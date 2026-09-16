@@ -1,0 +1,2672 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Passenger Details | Entree</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/site.css" />
+    <script src="../assets/js/data.js" defer></script>
+    <script src="../assets/js/app.js" defer></script>
+  </head>
+  <body data-page="passenger-details">
+    <div
+      class="flex flex-col min-h-screen font-sans text-slate-900 bg-white selection:bg-[#CCFF00] selection:text-black overflow-x-hidden"
+    >
+      <header
+        class="fixed top-0 left-0 w-full z-50 px-6 md:px-10 py-4 flex justify-between items-center h-20 transition-all duration-300 shadow-md border-b border-white/10"
+        style="
+          background-image: url(../assets/images/ocean-background.png);
+          background-size: cover;
+          background-position: center top;
+        "
+      >
+        <div class="flex-1 flex items-center">
+          <button
+            class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition-all border border-white/20 shadow-sm"
+            aria-label="Go back"
+            data-action="back"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-left w-5 h-5 stroke-[2.5]"
+            >
+              <path d="m12 19-7-7 7-7"></path>
+              <path d="M19 12H5"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="flex items-center space-x-4 md:space-x-5 shrink-0 justify-end">
+          <div class="flex flex-col gap-2 items-end">
+            <a
+              class="border-2 border-[#FFCC00] text-[#FFCC00] text-[12px] md:text-[13px] font-bold rounded-full px-6 py-2 flex items-center justify-center shadow-sm"
+              href="verify-booking.html"
+              data-discover="true"
+              >Buy Pasalubong</a
+            >
+          </div>
+          <button
+            class="bg-[#CCFF00] text-black text-[12px] md:text-[13px] font-bold rounded-full px-6 py-2 flex items-center justify-center gap-2 shadow-sm"
+          >
+            <span>Proceed to payment</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-right w-4 h-4 stroke-[2.5]"
+            >
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </button>
+          <button
+            class="border-2 border-[#CCFF00] text-[#CCFF00] text-[12px] md:text-[13px] font-bold rounded-full px-6 py-2 flex items-center space-x-2 shadow-sm"
+            data-action="go:login"
+          >
+            <span>Log-in</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-log-in w-4 h-4 stroke-[2.5]"
+            >
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" x2="3" y1="12" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+      </header>
+      <main class="flex-1 flex flex-col relative w-full h-full">
+        <div class="w-full flex-1 bg-white flex flex-col items-center overflow-x-auto">
+          <div class="w-full pt-20">
+            <div class="w-full bg-white border-b border-gray-100">
+              <div class="max-w-[1200px] mx-auto px-[120px] py-4">
+                <div class="flex items-center gap-[77px]">
+                  <div class="flex-shrink-0 w-[114px]">
+                    <button
+                      class="bg-[#b2f510] rounded-full px-5 py-2 flex items-center justify-center hover:bg-[#a3e000] transition-all shadow-sm h-[33px]"
+                      data-action="back"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-chevron-left w-5 h-5 text-black stroke-[2.5]"
+                      >
+                        <path d="m15 18-6-6 6-6"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="flex-shrink-0 w-[150px]">
+                    <div class="flex flex-col items-center justify-center pt-1">
+                      <div class="flex flex-col gap-1 items-start justify-center px-2">
+                        <div class="flex gap-2 items-center">
+                          <p
+                            class="font-[&#x27;Poppins&#x27;] leading-[22px] text-[14px] text-[#363636] whitespace-nowrap"
+                          >
+                            Search
+                          </p>
+                          <div class="w-[10.5px] h-[14px]">
+                            <svg class="w-full h-full" fill="none" viewBox="0 0 10.4853 14.0204">
+                              <path
+                                d="M5.24268 14.0204C5.17122 14.0204 5.09983 14.007 5.03196 13.9803C4.86846 13.9146 4.73633 13.7862 4.66592 13.6241L0.256542 3.64661C0.163916 3.43634 0.171631 3.19412 0.277393 2.98989C0.383154 2.78574 0.574219 2.64429 0.796143 2.60718L9.61475 1.15112C9.88037 1.10596 10.147 1.20532 10.3213 1.41382C10.4956 1.62241 10.552 1.90503 10.4714 2.16235L7.13867 13.1538C7.07446 13.3557 6.92725 13.5212 6.73242 13.6085C6.53765 13.6958 6.31519 13.6963 6.11987 13.6099L5.24268 13.2329V14.0204Z"
+                                fill="#007F70"
+                              ></path>
+                            </svg>
+                          </div>
+                        </div>
+                        <div class="h-[3px] rounded-full w-full bg-white"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0 w-[19px] h-[15px]">
+                    <svg class="w-full h-full" fill="none" viewBox="0 0 19 15.033">
+                      <path
+                        d="M11.2764 0.322266L18.3223 7.36816L11.2764 14.4141"
+                        stroke="#363636"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <path
+                        d="M0.677734 7.36816H18.3223"
+                        stroke="#363636"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="flex-shrink-0 w-[150px]">
+                    <div class="flex flex-col items-center justify-center pt-1">
+                      <div class="flex flex-col gap-1 items-start justify-center px-2">
+                        <div class="flex gap-2 items-center">
+                          <p
+                            class="font-[&#x27;Poppins&#x27;] leading-[22px] text-[14px] text-[#363636] whitespace-nowrap"
+                          >
+                            Trips
+                          </p>
+                          <div class="w-[10.5px] h-[14px]">
+                            <svg class="w-full h-full" fill="none" viewBox="0 0 10.4853 14.0204">
+                              <path
+                                d="M5.24268 14.0204C5.17122 14.0204 5.09983 14.007 5.03196 13.9803C4.86846 13.9146 4.73633 13.7862 4.66592 13.6241L0.256542 3.64661C0.163916 3.43634 0.171631 3.19412 0.277393 2.98989C0.383154 2.78574 0.574219 2.64429 0.796143 2.60718L9.61475 1.15112C9.88037 1.10596 10.147 1.20532 10.3213 1.41382C10.4956 1.62241 10.552 1.90503 10.4714 2.16235L7.13867 13.1538C7.07446 13.3557 6.92725 13.5212 6.73242 13.6085C6.53765 13.6958 6.31519 13.6963 6.11987 13.6099L5.24268 13.2329V14.0204Z"
+                                fill="#007F70"
+                              ></path>
+                            </svg>
+                          </div>
+                        </div>
+                        <div class="h-[3px] rounded-full w-full bg-white"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0 w-[19px] h-[15px]">
+                    <svg class="w-full h-full" fill="none" viewBox="0 0 19 15.033">
+                      <path
+                        d="M11.2764 0.322266L18.3223 7.36816L11.2764 14.4141"
+                        stroke="#363636"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <path
+                        d="M0.677734 7.36816H18.3223"
+                        stroke="#363636"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="flex-shrink-0 w-[150px]">
+                    <div class="flex flex-col items-center justify-center pt-1">
+                      <div class="flex flex-col gap-1 items-start justify-center px-2">
+                        <p
+                          class="font-[&#x27;Poppins&#x27;] leading-[22px] text-[14px] whitespace-nowrap text-[#007f70]"
+                        >
+                          Passenger Details
+                        </p>
+                        <div class="h-[3px] rounded-full w-full bg-[#007f70]"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0 w-[19px] h-[15px]">
+                    <svg class="w-full h-full" fill="none" viewBox="0 0 19 15.033">
+                      <path
+                        d="M11.2764 0.322266L18.3223 7.36816L11.2764 14.4141"
+                        stroke="#d8dad6"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                      <path
+                        d="M0.677734 7.36816H18.3223"
+                        stroke="#d8dad6"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="flex-shrink-0 w-[150px]">
+                    <div class="flex flex-col items-center justify-center pt-1">
+                      <div class="flex flex-col gap-1 items-start justify-center px-2">
+                        <p
+                          class="font-[&#x27;Poppins&#x27;] leading-[22px] text-[14px] whitespace-nowrap text-[#d8dad6]"
+                        >
+                          Payment
+                        </p>
+                        <div class="h-[3px] rounded-full w-full bg-white"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-full max-w-[1440px] mx-auto">
+            <div
+              class="content-stretch flex flex-col items-center justify-center relative size-full"
+              data-name="body"
+            >
+              <div
+                class="content-stretch flex flex-col gap-[24px] items-center pb-[24px] px-[24px] relative shrink-0 w-[1440px]"
+                data-name="Content"
+              >
+                <div class="content-stretch flex flex-col items-start relative shrink-0">
+                  <div
+                    class="bg-white content-stretch flex items-center justify-center px-[12px] py-[16px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)] shrink-0 sticky top-0 w-[1440px]"
+                  >
+                    <div
+                      class="content-stretch flex gap-[77px] items-center relative shrink-0 w-[1250px]"
+                    >
+                      <div
+                        class="content-stretch flex flex-col h-[33px] items-start relative shrink-0 w-[114px]"
+                      >
+                        <div
+                          class="bg-[#b2f510] flex-[1_0_0] min-h-px min-w-px relative rounded-[100px]"
+                        >
+                          <div class="flex flex-col items-center justify-center size-full">
+                            <div
+                              class="content-stretch flex flex-col h-full items-center justify-center px-[20px] py-[10px] relative"
+                            >
+                              <div class="flex items-center justify-center relative shrink-0">
+                                <div class="flex-none rotate-180">
+                                  <div class="h-[10.217px] relative w-[16px]">
+                                    <svg
+                                      class="absolute block size-full"
+                                      fill="none"
+                                      preserveAspectRatio="none"
+                                      viewBox="0 0 16.0001 10.2168"
+                                    >
+                                      <path
+                                        d="M10.3486 0.224586C10.6483 -0.0747799 11.134 -0.0749439 11.4336 0.224586L15.7656 4.55662C15.7687 4.55961 15.7723 4.56234 15.7754 4.56541C16.075 4.8651 16.075 5.35169 15.7754 5.65134L11.4346 9.99216C11.1349 10.2917 10.6483 10.2917 10.3486 9.99216C10.0492 9.69263 10.0494 9.20691 10.3486 8.9072L13.3438 5.91306H0.767578C0.343868 5.91306 0.000182387 5.56915 0 5.14548C3.70517e-08 4.72166 0.343756 4.37791 0.767578 4.37791H13.416L10.3486 1.31052C10.049 1.01087 10.049 0.524282 10.3486 0.224586Z"
+                                        fill="var(--fill-0, #363636)"
+                                        id="Union"
+                                      ></path>
+                                    </svg>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="content-stretch flex flex-col items-start relative shrink-0 w-[114px]"
+                      >
+                        <div class="relative shrink-0 w-full" data-name="Trips_Search">
+                          <div class="flex flex-col items-center justify-center size-full">
+                            <div
+                              class="content-stretch flex flex-col items-center justify-center pt-[4px] relative w-full"
+                            >
+                              <div
+                                class="content-stretch flex flex-col gap-[4px] h-[27px] items-start justify-center px-[8px] relative shrink-0"
+                                data-name="Component 2"
+                              >
+                                <div
+                                  class="content-stretch flex gap-[8px] items-center relative shrink-0"
+                                >
+                                  <p
+                                    class="font-[&#x27;Poppins:Regular&#x27;,sans-serif] leading-[22px] not-italic relative shrink-0 text-[#363636] text-[14px] whitespace-nowrap"
+                                  >
+                                    Search
+                                  </p>
+                                  <div
+                                    style="
+                                      --transform-inner-width: 1200;
+                                      --transform-inner-height: 19;
+                                    "
+                                    class="flex h-[10.485px] items-center justify-center relative shrink-0 w-[14.021px]"
+                                  >
+                                    <div class="-rotate-90 flex-none">
+                                      <div
+                                        class="h-[14.021px] relative w-[10.485px]"
+                                        data-name="Union"
+                                      >
+                                        <svg
+                                          class="absolute block size-full"
+                                          fill="none"
+                                          preserveAspectRatio="none"
+                                          viewBox="0 0 10.486 14.0211"
+                                        >
+                                          <path
+                                            d="M3.82882 0.29286C4.21932 -0.097642 4.85235 -0.0975983 5.24288 0.29286C5.63341 0.683385 5.63341 1.3164 5.24288 1.70692L2.41378 4.53505L10.1931 12.3134C10.5836 12.7039 10.5836 13.3379 10.1931 13.7284C9.80269 14.1188 9.16956 14.1185 8.77902 13.7284L0.293666 5.24306C0.269264 5.21865 0.245682 5.19306 0.22433 5.16688C0.0962802 5.00985 0.0229382 4.82285 0.0046033 4.63173C-0.00155194 4.5678 -0.0015169 4.50328 0.0046033 4.43934C0.0245956 4.23137 0.110555 4.02907 0.260463 3.86415C0.27136 3.85215 0.282081 3.8396 0.293666 3.82802L3.82882 0.29286Z"
+                                            fill="var(--fill-0, #007F70)"
+                                            id="Union"
+                                          ></path>
+                                        </svg>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="bg-white flex-[1_0_0] min-h-px min-w-px rounded-[100px] w-full"
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="h-[9.999px] relative shrink-0 w-[5.75px]">
+                        <svg
+                          class="absolute block size-full"
+                          fill="none"
+                          preserveAspectRatio="none"
+                          viewBox="0 0 5.75162 10.0002"
+                        >
+                          <g id="Frame 169">
+                            <path
+                              d="M1.28251 9.78039C0.989135 10.0734 0.513232 10.0736 0.220008 9.78039C-0.0731923 9.48717 -0.0729697 9.01126 0.220008 8.71789L3.93876 5.0011L0.220009 1.28235C-0.0733352 0.989003 -0.0733353 0.513191 0.220009 0.219847C0.513378 -0.0731751 0.989272 -0.0733896 1.28251 0.219847L5.52079 4.45911C5.52427 4.46246 5.5281 4.46544 5.53153 4.46887C5.75159 4.68893 5.80667 5.01104 5.69657 5.28235C5.65996 5.37296 5.60494 5.45788 5.53153 5.53137L1.28251 9.78039Z"
+                              fill="var(--fill-0, #363636)"
+                              id="Union"
+                            ></path>
+                          </g>
+                        </svg>
+                      </div>
+                      <div class="relative shrink-0 w-[150px]">
+                        <div class="flex flex-col items-center justify-center size-full">
+                          <div
+                            class="content-stretch flex flex-col items-center justify-center pt-[4px] relative w-full"
+                          >
+                            <div
+                              class="content-stretch flex flex-col gap-[4px] items-start justify-center px-[8px] relative shrink-0 h-[27px]"
+                              data-name="Component 2"
+                            >
+                              <div
+                                class="shrink-0 content-stretch flex gap-[8px] items-center relative"
+                              >
+                                <p
+                                  class="font-[&#x27;Poppins:Regular&#x27;,sans-serif] leading-[22px] not-italic relative shrink-0 text-[#363636] text-[14px] whitespace-nowrap"
+                                >
+                                  Trips
+                                </p>
+                                <div
+                                  style="
+                                    --transform-inner-width: 1200;
+                                    --transform-inner-height: 19;
+                                  "
+                                  class="flex h-[10.485px] items-center justify-center relative shrink-0 w-[14.021px]"
+                                >
+                                  <div class="-rotate-90 flex-none">
+                                    <div
+                                      class="h-[14.021px] relative w-[10.485px]"
+                                      data-name="Union"
+                                    >
+                                      <svg
+                                        class="absolute block size-full"
+                                        fill="none"
+                                        preserveAspectRatio="none"
+                                        viewBox="0 0 10.486 14.0211"
+                                      >
+                                        <path
+                                          d="M3.82882 0.29286C4.21932 -0.097642 4.85235 -0.0975983 5.24288 0.29286C5.63341 0.683385 5.63341 1.3164 5.24288 1.70692L2.41378 4.53505L10.1931 12.3134C10.5836 12.7039 10.5836 13.3379 10.1931 13.7284C9.80269 14.1188 9.16956 14.1185 8.77902 13.7284L0.293666 5.24306C0.269264 5.21865 0.245682 5.19306 0.22433 5.16688C0.0962802 5.00985 0.0229382 4.82285 0.0046033 4.63173C-0.00155194 4.5678 -0.0015169 4.50328 0.0046033 4.43934C0.0245956 4.23137 0.110555 4.02907 0.260463 3.86415C0.27136 3.85215 0.282081 3.8396 0.293666 3.82802L3.82882 0.29286Z"
+                                          fill="var(--fill-0, #007F70)"
+                                          id="Union"
+                                        ></path>
+                                      </svg>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                class="bg-white flex-[1_0_0] min-h-px min-w-px rounded-[100px] w-full"
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="h-[9.999px] relative shrink-0 w-[5.75px]">
+                        <svg
+                          class="absolute block size-full"
+                          fill="none"
+                          preserveAspectRatio="none"
+                          viewBox="0 0 5.75162 10.0002"
+                        >
+                          <g id="Frame 169">
+                            <path
+                              d="M1.28251 9.78039C0.989135 10.0734 0.513232 10.0736 0.220008 9.78039C-0.0731923 9.48717 -0.0729697 9.01126 0.220008 8.71789L3.93876 5.0011L0.220009 1.28235C-0.0733352 0.989003 -0.0733353 0.513191 0.220009 0.219847C0.513378 -0.0731751 0.989272 -0.0733896 1.28251 0.219847L5.52079 4.45911C5.52427 4.46246 5.5281 4.46544 5.53153 4.46887C5.75159 4.68893 5.80667 5.01104 5.69657 5.28235C5.65996 5.37296 5.60494 5.45788 5.53153 5.53137L1.28251 9.78039Z"
+                              fill="var(--fill-0, #363636)"
+                              id="Union"
+                            ></path>
+                          </g>
+                        </svg>
+                      </div>
+                      <div class="relative shrink-0 w-[150px]">
+                        <div class="flex flex-col items-center justify-center size-full">
+                          <div
+                            class="content-stretch flex flex-col items-center justify-center pt-[4px] relative w-full"
+                          >
+                            <div
+                              class="content-stretch flex flex-col gap-[4px] items-start justify-center px-[8px] relative shrink-0"
+                              data-name="Component 2"
+                            >
+                              <p
+                                class="font-[&quot;Poppins:Regular&quot;,sans-serif] leading-[22px] not-italic relative shrink-0 text-[14px] whitespace-nowrap text-[#007f70]"
+                              >
+                                Passenger Details
+                              </p>
+                              <div
+                                class="shrink-0 bg-[#007f70] h-[3px] rounded-[100px] w-full"
+                              ></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="h-[9.999px] relative shrink-0 w-[5.75px]">
+                        <svg
+                          class="absolute block size-full"
+                          fill="none"
+                          preserveAspectRatio="none"
+                          viewBox="0 0 5.75162 10.0002"
+                        >
+                          <g id="Frame 171">
+                            <path
+                              d="M1.28251 9.78039C0.989135 10.0734 0.513232 10.0736 0.220008 9.78039C-0.0731923 9.48717 -0.0729697 9.01126 0.220008 8.71789L3.93876 5.0011L0.220009 1.28235C-0.0733352 0.989003 -0.0733353 0.513191 0.220009 0.219847C0.513378 -0.0731751 0.989272 -0.0733896 1.28251 0.219847L5.52079 4.45911C5.52427 4.46246 5.5281 4.46544 5.53153 4.46887C5.75159 4.68893 5.80667 5.01104 5.69657 5.28235C5.65996 5.37296 5.60494 5.45788 5.53153 5.53137L1.28251 9.78039Z"
+                              fill="var(--fill-0, #D8DAD6)"
+                              id="Union"
+                            ></path>
+                          </g>
+                        </svg>
+                      </div>
+                      <div class="relative shrink-0 w-[150px]">
+                        <div class="flex flex-col items-center justify-center size-full">
+                          <div
+                            class="content-stretch flex flex-col items-center justify-center pt-[4px] relative w-full"
+                          >
+                            <div
+                              class="content-stretch flex flex-col gap-[4px] items-start justify-center px-[8px] relative shrink-0"
+                              data-name="Component 2"
+                            >
+                              <p
+                                class="font-[&quot;Poppins:Regular&quot;,sans-serif] leading-[22px] not-italic relative shrink-0 text-[14px] whitespace-nowrap text-[#d8dad6]"
+                              >
+                                Payment
+                              </p>
+                              <div class="shrink-0 bg-white h-[3px] rounded-[100px] w-full"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="content-stretch flex flex-col items-start relative shrink-0 w-[1250px]">
+                  <div class="content-stretch flex gap-[16px] items-start relative shrink-0 w-full">
+                    <div
+                      class="content-stretch flex flex-col items-center relative shrink-0 w-[884px]"
+                    >
+                      <div
+                        class="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-full"
+                      >
+                        <div class="bg-black relative rounded-[4px] shrink-0 w-full">
+                          <div
+                            class="content-stretch flex items-start px-[20px] py-[8px] relative w-full"
+                          >
+                            <div
+                              class="content-stretch flex flex-[1_0_0] flex-col gap-[8px] items-start justify-center min-h-px min-w-px py-[8px] rounded-[4px] sticky top-0"
+                            >
+                              <div class="content-stretch flex items-center relative shrink-0">
+                                <p
+                                  class="font-[&#x27;Poppins:Medium&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[16px] text-white whitespace-nowrap"
+                                >
+                                  Log-In for faster booking
+                                </p>
+                              </div>
+                              <div
+                                class="content-stretch flex gap-[72px] items-start relative shrink-0 w-full"
+                              >
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] items-center justify-center min-h-px min-w-px relative"
+                                >
+                                  <p
+                                    class="flex-[1_0_0] font-[&#x27;Poppins:Regular&#x27;,sans-serif] leading-[21px] min-h-px min-w-px not-italic relative text-[14px] text-white"
+                                  >
+                                    By logging in, your contact information will be auto-filled for
+                                    an even faster experience! You&#x27;ll also have all your past
+                                    journeys conveniently organized in one place.
+                                  </p>
+                                </div>
+                                <div class="bg-[#b2f510] relative rounded-[100px] shrink-0">
+                                  <div class="flex flex-row items-center size-full">
+                                    <div
+                                      class="content-stretch flex gap-[8px] items-center overflow-clip px-[24px] py-[8px] relative"
+                                    >
+                                      <div
+                                        class="flex flex-col font-[&quot;Poppins:Medium&quot;,sans-serif] justify-center leading-[0] not-italic relative shrink-0 text-[14px] whitespace-nowrap text-[#363636]"
+                                      >
+                                        <p class="leading-[22px]">Log-In</p>
+                                      </div>
+                                      <div
+                                        class="h-[12px] relative shrink-0 w-[13px]"
+                                        data-name="Union"
+                                      >
+                                        <svg
+                                          class="absolute block size-full"
+                                          fill="none"
+                                          preserveAspectRatio="none"
+                                          viewBox="0 0 13 12"
+                                        >
+                                          <path
+                                            d="M12.6006 0.00976562C12.8286 0.056292 13 0.258287 13 0.5V11.5C13 11.5344 12.9969 11.5681 12.9902 11.6006C12.9503 11.7961 12.7961 11.9503 12.6006 11.9902C12.5681 11.9969 12.5344 12 12.5 12H4.5C4.22386 12 4 11.7761 4 11.5V9.5C4 9.22386 4.22386 9 4.5 9C4.77614 9 5 9.22386 5 9.5V11H12V1H5V3.5C5 3.77614 4.77614 4 4.5 4C4.22386 4 4 3.77614 4 3.5V0.5C4 0.223858 4.22386 2.0133e-09 4.5 0H12.5C12.5344 0 12.5681 0.00313853 12.6006 0.00976562ZM6.5 3.17188C6.69526 2.97661 7.01177 2.97661 7.20703 3.17188L10.0352 6C10.0839 6.04878 10.1211 6.1049 10.1455 6.16504C10.2189 6.34569 10.1817 6.56048 10.0352 6.70703L7.20703 9.53613C7.01182 9.73104 6.69518 9.73109 6.5 9.53613C6.30474 9.34087 6.30474 9.02339 6.5 8.82812L8.32812 7H0.5C0.223858 7 -6.03528e-09 6.77614 0 6.5C6.03528e-09 6.22386 0.223858 6 0.5 6H8.5C8.55048 6 8.59859 6.00952 8.64453 6.02344L6.5 3.87891C6.30481 3.68371 6.30494 3.36715 6.5 3.17188Z"
+                                            fill="var(--fill-0, #363636)"
+                                            id="Union"
+                                          ></path>
+                                        </svg>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div
+                                    aria-hidden="true"
+                                    class="absolute border border-solid inset-0 pointer-events-none rounded-[100px] border-[#b2f510]"
+                                  ></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-full"
+                        >
+                          <p
+                            class="font-[&#x27;Poppins:Medium&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[16px] whitespace-nowrap"
+                          >
+                            Passengers, pets &amp; vehicles
+                          </p>
+                          <div class="bg-white relative rounded-[4px] shrink-0 w-full">
+                            <div
+                              aria-hidden="true"
+                              class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[4px]"
+                            ></div>
+                            <div
+                              class="content-stretch flex flex-col gap-[16px] items-start p-[24px] relative w-full"
+                            >
+                              <div
+                                class="content-stretch flex gap-[10px] items-center justify-center relative shrink-0"
+                              >
+                                <div
+                                  class="h-[15px] relative shrink-0 w-[12.305px]"
+                                  data-name="Vector"
+                                >
+                                  <svg
+                                    class="absolute block size-full"
+                                    fill="none"
+                                    preserveAspectRatio="none"
+                                    viewBox="0 0 12.3045 15"
+                                  >
+                                    <path
+                                      d="M3.84517 13.0774H8.45937V14.6155H3.84517C1.72264 14.6155 0 12.8928 0 10.7703V3.84901H1.53807V10.7703C1.53807 12.0469 2.56857 13.0774 3.84517 13.0774ZM4.9372 2.62625C5.53704 2.0264 5.53704 1.04973 4.9372 0.449885C4.33735 -0.149962 3.36068 -0.149962 2.76083 0.449885C2.16098 1.04973 2.16098 2.0264 2.76083 2.62625C3.36068 3.23379 4.32966 3.23379 4.9372 2.62625ZM5.76775 5.38708C5.76775 4.54114 5.07562 3.84901 4.22968 3.84901H3.84517C2.99923 3.84901 2.3071 4.54114 2.3071 5.38708V10.0013C2.3071 11.2779 3.33761 12.3084 4.6142 12.3084H8.5132L11.2048 15L12.3045 13.9003L8.40554 10.0013H5.76775V5.38708Z"
+                                      fill="var(--fill-0, black)"
+                                      id="Vector"
+                                    ></path>
+                                  </svg>
+                                </div>
+                                <p
+                                  class="font-[&#x27;Poppins:Medium&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[16px] whitespace-nowrap"
+                                >
+                                  Passenger 1
+                                </p>
+                              </div>
+                              <div class="relative shrink-0">
+                                <div class="content-stretch flex gap-[24px] items-start relative">
+                                  <div
+                                    class="content-stretch flex gap-[8px] items-start relative shrink-0"
+                                    data-name="Radio"
+                                  >
+                                    <button
+                                      class="content-stretch cursor-pointer flex h-[21px] items-center relative shrink-0"
+                                    >
+                                      <div
+                                        class="bg-white relative rounded-[1000px] shrink-0 size-[16px]"
+                                        data-name="Radio / Radio"
+                                      >
+                                        <div
+                                          class="flex flex-col items-center justify-center overflow-clip rounded-[inherit] size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex flex-col items-center justify-center size-full"
+                                          ></div>
+                                        </div>
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#ced4da] border-solid inset-0 pointer-events-none rounded-[1000px]"
+                                        ></div>
+                                      </div>
+                                    </button>
+                                    <div
+                                      class="content-stretch flex items-start overflow-clip relative shrink-0"
+                                    >
+                                      <p
+                                        class="font-[&#x27;Poppins:Regular&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[14px] whitespace-nowrap"
+                                      >
+                                        Male
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div
+                                    class="content-stretch flex gap-[8px] items-start relative shrink-0"
+                                    data-name="Radio"
+                                  >
+                                    <button
+                                      class="content-stretch cursor-pointer flex h-[21px] items-center relative shrink-0"
+                                    >
+                                      <div
+                                        class="bg-white relative rounded-[1000px] shrink-0 size-[16px]"
+                                        data-name="Radio / Radio"
+                                      >
+                                        <div
+                                          class="flex flex-col items-center justify-center overflow-clip rounded-[inherit] size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex flex-col items-center justify-center size-full"
+                                          ></div>
+                                        </div>
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#ced4da] border-solid inset-0 pointer-events-none rounded-[1000px]"
+                                        ></div>
+                                      </div>
+                                    </button>
+                                    <div
+                                      class="content-stretch flex items-start overflow-clip relative shrink-0"
+                                    >
+                                      <p
+                                        class="font-[&#x27;Poppins:Regular&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[14px] whitespace-nowrap"
+                                      >
+                                        Female
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                class="content-stretch flex gap-[12px] items-start relative shrink-0 w-full"
+                              >
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-h-px min-w-px relative"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-center relative shrink-0 w-full"
+                                          >
+                                            <div
+                                              class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                            >
+                                              <div
+                                                class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                              >
+                                                <p
+                                                  class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                >
+                                                  Full Name
+                                                </p>
+                                                <p
+                                                  class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                >
+                                                  *
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] h-[44px] items-center min-h-px min-w-px relative"
+                                >
+                                  <div class="flex flex-[1_0_0] flex-row items-center self-stretch">
+                                    <div
+                                      class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                    >
+                                      <div
+                                        aria-hidden="true"
+                                        class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                      ></div>
+                                      <div
+                                        class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                      >
+                                        <div
+                                          class="content-stretch flex items-start relative shrink-0 w-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                          >
+                                            <div
+                                              class="content-stretch flex items-center relative shrink-0"
+                                            >
+                                              <div
+                                                class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                              >
+                                                <p
+                                                  class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                >
+                                                  Last Name
+                                                </p>
+                                                <p
+                                                  class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                >
+                                                  *
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-h-px min-w-px relative"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-start relative shrink-0 w-full"
+                                          >
+                                            <div
+                                              class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                            >
+                                              <div
+                                                class="content-stretch flex items-center relative shrink-0"
+                                              >
+                                                <div
+                                                  class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                                >
+                                                  <p
+                                                    class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                  >
+                                                    MM/DD/YYYY
+                                                  </p>
+                                                  <p
+                                                    class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                  >
+                                                    *
+                                                  </p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                class="content-stretch flex items-start relative shrink-0 w-full"
+                              >
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-h-px min-w-px relative"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-center relative shrink-0 w-full"
+                                          >
+                                            <div
+                                              class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                            >
+                                              <div
+                                                class="content-stretch flex items-center relative shrink-0"
+                                              >
+                                                <div
+                                                  class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                                >
+                                                  <p
+                                                    class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                  >
+                                                    Complete Address
+                                                  </p>
+                                                  <p
+                                                    class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                  >
+                                                    *
+                                                  </p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="bg-white relative rounded-[4px] shrink-0 w-full">
+                            <div
+                              aria-hidden="true"
+                              class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[4px]"
+                            ></div>
+                            <div
+                              class="content-stretch flex flex-col gap-[16px] items-start p-[24px] relative w-full"
+                            >
+                              <div
+                                class="content-stretch flex gap-[10px] items-center justify-center relative shrink-0"
+                              >
+                                <div
+                                  class="h-[15px] relative shrink-0 w-[12.305px]"
+                                  data-name="Vector"
+                                >
+                                  <svg
+                                    class="absolute block size-full"
+                                    fill="none"
+                                    preserveAspectRatio="none"
+                                    viewBox="0 0 12.3045 15"
+                                  >
+                                    <path
+                                      d="M3.84517 13.0774H8.45937V14.6155H3.84517C1.72264 14.6155 0 12.8928 0 10.7703V3.84901H1.53807V10.7703C1.53807 12.0469 2.56857 13.0774 3.84517 13.0774ZM4.9372 2.62625C5.53704 2.0264 5.53704 1.04973 4.9372 0.449885C4.33735 -0.149962 3.36068 -0.149962 2.76083 0.449885C2.16098 1.04973 2.16098 2.0264 2.76083 2.62625C3.36068 3.23379 4.32966 3.23379 4.9372 2.62625ZM5.76775 5.38708C5.76775 4.54114 5.07562 3.84901 4.22968 3.84901H3.84517C2.99923 3.84901 2.3071 4.54114 2.3071 5.38708V10.0013C2.3071 11.2779 3.33761 12.3084 4.6142 12.3084H8.5132L11.2048 15L12.3045 13.9003L8.40554 10.0013H5.76775V5.38708Z"
+                                      fill="var(--fill-0, black)"
+                                      id="Vector"
+                                    ></path>
+                                  </svg>
+                                </div>
+                                <p
+                                  class="font-[&#x27;Poppins:Medium&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[16px] whitespace-nowrap"
+                                >
+                                  Passenger 2
+                                </p>
+                              </div>
+                              <div class="relative shrink-0">
+                                <div class="content-stretch flex gap-[24px] items-start relative">
+                                  <div
+                                    class="content-stretch flex gap-[8px] items-start relative shrink-0"
+                                    data-name="Radio"
+                                  >
+                                    <button
+                                      class="content-stretch cursor-pointer flex h-[21px] items-center relative shrink-0"
+                                    >
+                                      <div
+                                        class="bg-white relative rounded-[1000px] shrink-0 size-[16px]"
+                                        data-name="Radio / Radio"
+                                      >
+                                        <div
+                                          class="flex flex-col items-center justify-center overflow-clip rounded-[inherit] size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex flex-col items-center justify-center size-full"
+                                          ></div>
+                                        </div>
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#ced4da] border-solid inset-0 pointer-events-none rounded-[1000px]"
+                                        ></div>
+                                      </div>
+                                    </button>
+                                    <div
+                                      class="content-stretch flex items-start overflow-clip relative shrink-0"
+                                    >
+                                      <p
+                                        class="font-[&#x27;Poppins:Regular&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[14px] whitespace-nowrap"
+                                      >
+                                        Male
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div
+                                    class="content-stretch flex gap-[8px] items-start relative shrink-0"
+                                    data-name="Radio"
+                                  >
+                                    <button
+                                      class="content-stretch cursor-pointer flex h-[21px] items-center relative shrink-0"
+                                    >
+                                      <div
+                                        class="bg-white relative rounded-[1000px] shrink-0 size-[16px]"
+                                        data-name="Radio / Radio"
+                                      >
+                                        <div
+                                          class="flex flex-col items-center justify-center overflow-clip rounded-[inherit] size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex flex-col items-center justify-center size-full"
+                                          ></div>
+                                        </div>
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#ced4da] border-solid inset-0 pointer-events-none rounded-[1000px]"
+                                        ></div>
+                                      </div>
+                                    </button>
+                                    <div
+                                      class="content-stretch flex items-start overflow-clip relative shrink-0"
+                                    >
+                                      <p
+                                        class="font-[&#x27;Poppins:Regular&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[14px] whitespace-nowrap"
+                                      >
+                                        Female
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                class="content-stretch flex gap-[12px] items-start relative shrink-0 w-full"
+                              >
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-h-px min-w-px relative"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-center relative shrink-0 w-full"
+                                          >
+                                            <div
+                                              class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                            >
+                                              <div
+                                                class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                              >
+                                                <p
+                                                  class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                >
+                                                  Full Name
+                                                </p>
+                                                <p
+                                                  class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                >
+                                                  *
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-h-px min-w-px relative"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-start relative shrink-0 w-full"
+                                          >
+                                            <div
+                                              class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                            >
+                                              <div
+                                                class="content-stretch flex items-center relative shrink-0"
+                                              >
+                                                <div
+                                                  class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                                >
+                                                  <p
+                                                    class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                  >
+                                                    MM/DD/YYYY
+                                                  </p>
+                                                  <p
+                                                    class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                  >
+                                                    *
+                                                  </p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative self-stretch"
+                                >
+                                  <div class="flex flex-[1_0_0] flex-row items-center self-stretch">
+                                    <div
+                                      class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                    >
+                                      <div
+                                        aria-hidden="true"
+                                        class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                      ></div>
+                                      <div
+                                        class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                      >
+                                        <div
+                                          class="content-stretch flex items-start relative shrink-0 w-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                          >
+                                            <div
+                                              class="content-stretch flex items-center relative shrink-0"
+                                            >
+                                              <div
+                                                class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                              >
+                                                <p
+                                                  class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                >
+                                                  Contact Number
+                                                </p>
+                                                <p
+                                                  class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                >
+                                                  *
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                class="content-stretch flex items-start relative shrink-0 w-full"
+                              >
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-h-px min-w-px relative"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-center relative shrink-0 w-full"
+                                          >
+                                            <div
+                                              class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                            >
+                                              <div
+                                                class="content-stretch flex items-center relative shrink-0"
+                                              >
+                                                <div
+                                                  class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                                >
+                                                  <p
+                                                    class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                  >
+                                                    Complete Address
+                                                  </p>
+                                                  <p
+                                                    class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                  >
+                                                    *
+                                                  </p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="bg-white relative rounded-[4px] shrink-0 w-full">
+                            <div
+                              aria-hidden="true"
+                              class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[4px]"
+                            ></div>
+                            <div
+                              class="content-stretch flex flex-col gap-[16px] items-start p-[24px] relative w-full"
+                            >
+                              <div
+                                class="content-stretch flex gap-[10px] items-center justify-center relative shrink-0"
+                              >
+                                <div class="h-[15.033px] relative shrink-0 w-[19px]">
+                                  <svg
+                                    class="absolute block size-full"
+                                    fill="none"
+                                    preserveAspectRatio="none"
+                                    viewBox="0 0 19 15.033"
+                                  >
+                                    <g id="Frame 209">
+                                      <path
+                                        d="M9.34233 7.8171C12.6805 7.8171 14.5586 12.7198 14.5591 13.5554C14.5591 14.39 13.8288 15.0163 12.6812 15.0163C11.5336 15.0163 10.2813 14.0778 9.34233 14.0778C8.40346 14.078 6.73487 15.016 6.00444 15.0163C5.27412 15.0163 4.43901 14.8073 4.43901 13.5554C4.75212 9.90423 7.56875 7.81734 9.34233 7.8171ZM3.12846 4.79952C4.05421 4.43482 5.2607 5.29655 5.8228 6.72335C6.38457 8.14981 6.08993 9.60159 5.16459 9.96652C4.23886 10.3312 3.03237 9.47043 2.47026 8.04367C1.90817 6.6169 2.20278 5.16428 3.12846 4.79952ZM13.1773 6.72335C13.7394 5.29655 14.9459 4.43482 15.8716 4.79952C16.7972 5.16435 17.0919 6.61695 16.5298 8.04367C15.9677 9.47045 14.7612 10.3312 13.8355 9.96652C12.9101 9.60165 12.6155 8.14987 13.1773 6.72335ZM6.52494 0.0387824C7.56233 -0.15939 8.65283 0.985864 8.96049 2.5964C9.26799 4.20679 8.67651 5.67266 7.6392 5.87081C6.60188 6.06879 5.5113 4.92362 5.20366 3.3132C4.89623 1.70303 5.48789 0.237215 6.52494 0.0387824ZM10.0044 2.5964C10.3121 0.986055 11.4017 -0.159049 12.439 0.0387824C13.4763 0.236942 14.0678 1.70279 13.7603 3.3132C13.4527 4.92352 12.363 6.0686 11.3257 5.87081C10.2884 5.67265 9.69692 4.2068 10.0044 2.5964Z"
+                                        fill="var(--fill-0, #363636)"
+                                        id="Union"
+                                      ></path>
+                                    </g>
+                                  </svg>
+                                </div>
+                                <p
+                                  class="font-[&#x27;Poppins:Medium&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[16px] whitespace-nowrap"
+                                >
+                                  Pet
+                                </p>
+                              </div>
+                              <div
+                                class="content-stretch flex gap-[12px] items-start relative shrink-0 w-full"
+                              >
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-h-px min-w-px relative"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-center relative shrink-0 w-full"
+                                          >
+                                            <div
+                                              class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                            >
+                                              <div
+                                                class="content-stretch flex flex-[1_0_0] items-center justify-between min-h-px min-w-px relative"
+                                              >
+                                                <div
+                                                  class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                                >
+                                                  <p
+                                                    class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                  >
+                                                    Category
+                                                  </p>
+                                                  <p
+                                                    class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                  >
+                                                    *
+                                                  </p>
+                                                </div>
+                                                <div
+                                                  style="
+                                                    --transform-inner-width: 1200;
+                                                    --transform-inner-height: 19;
+                                                  "
+                                                  class="flex items-center justify-center relative shrink-0 size-[8.485px]"
+                                                >
+                                                  <div class="-rotate-45 flex-none">
+                                                    <div
+                                                      class="relative size-[6px]"
+                                                      data-name="Union"
+                                                    >
+                                                      <svg
+                                                        class="absolute block size-full"
+                                                        fill="none"
+                                                        preserveAspectRatio="none"
+                                                        viewBox="0 0 6 6"
+                                                      >
+                                                        <path
+                                                          d="M0.5 0C0.776142 0 1 0.223858 1 0.5V5H5.5C5.77614 5 6 5.22386 6 5.5C6 5.77614 5.77614 6 5.5 6H0.5C0.258287 6 0.056292 5.82855 0.00976562 5.60059L0 5.5V0.5C0 0.223858 0.223858 0 0.5 0Z"
+                                                          fill="var(--fill-0, #363636)"
+                                                          id="Union"
+                                                        ></path>
+                                                      </svg>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-h-px min-w-px relative"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-center relative shrink-0 w-full"
+                                          >
+                                            <div
+                                              class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                            >
+                                              <div
+                                                class="content-stretch flex flex-[1_0_0] items-center justify-between min-h-px min-w-px relative"
+                                              >
+                                                <div
+                                                  class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                                >
+                                                  <p
+                                                    class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                  >
+                                                    Size
+                                                  </p>
+                                                  <p
+                                                    class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                  >
+                                                    *
+                                                  </p>
+                                                </div>
+                                                <div
+                                                  style="
+                                                    --transform-inner-width: 1200;
+                                                    --transform-inner-height: 19;
+                                                  "
+                                                  class="flex items-center justify-center relative shrink-0 size-[8.485px]"
+                                                >
+                                                  <div class="-rotate-45 flex-none">
+                                                    <div
+                                                      class="relative size-[6px]"
+                                                      data-name="Union"
+                                                    >
+                                                      <svg
+                                                        class="absolute block size-full"
+                                                        fill="none"
+                                                        preserveAspectRatio="none"
+                                                        viewBox="0 0 6 6"
+                                                      >
+                                                        <path
+                                                          d="M0.5 0C0.776142 0 1 0.223858 1 0.5V5H5.5C5.77614 5 6 5.22386 6 5.5C6 5.77614 5.77614 6 5.5 6H0.5C0.258287 6 0.056292 5.82855 0.00976562 5.60059L0 5.5V0.5C0 0.223858 0.223858 0 0.5 0Z"
+                                                          fill="var(--fill-0, #363636)"
+                                                          id="Union"
+                                                        ></path>
+                                                      </svg>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-h-px min-w-px relative"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-center relative shrink-0 w-full"
+                                          >
+                                            <div
+                                              class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                            >
+                                              <div
+                                                class="content-stretch flex flex-[1_0_0] items-center justify-between min-h-px min-w-px relative"
+                                              >
+                                                <div
+                                                  class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                                >
+                                                  <p
+                                                    class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                  >
+                                                    Class
+                                                  </p>
+                                                  <p
+                                                    class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                  >
+                                                    *
+                                                  </p>
+                                                </div>
+                                                <div
+                                                  style="
+                                                    --transform-inner-width: 1200;
+                                                    --transform-inner-height: 19;
+                                                  "
+                                                  class="flex items-center justify-center relative shrink-0 size-[8.485px]"
+                                                >
+                                                  <div class="-rotate-45 flex-none">
+                                                    <div
+                                                      class="relative size-[6px]"
+                                                      data-name="Union"
+                                                    >
+                                                      <svg
+                                                        class="absolute block size-full"
+                                                        fill="none"
+                                                        preserveAspectRatio="none"
+                                                        viewBox="0 0 6 6"
+                                                      >
+                                                        <path
+                                                          d="M0.5 0C0.776142 0 1 0.223858 1 0.5V5H5.5C5.77614 5 6 5.22386 6 5.5C6 5.77614 5.77614 6 5.5 6H0.5C0.258287 6 0.056292 5.82855 0.00976562 5.60059L0 5.5V0.5C0 0.223858 0.223858 0 0.5 0Z"
+                                                          fill="var(--fill-0, #363636)"
+                                                          id="Union"
+                                                        ></path>
+                                                      </svg>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                class="content-stretch flex flex-col gap-[8px] items-start relative shrink-0 w-full"
+                                data-name="File Input / File Input + Label"
+                              >
+                                <div
+                                  class="content-stretch flex gap-[4px] items-start not-italic relative shrink-0 w-full whitespace-nowrap"
+                                  data-name=".Input / Label"
+                                >
+                                  <p
+                                    class="font-[&#x27;Poppins:Medium&#x27;,sans-serif] leading-[21px] relative shrink-0 text-[#343a40] text-[14px]"
+                                  >
+                                    Proof of Vaccination
+                                  </p>
+                                  <p
+                                    class="font-[&#x27;Poppins:Regular&#x27;,sans-serif] leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                  >
+                                    *
+                                  </p>
+                                </div>
+                                <div
+                                  class="bg-white relative rounded-[100px] shrink-0 w-full"
+                                  data-name="File Input / File Input"
+                                >
+                                  <div class="overflow-clip rounded-[inherit] size-full">
+                                    <div
+                                      class="content-stretch flex items-start p-px relative w-full"
+                                    >
+                                      <div
+                                        class="flex-[1_0_0] h-[36px] min-h-px min-w-px relative"
+                                        data-name="Input Value"
+                                      >
+                                        <div
+                                          class="flex flex-row items-center overflow-clip rounded-[inherit] size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-center px-[12px] py-[6px] relative size-full"
+                                          >
+                                            <div
+                                              class="flex-[1_0_0] min-h-px min-w-px relative"
+                                              data-name=".Input / Placeholder"
+                                            >
+                                              <div
+                                                class="content-stretch flex items-start relative w-full"
+                                              >
+                                                <p
+                                                  class="font-[&#x27;Poppins:Regular&#x27;,sans-serif] leading-[24px] not-italic relative shrink-0 text-[#b5b5c3] text-[14px] whitespace-nowrap"
+                                                >
+                                                  Please
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div
+                                        class="bg-[#ced4da] self-stretch shrink-0 w-px"
+                                        data-name="vertical-border"
+                                      ></div>
+                                      <div
+                                        class="bg-[#f8f9fa] relative self-stretch shrink-0"
+                                        data-name="Form Label"
+                                      >
+                                        <div
+                                          class="flex flex-col items-center justify-center overflow-clip rounded-[inherit] size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex flex-col h-full items-center justify-center px-[20px] py-[6px] relative"
+                                          >
+                                            <p
+                                              class="font-[&#x27;Poppins:Regular&#x27;,sans-serif] leading-[24px] not-italic relative shrink-0 text-[#6c757d] text-[14px] whitespace-nowrap"
+                                            >
+                                              Upload
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div
+                                    aria-hidden="true"
+                                    class="absolute border border-[#ced4da] border-solid inset-0 pointer-events-none rounded-[100px]"
+                                  ></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="bg-white relative rounded-[4px] shrink-0 w-full">
+                            <div
+                              aria-hidden="true"
+                              class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[4px]"
+                            ></div>
+                            <div
+                              class="content-stretch flex flex-col gap-[16px] items-start p-[24px] relative w-full"
+                            >
+                              <div
+                                class="content-stretch flex gap-[10px] items-center justify-center relative shrink-0"
+                              >
+                                <div class="h-[15.033px] relative shrink-0 w-[19px]">
+                                  <svg
+                                    class="absolute block size-full"
+                                    fill="none"
+                                    preserveAspectRatio="none"
+                                    viewBox="0 0 19 15.033"
+                                  >
+                                    <g id="Frame 209">
+                                      <path
+                                        d="M11.3184 0.000378609C11.8707 0.000378609 12.3184 0.448094 12.3184 1.00038V2.81874H13.9883C14.1274 2.81874 14.5734 2.98602 15.2412 3.6537L17.9561 6.36854C18.0559 6.46856 18.3411 6.83369 18.3682 7.51698H18.374V10.2855C18.7385 10.4147 18.9998 10.7616 19 11.1703C19 11.6892 18.5794 12.1107 18.0606 12.1107H17.1201C17.1198 13.7248 15.8114 15.0326 14.1973 15.0326C12.5834 15.0323 11.2748 13.7246 11.2744 12.1107H7.72462V12.1098C7.72462 13.7241 6.41614 15.0326 4.80177 15.0326C3.18761 15.0324 1.87891 13.724 1.87891 12.1098V12.1107H1.00001C0.447878 12.1107 0.000257944 11.6628 8.58307e-06 11.1107V1.00038C8.58307e-06 0.448094 0.447724 0.000378611 1.00001 0.000378609H11.3184ZM6.25587 11.9603C6.26087 12.0095 6.26367 12.0593 6.26368 12.1098V12.1107H3.34083C3.34119 12.9174 3.99512 13.5713 4.80177 13.5717C5.60895 13.5717 6.26368 12.9169 6.26368 12.1098C6.26367 12.0593 6.26184 12.0095 6.25684 11.9603H6.25587ZM12.7354 12.1107C12.7357 12.9175 13.3905 13.5715 14.1973 13.5717C15.0042 13.5717 15.6588 12.9176 15.6592 12.1107H12.7354ZM5.83497 11.0766C5.90105 11.1426 5.96116 11.2147 6.01368 11.2924C6.06622 11.3701 6.11143 11.4531 6.14845 11.5404L6.14942 11.5414C6.07537 11.3662 5.96748 11.209 5.83497 11.0766ZM5.3711 10.7631C5.45845 10.8001 5.54145 10.8453 5.61915 10.8978L5.49903 10.8246C5.45758 10.8021 5.41485 10.7816 5.3711 10.7631ZM6.53224 9.75721C6.61493 9.81813 6.69382 9.88343 6.76954 9.95253C6.69383 9.88342 6.61492 9.81814 6.53224 9.75721ZM5.93946 9.41737C6.02699 9.45439 6.11239 9.49536 6.19532 9.54042C6.02953 9.45029 5.85413 9.37574 5.67091 9.31874L5.93946 9.41737ZM4.50294 9.20155V9.20253V9.20155ZM5.10059 9.20253V9.20155V9.20253ZM12.3184 7.51698H16.6865C16.6388 7.0959 16.4591 6.86613 16.3916 6.79921L14.3672 4.79335C13.8691 4.29983 13.5364 4.17616 13.4326 4.17616H12.3184V7.51698Z"
+                                        fill="var(--fill-0, #363636)"
+                                        id="Union"
+                                      ></path>
+                                    </g>
+                                  </svg>
+                                </div>
+                                <p
+                                  class="font-[&#x27;Poppins:Medium&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[16px] whitespace-nowrap"
+                                >
+                                  Vehicle
+                                </p>
+                              </div>
+                              <div
+                                class="content-stretch flex gap-[12px] items-start relative shrink-0 w-full"
+                              >
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-h-px min-w-px relative"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-center relative shrink-0 w-full"
+                                          >
+                                            <div
+                                              class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                            >
+                                              <div
+                                                class="content-stretch flex flex-[1_0_0] items-center justify-between min-h-px min-w-px relative"
+                                              >
+                                                <div
+                                                  class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                                >
+                                                  <p
+                                                    class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                  >
+                                                    Category
+                                                  </p>
+                                                  <p
+                                                    class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                  >
+                                                    *
+                                                  </p>
+                                                </div>
+                                                <div
+                                                  style="
+                                                    --transform-inner-width: 1200;
+                                                    --transform-inner-height: 19;
+                                                  "
+                                                  class="flex items-center justify-center relative shrink-0 size-[8.485px]"
+                                                >
+                                                  <div class="-rotate-45 flex-none">
+                                                    <div
+                                                      class="relative size-[6px]"
+                                                      data-name="Union"
+                                                    >
+                                                      <svg
+                                                        class="absolute block size-full"
+                                                        fill="none"
+                                                        preserveAspectRatio="none"
+                                                        viewBox="0 0 6 6"
+                                                      >
+                                                        <path
+                                                          d="M0.5 0C0.776142 0 1 0.223858 1 0.5V5H5.5C5.77614 5 6 5.22386 6 5.5C6 5.77614 5.77614 6 5.5 6H0.5C0.258287 6 0.056292 5.82855 0.00976562 5.60059L0 5.5V0.5C0 0.223858 0.223858 0 0.5 0Z"
+                                                          fill="var(--fill-0, #363636)"
+                                                          id="Union"
+                                                        ></path>
+                                                      </svg>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-h-px min-w-px relative"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-center relative shrink-0 w-full"
+                                          >
+                                            <div
+                                              class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                            >
+                                              <div
+                                                class="content-stretch flex flex-[1_0_0] items-center justify-between min-h-px min-w-px relative"
+                                              >
+                                                <div
+                                                  class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                                >
+                                                  <p
+                                                    class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                  >
+                                                    Make
+                                                  </p>
+                                                  <p
+                                                    class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                  >
+                                                    *
+                                                  </p>
+                                                </div>
+                                                <div
+                                                  style="
+                                                    --transform-inner-width: 1200;
+                                                    --transform-inner-height: 19;
+                                                  "
+                                                  class="flex items-center justify-center relative shrink-0 size-[8.485px]"
+                                                >
+                                                  <div class="-rotate-45 flex-none">
+                                                    <div
+                                                      class="relative size-[6px]"
+                                                      data-name="Union"
+                                                    >
+                                                      <svg
+                                                        class="absolute block size-full"
+                                                        fill="none"
+                                                        preserveAspectRatio="none"
+                                                        viewBox="0 0 6 6"
+                                                      >
+                                                        <path
+                                                          d="M0.5 0C0.776142 0 1 0.223858 1 0.5V5H5.5C5.77614 5 6 5.22386 6 5.5C6 5.77614 5.77614 6 5.5 6H0.5C0.258287 6 0.056292 5.82855 0.00976562 5.60059L0 5.5V0.5C0 0.223858 0.223858 0 0.5 0Z"
+                                                          fill="var(--fill-0, #363636)"
+                                                          id="Union"
+                                                        ></path>
+                                                      </svg>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-h-px min-w-px relative"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-center relative shrink-0 w-full"
+                                          >
+                                            <div
+                                              class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                            >
+                                              <div
+                                                class="content-stretch flex flex-[1_0_0] items-center justify-between min-h-px min-w-px relative"
+                                              >
+                                                <div
+                                                  class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                                >
+                                                  <p
+                                                    class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                  >
+                                                    Model
+                                                  </p>
+                                                  <p
+                                                    class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                  >
+                                                    *
+                                                  </p>
+                                                </div>
+                                                <div
+                                                  style="
+                                                    --transform-inner-width: 1200;
+                                                    --transform-inner-height: 19;
+                                                  "
+                                                  class="flex items-center justify-center relative shrink-0 size-[8.485px]"
+                                                >
+                                                  <div class="-rotate-45 flex-none">
+                                                    <div
+                                                      class="relative size-[6px]"
+                                                      data-name="Union"
+                                                    >
+                                                      <svg
+                                                        class="absolute block size-full"
+                                                        fill="none"
+                                                        preserveAspectRatio="none"
+                                                        viewBox="0 0 6 6"
+                                                      >
+                                                        <path
+                                                          d="M0.5 0C0.776142 0 1 0.223858 1 0.5V5H5.5C5.77614 5 6 5.22386 6 5.5C6 5.77614 5.77614 6 5.5 6H0.5C0.258287 6 0.056292 5.82855 0.00976562 5.60059L0 5.5V0.5C0 0.223858 0.223858 0 0.5 0Z"
+                                                          fill="var(--fill-0, #363636)"
+                                                          id="Union"
+                                                        ></path>
+                                                      </svg>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="bg-white relative rounded-[4px] shrink-0 w-full">
+                            <div
+                              aria-hidden="true"
+                              class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[4px]"
+                            ></div>
+                            <div
+                              class="content-stretch flex flex-col gap-[16px] items-start p-[24px] relative w-full"
+                            >
+                              <div
+                                class="content-stretch flex gap-[10px] items-center justify-center relative shrink-0"
+                              >
+                                <div
+                                  style="
+                                    --transform-inner-width: 1200;
+                                    --transform-inner-height: 19;
+                                  "
+                                  class="flex items-center justify-center relative shrink-0 size-[14.37px]"
+                                >
+                                  <div class="-rotate-45 flex-none">
+                                    <div
+                                      class="h-[5.322px] relative w-[15.001px]"
+                                      data-name="Union"
+                                    >
+                                      <svg
+                                        class="absolute block size-full"
+                                        fill="none"
+                                        preserveAspectRatio="none"
+                                        viewBox="0 0 14.9996 5.32163"
+                                      >
+                                        <path
+                                          d="M13.9222 0.00620164C14.1928 -0.0307079 14.7639 0.079637 14.8821 0.817725C15.0298 1.74051 15.1036 3.254 14.6976 3.58628C14.2915 3.91849 13.7005 4.32496 12.9622 4.58335C12.2402 4.83605 10.8123 5.29822 7.60967 5.3187L7.61064 5.32065C7.58852 5.32065 7.56619 5.31972 7.54424 5.31968C7.49293 5.31991 7.44118 5.32163 7.38896 5.32163V5.3187C4.18604 5.29817 2.75826 4.83599 2.03642 4.58335C1.29832 4.32501 0.70808 3.91846 0.302049 3.58628C-0.103989 3.25407 -0.0301715 1.74054 0.117479 0.817725C0.235606 0.0798557 0.805672 -0.0305917 1.07646 0.00620164L3.80791 0.558936C3.94324 0.583543 4.25107 0.67768 4.39873 0.854834C4.69401 1.1132 4.84212 2.14641 5.02666 2.62632C5.65408 2.70014 6.3922 2.77377 7.49931 2.77378C8.71743 2.77378 9.34544 2.70015 9.97295 2.62632C10.1574 2.14642 10.3048 1.11347 10.5999 0.854834C10.7475 0.677746 11.0553 0.58458 11.1907 0.559913L13.9222 0.00620164Z"
+                                          fill="var(--fill-0, #363636)"
+                                          id="Union"
+                                        ></path>
+                                      </svg>
+                                    </div>
+                                  </div>
+                                </div>
+                                <p
+                                  class="font-[&#x27;Poppins:Medium&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[16px] whitespace-nowrap"
+                                >
+                                  Contact Information
+                                </p>
+                              </div>
+                              <div
+                                class="content-stretch flex gap-[12px] items-start relative shrink-0 w-full"
+                              >
+                                <div
+                                  class="content-stretch flex flex-col items-start justify-center relative shrink-0 w-[450px]"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-center relative shrink-0 w-full"
+                                          >
+                                            <div
+                                              class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                            >
+                                              <div
+                                                class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                              >
+                                                <div
+                                                  class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                                >
+                                                  <p
+                                                    class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                  >
+                                                    Email
+                                                  </p>
+                                                  <p
+                                                    class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                  >
+                                                    *
+                                                  </p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-h-px min-w-px relative"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex flex-[1_0_0] items-center justify-between min-h-px min-w-px relative w-[61.33px]"
+                                          >
+                                            <div
+                                              class="content-stretch flex items-center relative shrink-0"
+                                            >
+                                              <p
+                                                class="font-[&#x27;Poppins:Regular&#x27;,sans-serif] leading-[24px] not-italic relative shrink-0 text-[#363636] text-[14px] whitespace-nowrap"
+                                              >
+                                                +63
+                                              </p>
+                                            </div>
+                                            <div
+                                              style="
+                                                --transform-inner-width: 1200;
+                                                --transform-inner-height: 19;
+                                              "
+                                              class="flex items-center justify-center relative shrink-0 size-[8.485px]"
+                                            >
+                                              <div class="-rotate-45 flex-none">
+                                                <div class="relative size-[6px]" data-name="Union">
+                                                  <svg
+                                                    class="absolute block size-full"
+                                                    fill="none"
+                                                    preserveAspectRatio="none"
+                                                    viewBox="0 0 6 6"
+                                                  >
+                                                    <path
+                                                      d="M0.5 0C0.776142 0 1 0.223858 1 0.5V5H5.5C5.77614 5 6 5.22386 6 5.5C6 5.77614 5.77614 6 5.5 6H0.5C0.258287 6 0.056292 5.82855 0.00976562 5.60059L0 5.5V0.5C0 0.223858 0.223858 0 0.5 0Z"
+                                                      fill="var(--fill-0, #363636)"
+                                                      id="Union"
+                                                    ></path>
+                                                  </svg>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="content-stretch flex flex-col items-start justify-center relative shrink-0 w-[270.67px]"
+                                  data-name="Travel Type"
+                                >
+                                  <div
+                                    class="content-stretch flex h-[44px] items-center relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="flex flex-[1_0_0] flex-row items-center self-stretch"
+                                    >
+                                      <div
+                                        class="bg-white flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[100px]"
+                                      >
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[100px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)]"
+                                        ></div>
+                                        <div
+                                          class="content-stretch flex flex-col items-start px-[15px] py-[10px] relative size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex items-center relative shrink-0 w-full"
+                                          >
+                                            <div
+                                              class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                            >
+                                              <div
+                                                class="content-stretch flex flex-[1_0_0] items-center min-h-px min-w-px relative"
+                                              >
+                                                <div
+                                                  class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[4px] items-center not-italic relative shrink-0 whitespace-nowrap"
+                                                >
+                                                  <p
+                                                    class="leading-[24px] relative shrink-0 text-[#dcdcdc] text-[14px]"
+                                                  >
+                                                    XXX-XXXX-XXX
+                                                  </p>
+                                                  <p
+                                                    class="leading-[14px] relative shrink-0 text-[#df3434] text-[16px]"
+                                                  >
+                                                    *
+                                                  </p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            class="content-stretch cursor-pointer flex flex-col gap-[10px] items-start relative shrink-0"
+                          >
+                            <button class="relative shrink-0">
+                              <div class="content-stretch flex items-start relative">
+                                <div
+                                  class="relative shrink-0"
+                                  data-name="Checkbox / Checkbox + Label"
+                                >
+                                  <div class="content-stretch flex gap-[8px] items-start relative">
+                                    <div
+                                      class="content-stretch flex h-[21px] items-center relative shrink-0"
+                                      data-name="Checkbox"
+                                    >
+                                      <div
+                                        class="relative rounded-[4px] shrink-0 size-[16px] bg-white"
+                                        data-name="Checkbox / Checkbox"
+                                      >
+                                        <div
+                                          class="flex flex-col items-center justify-center overflow-clip rounded-[inherit] size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex flex-col items-center justify-center size-full"
+                                          ></div>
+                                        </div>
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-solid inset-0 pointer-events-none rounded-[4px] border-[#dbdcd9]"
+                                        ></div>
+                                      </div>
+                                    </div>
+                                    <div
+                                      class="content-stretch flex items-start overflow-clip relative shrink-0"
+                                      data-name="Label"
+                                    >
+                                      <p
+                                        class="font-[&quot;Poppins:Regular&quot;,sans-serif] leading-[21px] not-italic relative text-[14px] text-left shrink-0 text-[#363636] whitespace-nowrap"
+                                      >
+                                        I’d love to stay updated with future travel promos and
+                                        advisories, so I never miss an adventure!
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </button>
+                            <button class="relative shrink-0" data-name="Checkbox">
+                              <div class="content-stretch flex items-start relative">
+                                <div
+                                  class="relative shrink-0"
+                                  data-name="Checkbox / Checkbox + Label"
+                                >
+                                  <div class="content-stretch flex gap-[8px] items-start relative">
+                                    <div
+                                      class="content-stretch flex h-[21px] items-center relative shrink-0"
+                                      data-name="Checkbox"
+                                    >
+                                      <div
+                                        class="bg-white relative rounded-[4px] shrink-0 size-[16px]"
+                                        data-name="Checkbox / Checkbox"
+                                      >
+                                        <div
+                                          class="flex flex-col items-center justify-center overflow-clip rounded-[inherit] size-full"
+                                        >
+                                          <div
+                                            class="content-stretch flex flex-col items-center justify-center size-full"
+                                          ></div>
+                                        </div>
+                                        <div
+                                          aria-hidden="true"
+                                          class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[4px]"
+                                        ></div>
+                                      </div>
+                                    </div>
+                                    <div
+                                      class="content-stretch flex items-start overflow-clip relative shrink-0"
+                                      data-name="Label"
+                                    >
+                                      <p
+                                        class="font-[&#x27;Poppins:Regular&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[14px] text-left whitespace-nowrap"
+                                      >
+                                        By providing my personal details, I confirm that Entrée can
+                                        use this information to create and manage my account.
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="bg-white flex-[1_0_0] min-h-px min-w-px relative rounded-[4px]">
+                      <div
+                        aria-hidden="true"
+                        class="absolute border border-[#dbdcd9] border-solid inset-0 pointer-events-none rounded-[4px]"
+                      ></div>
+                      <div class="flex flex-col justify-center size-full">
+                        <div
+                          class="content-stretch flex flex-col gap-[24px] items-start justify-center p-[16px] relative w-full"
+                        >
+                          <div
+                            class="content-stretch flex flex-col gap-[12px] items-start relative shrink-0 w-full"
+                          >
+                            <p
+                              class="font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[14px] w-[137px]"
+                            >
+                              Summary
+                            </p>
+                            <div
+                              class="bg-[#dbdcd9] h-px shrink-0 w-full"
+                              data-name="row-border-bottom"
+                            ></div>
+                            <div
+                              class="content-stretch flex flex-col gap-[32px] items-start relative shrink-0 w-full"
+                            >
+                              <div
+                                class="content-stretch flex flex-col gap-[12px] items-start relative shrink-0 w-full"
+                              >
+                                <div
+                                  class="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-full"
+                                >
+                                  <p
+                                    class="font-[&#x27;Poppins:Medium&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#979797] text-[13px] w-full"
+                                  >
+                                    Departure
+                                  </p>
+                                  <div
+                                    class="content-stretch flex flex-col items-start relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="content-stretch flex items-center relative shrink-0 w-full"
+                                    >
+                                      <div
+                                        class="content-stretch flex gap-[10px] items-center relative shrink-0"
+                                      >
+                                        <p
+                                          class="font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[12px] whitespace-nowrap"
+                                        >
+                                          Cebu City
+                                        </p>
+                                        <div class="h-[10.217px] relative w-[16px] shrink-0">
+                                          <svg
+                                            class="absolute block size-full"
+                                            fill="none"
+                                            preserveAspectRatio="none"
+                                            viewBox="0 0 16.0001 10.2168"
+                                          >
+                                            <path
+                                              d="M10.3486 0.224586C10.6483 -0.0747799 11.134 -0.0749439 11.4336 0.224586L15.7656 4.55662C15.7687 4.55961 15.7723 4.56234 15.7754 4.56541C16.075 4.8651 16.075 5.35169 15.7754 5.65134L11.4346 9.99216C11.1349 10.2917 10.6483 10.2917 10.3486 9.99216C10.0492 9.69263 10.0494 9.20691 10.3486 8.9072L13.3438 5.91306H0.767578C0.343868 5.91306 0.000182387 5.56915 0 5.14548C3.70517e-08 4.72166 0.343756 4.37791 0.767578 4.37791H13.416L10.3486 1.31052C10.049 1.01087 10.049 0.524282 10.3486 0.224586Z"
+                                              fill="var(--fill-0, #363636)"
+                                              id="Union"
+                                            ></path>
+                                          </svg>
+                                        </div>
+                                        <p
+                                          class="font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[12px] whitespace-nowrap"
+                                        >
+                                          Tagbilaran, Bohol
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div
+                                      class="content-stretch flex items-center relative shrink-0 w-full"
+                                    >
+                                      <p
+                                        class="font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[12px] whitespace-pre"
+                                      >
+                                        Wed, Oct 30 | 05:40 - 09:40
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="content-stretch flex gap-[12px] items-start relative shrink-0 w-full"
+                                >
+                                  <div
+                                    class="content-stretch flex flex-col items-start relative shrink-0 w-[100px]"
+                                  >
+                                    <div
+                                      class="content-stretch flex flex-col h-[38.105px] items-center justify-center relative shrink-0 w-[100px]"
+                                    >
+                                      <div
+                                        class="flex-[1_0_0] min-h-px min-w-px relative w-full"
+                                        data-name="SuperCat_logo_(A_CHELSEA_Company) 1"
+                                      >
+                                        <img
+                                          alt=""
+                                          class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+                                          src="../assets/images/supercat-logo.png"
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div
+                                    class="content-stretch flex flex-[1_0_0] flex-col font-[&#x27;Poppins:Medium&#x27;,sans-serif] gap-[8px] items-center justify-center leading-[12px] min-h-px min-w-px not-italic relative self-stretch text-[#363636] text-[12px]"
+                                  >
+                                    <p class="relative shrink-0 w-full">SUPERCAT</p>
+                                    <p class="relative shrink-0 w-full">Economy SPR</p>
+                                  </div>
+                                </div>
+                                <div
+                                  class="content-stretch flex items-center justify-between leading-[21px] relative shrink-0 text-[#363636] text-[12px] w-full whitespace-nowrap"
+                                >
+                                  <div
+                                    class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[8px] items-center not-italic relative shrink-0 w-[203px]"
+                                  >
+                                    <p class="relative shrink-0">Ticket price</p>
+                                    <p class="relative shrink-0">(2 pax)</p>
+                                  </div>
+                                  <p
+                                    class="font-[&#x27;Poppins:Medium&#x27;,&#x27;Noto_Sans:Medium&#x27;,sans-serif] relative shrink-0 text-right"
+                                    style="font-variation-settings:&#x27;CTGR&#x27; 0, &#x27;wdth&#x27; 100, &#x27;wght&#x27; 500"
+                                  >
+                                    ₱ 1,669.80
+                                  </p>
+                                </div>
+                              </div>
+                              <div
+                                class="content-stretch flex flex-col gap-[12px] items-start relative shrink-0 w-full"
+                              >
+                                <div
+                                  class="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-full"
+                                >
+                                  <p
+                                    class="font-[&#x27;Poppins:Medium&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#979797] text-[13px] w-full"
+                                  >
+                                    Return
+                                  </p>
+                                  <div
+                                    class="content-stretch flex flex-col gap-[4px] items-start relative shrink-0 w-full"
+                                  >
+                                    <div
+                                      class="content-stretch flex items-center relative shrink-0 w-full"
+                                    >
+                                      <div
+                                        class="content-stretch flex gap-[10px] items-center relative shrink-0"
+                                      >
+                                        <p
+                                          class="font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[12px] whitespace-nowrap"
+                                        >
+                                          Tagbilaran, Bohol
+                                        </p>
+                                        <div class="h-[10.217px] relative w-[16px] shrink-0">
+                                          <svg
+                                            class="absolute block size-full"
+                                            fill="none"
+                                            preserveAspectRatio="none"
+                                            viewBox="0 0 16.0001 10.2168"
+                                          >
+                                            <path
+                                              d="M10.3486 0.224586C10.6483 -0.0747799 11.134 -0.0749439 11.4336 0.224586L15.7656 4.55662C15.7687 4.55961 15.7723 4.56234 15.7754 4.56541C16.075 4.8651 16.075 5.35169 15.7754 5.65134L11.4346 9.99216C11.1349 10.2917 10.6483 10.2917 10.3486 9.99216C10.0492 9.69263 10.0494 9.20691 10.3486 8.9072L13.3438 5.91306H0.767578C0.343868 5.91306 0.000182387 5.56915 0 5.14548C3.70517e-08 4.72166 0.343756 4.37791 0.767578 4.37791H13.416L10.3486 1.31052C10.049 1.01087 10.049 0.524282 10.3486 0.224586Z"
+                                              fill="var(--fill-0, #363636)"
+                                              id="Union"
+                                            ></path>
+                                          </svg>
+                                        </div>
+                                        <p
+                                          class="font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[12px] whitespace-nowrap"
+                                        >
+                                          Cebu City
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div
+                                      class="content-stretch flex items-center relative shrink-0 w-full"
+                                    >
+                                      <p
+                                        class="font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] leading-[21px] not-italic relative shrink-0 text-[#363636] text-[12px] whitespace-pre"
+                                      >
+                                        Mon, Nov 4 | 22:00 - 02:00
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div
+                                  class="content-stretch flex gap-[12px] items-start relative shrink-0 w-full"
+                                >
+                                  <div
+                                    class="content-stretch flex items-center relative shrink-0 w-[100px]"
+                                  >
+                                    <div
+                                      class="relative shrink-0 size-[38px]"
+                                      data-name="lite-removebg-preview (1) 1"
+                                    >
+                                      <img
+                                        alt=""
+                                        class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+                                        src="../assets/images/lite-ferries-logo.png"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div
+                                    class="content-stretch flex flex-[1_0_0] flex-col font-[&#x27;Poppins:Medium&#x27;,sans-serif] gap-[8px] items-center justify-center leading-[12px] min-h-px min-w-px not-italic relative self-stretch text-[#363636] text-[12px]"
+                                  >
+                                    <p class="relative shrink-0 w-full">LITE SHIPPING</p>
+                                    <p class="relative shrink-0 w-full">Tourist</p>
+                                  </div>
+                                </div>
+                                <div
+                                  class="content-stretch flex items-center justify-between leading-[21px] relative shrink-0 text-[#363636] text-[12px] w-full whitespace-nowrap"
+                                >
+                                  <div
+                                    class="content-stretch flex font-[&#x27;Poppins:Regular&#x27;,sans-serif] gap-[8px] items-center not-italic relative shrink-0 w-[203px]"
+                                  >
+                                    <p class="relative shrink-0">Ticket price</p>
+                                    <p class="relative shrink-0">(2 pax)</p>
+                                  </div>
+                                  <p
+                                    class="font-[&#x27;Poppins:Medium&#x27;,&#x27;Noto_Sans:Medium&#x27;,sans-serif] relative shrink-0 text-right"
+                                    style="font-variation-settings:&#x27;CTGR&#x27; 0, &#x27;wdth&#x27; 100, &#x27;wght&#x27; 500"
+                                  >
+                                    ₱ 740.00
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              class="bg-[#dbdcd9] h-px shrink-0 w-full"
+                              data-name="row-border-bottom"
+                            ></div>
+                            <div
+                              class="content-stretch flex flex-col items-start leading-[21px] relative shrink-0 text-[#363636] text-[12px] w-full whitespace-nowrap"
+                            >
+                              <div
+                                class="content-stretch flex items-center justify-between relative shrink-0 w-full"
+                              >
+                                <p
+                                  class="font-[&#x27;Poppins:Regular&#x27;,sans-serif] not-italic relative shrink-0"
+                                >
+                                  Items total
+                                </p>
+                                <p
+                                  class="font-[&#x27;Poppins:Medium&#x27;,&#x27;Noto_Sans:Medium&#x27;,sans-serif] relative shrink-0 text-right"
+                                  style="font-variation-settings:&#x27;CTGR&#x27; 0, &#x27;wdth&#x27; 100, &#x27;wght&#x27; 500"
+                                >
+                                  ₱ 2,409.80
+                                </p>
+                              </div>
+                              <div
+                                class="content-stretch flex items-center justify-between not-italic relative shrink-0 w-full"
+                              >
+                                <p
+                                  class="font-[&#x27;Poppins:Regular&#x27;,sans-serif] relative shrink-0"
+                                >
+                                  Booking fee
+                                </p>
+                                <p
+                                  class="font-[&#x27;Poppins:Medium&#x27;,sans-serif] relative shrink-0 text-right"
+                                >
+                                  50.00
+                                </p>
+                              </div>
+                            </div>
+                            <div
+                              class="bg-[#dbdcd9] h-px shrink-0 w-full"
+                              data-name="row-border-bottom"
+                            ></div>
+                            <div
+                              class="content-stretch flex items-center justify-between leading-[21px] relative shrink-0 text-[#363636] text-[16px] w-full whitespace-nowrap"
+                            >
+                              <p
+                                class="font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] not-italic relative shrink-0"
+                              >
+                                Total
+                              </p>
+                              <p
+                                class="font-[&#x27;Poppins:SemiBold&#x27;,&#x27;Noto_Sans:SemiBold&#x27;,sans-serif] relative shrink-0 text-right"
+                                style="font-variation-settings:&#x27;CTGR&#x27; 0, &#x27;wdth&#x27; 100, &#x27;wght&#x27; 600"
+                              >
+                                ₱ 2,459.80
+                              </p>
+                            </div>
+                          </div>
+                          <div class="bg-[#e6e9e0] relative rounded-[100px] shrink-0 w-full">
+                            <div class="flex flex-row items-center justify-center size-full">
+                              <div
+                                class="content-stretch flex gap-[7px] items-center justify-center px-[15px] py-[10px] relative w-full"
+                              >
+                                <p
+                                  class="flex-[1_0_0] font-[&#x27;Poppins:Medium&#x27;,sans-serif] leading-[21px] min-h-px min-w-px not-italic relative text-[#979797] text-[12px]"
+                                >
+                                  Proceed to payment
+                                </p>
+                                <div
+                                  class="h-[14px] relative shrink-0 w-[14.954px]"
+                                  data-name="Union"
+                                >
+                                  <svg
+                                    class="absolute block size-full"
+                                    fill="none"
+                                    preserveAspectRatio="none"
+                                    viewBox="0 0 14.9542 14.0002"
+                                  >
+                                    <path
+                                      d="M6.1749 0.637742C7.19259 -0.379863 8.12551 0.0445752 8.46494 0.383835L14.9542 7.127L8.21103 13.6163C7.95657 13.9555 7.19275 14.3801 6.1749 13.3624C5.15743 12.3449 5.49627 11.4965 5.79306 11.1993L10.1192 7.127L5.92099 2.92876C5.58169 2.58946 5.157 1.65564 6.1749 0.637742ZM0.622166 1.10063C1.5473 0.175743 2.39567 0.560784 2.7042 0.869187L8.60361 7.00005L2.47275 12.8995C2.24139 13.2079 1.54743 13.5932 0.622166 12.668C-0.303174 11.7427 0.00461674 10.9711 0.274509 10.7012L4.2081 7.00005L0.39072 3.18266C0.0822863 2.87411 -0.303076 2.02587 0.622166 1.10063Z"
+                                      fill="var(--fill-0, #979797)"
+                                      id="Union"
+                                    ></path>
+                                  </svg>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="px-[120px] pb-8">
+              <div class="max-w-[1200px] mx-auto">
+                <button
+                  class="w-full bg-[#FFCC00] text-black font-bold rounded-full py-4 px-6 flex items-center justify-center gap-3 shadow-lg"
+                  style="border: 2px solid #ffcc00"
+                  data-action="go:verify-booking"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-shopping-bag w-5 h-5 stroke-[2.5]"
+                  >
+                    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                    <path d="M3 6h18"></path>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                  </svg>
+                  <span class="text-[14px] tracking-wide">Buy Pasalubong?</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <div class="mascot" aria-hidden="true">
+        <div class="mascot-bubble">Doode says: Speed it up! 🚀</div>
+        <div class="mascot-art">
+          <div class="relative size-full">
+            <div class="absolute contents left-0 top-[9.9px]" data-name="Mask group">
+              <div
+                class="absolute h-[121.854px] left-0 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[0px_11.426px] mask-size-[115px_109.668px] top-[-1.52px] w-[115.508px]"
+                style="mask-image:url(&#x27;data:image/svg+xml,%3Csvg%20preserveAspectRatio%3D%22none%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20overflow%3D%22visible%22%20style%3D%22display%3A%20block%3B%22%20viewBox%3D%220%200%20115%20109.669%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20id%3D%22Vector%203%22%20d%3D%22M0%200H58.6424L70.8278%2026.6556L89.8676%2040.3642H115V109.669H0V0Z%22%20fill%3D%22var(--fill-0%2C%20%23D9D9D9)%22%2F%3E%0A%3C%2Fsvg%3E%0A&#x27;)"
+                data-name="dud-removebg-preview 1"
+              >
+                <img
+                  alt=""
+                  class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+                  src="../assets/images/doode-turtle.png"
+                />
+              </div>
+            </div>
+            <div class="absolute left-[92.91px] size-[6.093px] top-[36.55px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 6.09277 6.09277"
+              >
+                <path
+                  d="M3.0459 0C4.7282 0 6.09253 1.36365 6.09277 3.0459C6.09277 4.72836 4.72836 6.09277 3.0459 6.09277C1.36365 6.09253 0 4.7282 0 3.0459C0.000248117 1.36381 1.36381 0.000248117 3.0459 0ZM3.04688 1.01562C1.92524 1.01562 1.01562 1.92524 1.01562 3.04688C1.01581 4.16835 1.92535 5.07715 3.04688 5.07715C4.16824 5.07696 5.07696 4.16824 5.07715 3.04688C5.07715 1.92535 4.16835 1.01581 3.04688 1.01562Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[97.48px] size-[3.046px] top-[22.85px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 3.0459 3.0459"
+              >
+                <path
+                  d="M1.52344 0C2.36455 0.000139786 3.0459 0.682295 3.0459 1.52344C3.04576 2.36446 2.36446 3.04576 1.52344 3.0459C0.682295 3.0459 0.000139786 2.36455 0 1.52344C0 0.682209 0.682209 0 1.52344 0ZM1.52344 0.507812C0.962619 0.507812 0.507812 0.962619 0.507812 1.52344C0.507906 2.08418 0.962676 2.53906 1.52344 2.53906C2.08412 2.53897 2.53897 2.08412 2.53906 1.52344C2.53906 0.962676 2.08418 0.507906 1.52344 0.507812Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[77.68px] size-[3.046px] top-0" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 3.0459 3.0459"
+              >
+                <path
+                  d="M1.52344 0C2.36455 0.000139786 3.0459 0.682295 3.0459 1.52344C3.04576 2.36446 2.36446 3.04576 1.52344 3.0459C0.682295 3.0459 0.000139786 2.36455 0 1.52344C0 0.682209 0.682209 0 1.52344 0ZM1.52344 0.507812C0.962619 0.507812 0.507812 0.962619 0.507812 1.52344C0.507906 2.08418 0.962676 2.53906 1.52344 2.53906C2.08412 2.53897 2.53897 2.08412 2.53906 1.52344C2.53906 0.962676 2.08418 0.507906 1.52344 0.507812Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[76.16px] size-[4.57px] top-[9.14px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 4.56934 4.56934"
+              >
+                <path
+                  d="M2.28516 0C3.54682 0.000209744 4.56934 1.02344 4.56934 2.28516C4.56913 3.54669 3.54669 4.56913 2.28516 4.56934C1.02344 4.56934 0.000209744 3.54682 0 2.28516C0 1.02331 1.02331 0 2.28516 0ZM2.28516 0.761719C1.44393 0.761719 0.761719 1.44393 0.761719 2.28516C0.761859 3.12627 1.44401 3.80762 2.28516 3.80762C3.12618 3.80748 3.80748 3.12618 3.80762 2.28516C3.80762 1.44401 3.12627 0.761859 2.28516 0.761719Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[82.25px] size-[9.139px] top-[25.89px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 9.13867 9.13867"
+              >
+                <path
+                  d="M4.56934 0C7.09295 0 9.13856 2.04574 9.13867 4.56934C9.13867 7.09302 7.09302 9.13867 4.56934 9.13867C2.04574 9.13856 0 7.09295 0 4.56934C0.000108229 2.04581 2.04581 0.000108229 4.56934 0ZM4.56934 1.52344C2.88724 1.52369 1.52369 2.88724 1.52344 4.56934C1.52344 6.25164 2.88709 7.61596 4.56934 7.61621C6.25179 7.61621 7.61621 6.25179 7.61621 4.56934C7.61596 2.88709 6.25164 1.52344 4.56934 1.52344Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[89.87px] size-[6.093px] top-[7.62px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 6.09277 6.09277"
+              >
+                <path
+                  d="M3.0459 0C4.7282 0 6.09253 1.36365 6.09277 3.0459C6.09277 4.72836 4.72836 6.09277 3.0459 6.09277C1.36365 6.09253 0 4.7282 0 3.0459C0.000248117 1.36381 1.36381 0.000248117 3.0459 0ZM3.04688 1.01562C1.92524 1.01562 1.01562 1.92524 1.01562 3.04688C1.01581 4.16835 1.92535 5.07715 3.04688 5.07715C4.16824 5.07696 5.07696 4.16824 5.07715 3.04688C5.07715 1.92535 4.16835 1.01581 3.04688 1.01562Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div
+              class="absolute flex items-center justify-center left-[92.91px] size-[2.285px] top-[15.99px]"
+            >
+              <div class="-scale-y-100 flex-none">
+                <div class="relative size-[2.285px]" data-name="Subtract">
+                  <svg
+                    class="absolute block inset-0 size-full"
+                    fill="none"
+                    preserveAspectRatio="none"
+                    viewBox="0 0 2.28516 2.28516"
+                  >
+                    <path
+                      d="M1.14258 0C1.77341 0.000104872 2.28516 0.511722 2.28516 1.14258C2.28505 1.77335 1.77335 2.28505 1.14258 2.28516C0.511722 2.28516 0.000104872 1.77341 0 1.14258C0 0.511657 0.511657 0 1.14258 0ZM1.14453 0.378906C0.723917 0.378906 0.382812 0.720011 0.382812 1.14062C0.382882 1.56118 0.72396 1.90234 1.14453 1.90234C1.56504 1.90227 1.90618 1.56114 1.90625 1.14062C1.90625 0.720054 1.56509 0.378976 1.14453 0.378906Z"
+                      fill="var(--fill-0, #191D4B)"
+                      id="Subtract"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="absolute flex items-center justify-center left-[86.82px] size-[1.523px] top-[20.56px]"
+            >
+              <div class="-scale-y-100 flex-none">
+                <div class="relative size-[1.523px]" data-name="Subtract">
+                  <svg
+                    class="absolute block inset-0 size-full"
+                    fill="none"
+                    preserveAspectRatio="none"
+                    viewBox="0 0 1.52344 1.52344"
+                  >
+                    <path
+                      d="M0.761719 0C1.18227 6.98931e-05 1.52344 0.341148 1.52344 0.761719C1.52337 1.18223 1.18223 1.52337 0.761719 1.52344C0.341148 1.52344 6.98931e-05 1.18227 0 0.761719C0 0.341105 0.341105 0 0.761719 0ZM0.761719 0.253906C0.481309 0.253906 0.253906 0.481309 0.253906 0.761719C0.253953 1.04209 0.481338 1.26953 0.761719 1.26953C1.04206 1.26948 1.26948 1.04206 1.26953 0.761719C1.26953 0.481338 1.04209 0.253953 0.761719 0.253906Z"
+                      fill="var(--fill-0, #191D4B)"
+                      id="Subtract"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="absolute flex items-center justify-center left-[92.91px] size-[1.523px] top-[47.22px]"
+            >
+              <div class="-scale-y-100 flex-none">
+                <div class="relative size-[1.523px]" data-name="Subtract">
+                  <svg
+                    class="absolute block inset-0 size-full"
+                    fill="none"
+                    preserveAspectRatio="none"
+                    viewBox="0 0 1.52344 1.52344"
+                  >
+                    <path
+                      d="M0.761719 0C1.18227 6.98931e-05 1.52344 0.341148 1.52344 0.761719C1.52337 1.18223 1.18223 1.52337 0.761719 1.52344C0.341148 1.52344 6.98931e-05 1.18227 0 0.761719C0 0.341105 0.341105 0 0.761719 0ZM0.761719 0.253906C0.481309 0.253906 0.253906 0.481309 0.253906 0.761719C0.253953 1.04209 0.481338 1.26953 0.761719 1.26953C1.04206 1.26948 1.26948 1.04206 1.26953 0.761719C1.26953 0.481338 1.04209 0.253953 0.761719 0.253906Z"
+                      fill="var(--fill-0, #191D4B)"
+                      id="Subtract"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="absolute flex items-center justify-center left-[100.53px] size-[1.523px] top-[30.46px]"
+            >
+              <div class="-scale-y-100 flex-none">
+                <div class="relative size-[1.523px]" data-name="Subtract">
+                  <svg
+                    class="absolute block inset-0 size-full"
+                    fill="none"
+                    preserveAspectRatio="none"
+                    viewBox="0 0 1.52344 1.52344"
+                  >
+                    <path
+                      d="M0.761719 0C1.18227 6.98931e-05 1.52344 0.341148 1.52344 0.761719C1.52337 1.18223 1.18223 1.52337 0.761719 1.52344C0.341148 1.52344 6.98931e-05 1.18227 0 0.761719C0 0.341105 0.341105 0 0.761719 0ZM0.761719 0.253906C0.481309 0.253906 0.253906 0.481309 0.253906 0.761719C0.254077 1.04198 0.481415 1.26953 0.761719 1.26953C1.04194 1.26944 1.26936 1.04192 1.26953 0.761719C1.26953 0.481368 1.04205 0.254001 0.761719 0.253906Z"
+                      fill="var(--fill-0, #191D4B)"
+                      id="Subtract"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

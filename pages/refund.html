@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Refund | Entree</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/site.css" />
+    <script src="../assets/js/data.js" defer></script>
+    <script src="../assets/js/app.js" defer></script>
+  </head>
+  <body data-page="refund">
+    <div
+      class="flex flex-col min-h-screen font-sans text-slate-900 bg-white selection:bg-[#CCFF00] selection:text-black overflow-x-hidden"
+    >
+      <header
+        class="fixed top-0 left-0 w-full z-50 px-6 md:px-10 py-4 flex justify-between items-center h-20 transition-all duration-300 shadow-md border-b border-white/10"
+        style="
+          background-image: url(../assets/images/ocean-background.png);
+          background-size: cover;
+          background-position: center top;
+        "
+      >
+        <div class="flex-1 flex items-center">
+          <button
+            class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition-all border border-white/20 shadow-sm"
+            aria-label="Go back"
+            data-action="back"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-left w-5 h-5 stroke-[2.5]"
+            >
+              <path d="m12 19-7-7 7-7"></path>
+              <path d="M19 12H5"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="flex items-center space-x-4 md:space-x-5 shrink-0 justify-end">
+          <div class="flex flex-col gap-2 items-end">
+            <a
+              class="border-2 border-[#FFCC00] text-[#FFCC00] text-[12px] md:text-[13px] font-bold rounded-full px-6 py-2 flex items-center justify-center shadow-sm"
+              href="verify-booking.html"
+              data-discover="true"
+              >Buy Pasalubong</a
+            >
+          </div>
+          <button
+            class="border-2 border-[#CCFF00] text-[#CCFF00] text-[12px] md:text-[13px] font-bold rounded-full px-6 py-2 flex items-center space-x-2 shadow-sm"
+            data-action="go:login"
+          >
+            <span>Log-in</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-log-in w-4 h-4 stroke-[2.5]"
+            >
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" x2="3" y1="12" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+      </header>
+      <main class="flex-1 flex flex-col relative w-full h-full">
+        <div class="w-full flex-1 bg-gray-50 flex flex-col items-center pt-20">
+          <div class="w-full max-w-[1000px] mx-auto px-6 py-8">
+            <button
+              class="flex items-center gap-2 text-[#666] hover:text-[#363636] mb-6 transition-colors"
+              data-action="go:bookings"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-arrow-left w-5 h-5"
+              >
+                <path d="m12 19-7-7 7-7"></path>
+                <path d="M19 12H5"></path>
+              </svg>
+            </button>
+            <div class="mb-8">
+              <h1
+                class="font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] text-[32px] text-[#363636] mb-2"
+              >
+                Request Refund
+              </h1>
+              <p class="text-[15px] text-[#666] font-[&#x27;Poppins:Regular&#x27;,sans-serif]">
+                Booking Reference: <span class="font-semibold text-[#363636]">ENT-2026-001234</span>
+              </p>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
+              <h2
+                class="font-[&#x27;Poppins:Bold&#x27;,sans-serif] text-[18px] text-[#363636] mb-4"
+              >
+                Current Booking
+              </h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex items-start gap-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-map-pin w-5 h-5 text-red-500 mt-0.5"
+                  >
+                    <path
+                      d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+                    ></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <div>
+                    <p
+                      class="text-[12px] text-[#999] font-[&#x27;Poppins:Regular&#x27;,sans-serif]"
+                    >
+                      Route
+                    </p>
+                    <p
+                      class="text-[15px] font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] text-[#363636]"
+                    >
+                      Cebu → Tagbilaran, Bohol
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-ship w-5 h-5 text-red-500 mt-0.5"
+                  >
+                    <path d="M12 10.189V14"></path>
+                    <path d="M12 2v3"></path>
+                    <path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"></path>
+                    <path
+                      d="M19.38 20A11.6 11.6 0 0 0 21 14l-8.188-3.639a2 2 0 0 0-1.624 0L3 14a11.6 11.6 0 0 0 2.81 7.76"
+                    ></path>
+                    <path
+                      d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"
+                    ></path>
+                  </svg>
+                  <div>
+                    <p
+                      class="text-[12px] text-[#999] font-[&#x27;Poppins:Regular&#x27;,sans-serif]"
+                    >
+                      Ferry
+                    </p>
+                    <p
+                      class="text-[15px] font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] text-[#363636]"
+                    >
+                      Supercat
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-calendar w-5 h-5 text-red-500 mt-0.5"
+                  >
+                    <path d="M8 2v4"></path>
+                    <path d="M16 2v4"></path>
+                    <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                    <path d="M3 10h18"></path>
+                  </svg>
+                  <div>
+                    <p
+                      class="text-[12px] text-[#999] font-[&#x27;Poppins:Regular&#x27;,sans-serif]"
+                    >
+                      Travel Date
+                    </p>
+                    <p
+                      class="text-[15px] font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] text-[#363636]"
+                    >
+                      Wed, Oct 30, 2026
+                    </p>
+                    <p
+                      class="text-[13px] text-[#666] font-[&#x27;Poppins:Regular&#x27;,sans-serif]"
+                    >
+                      09:00 AM - 11:30 AM
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-users w-5 h-5 text-red-500 mt-0.5"
+                  >
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                  <div>
+                    <p
+                      class="text-[12px] text-[#999] font-[&#x27;Poppins:Regular&#x27;,sans-serif]"
+                    >
+                      Passengers
+                    </p>
+                    <p
+                      class="text-[15px] font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] text-[#363636]"
+                    >
+                      2 passengers
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+              <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-dollar-sign w-5 h-5 text-red-600"
+                  >
+                    <line x1="12" x2="12" y1="2" y2="22"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg>
+                </div>
+                <h2 class="font-[&#x27;Poppins:Bold&#x27;,sans-serif] text-[20px] text-[#363636]">
+                  Refund Details
+                </h2>
+              </div>
+              <div
+                class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-start gap-3"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-circle-alert w-5 h-5 text-red-600 shrink-0 mt-0.5"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" x2="12" y1="8" y2="12"></line>
+                  <line x1="12" x2="12.01" y1="16" y2="16"></line>
+                </svg>
+                <div>
+                  <p
+                    class="text-[14px] text-red-800 font-[&#x27;Poppins:Medium&#x27;,sans-serif] mb-1"
+                  >
+                    Refund Policy
+                  </p>
+                  <ul
+                    class="text-[13px] text-red-700 font-[&#x27;Poppins:Regular&#x27;,sans-serif] space-y-1"
+                  >
+                    <li>• 48+ hours before: 100% refund</li>
+                    <li>• 24-48 hours before: 50% refund</li>
+                    <li>• Less than 24 hours: No refund</li>
+                    <li>• Processing time: 7-14 business days</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="mb-6">
+                <div class="bg-gray-50 rounded-xl p-4 mb-4">
+                  <div class="flex justify-between items-center mb-2">
+                    <span
+                      class="text-[14px] text-[#666] font-[&#x27;Poppins:Regular&#x27;,sans-serif]"
+                      >Booking Amount</span
+                    >
+                    <span
+                      class="text-[16px] font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] text-[#363636]"
+                      >₱4359.80</span
+                    >
+                  </div>
+                  <div class="flex justify-between items-center mb-2">
+                    <span
+                      class="text-[14px] text-[#666] font-[&#x27;Poppins:Regular&#x27;,sans-serif]"
+                      >Refund Amount (100%)</span
+                    >
+                    <span
+                      class="text-[16px] font-[&#x27;Poppins:SemiBold&#x27;,sans-serif] text-green-600"
+                      >₱4359.80</span
+                    >
+                  </div>
+                </div>
+                <div>
+                  <label
+                    class="block text-[14px] font-[&#x27;Poppins:Medium&#x27;,sans-serif] text-[#363636] mb-2"
+                    >Reason for Cancellation <span class="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    placeholder="Please provide a reason for your refund request..."
+                    rows="4"
+                    class="w-full px-4 py-3 border border-gray-200 rounded-xl font-[&#x27;Poppins:Regular&#x27;,sans-serif] text-[15px] focus:outline-none focus:border-[#CCFF00] focus:ring-2 focus:ring-[#CCFF00]/20 resize-none"
+                  ></textarea>
+                </div>
+              </div>
+              <div class="flex gap-3">
+                <button
+                  class="flex-1 border-2 border-gray-300 text-gray-600 hover:bg-gray-50 font-bold rounded-full py-3 transition-all"
+                  data-action="go:bookings"
+                >
+                  Cancel
+                </button>
+                <button
+                  class="flex-1 bg-red-500 hover:bg-red-600 disabled:bg-gray-200 disabled:text-gray-400 text-white font-bold rounded-full py-3 transition-all shadow-sm disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  data-action="refund"
+                >
+                  Confirm Refund Request
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <div class="mascot" aria-hidden="true">
+        <div class="mascot-bubble">Doode says: Speed it up! 🚀</div>
+        <div class="mascot-art">
+          <div class="relative size-full">
+            <div class="absolute contents left-0 top-[9.9px]" data-name="Mask group">
+              <div
+                class="absolute h-[121.854px] left-0 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[0px_11.426px] mask-size-[115px_109.668px] top-[-1.52px] w-[115.508px]"
+                style="mask-image:url(&#x27;data:image/svg+xml,%3Csvg%20preserveAspectRatio%3D%22none%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20overflow%3D%22visible%22%20style%3D%22display%3A%20block%3B%22%20viewBox%3D%220%200%20115%20109.669%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20id%3D%22Vector%203%22%20d%3D%22M0%200H58.6424L70.8278%2026.6556L89.8676%2040.3642H115V109.669H0V0Z%22%20fill%3D%22var(--fill-0%2C%20%23D9D9D9)%22%2F%3E%0A%3C%2Fsvg%3E%0A&#x27;)"
+                data-name="dud-removebg-preview 1"
+              >
+                <img
+                  alt=""
+                  class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+                  src="../assets/images/doode-turtle.png"
+                />
+              </div>
+            </div>
+            <div class="absolute left-[92.91px] size-[6.093px] top-[36.55px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 6.09277 6.09277"
+              >
+                <path
+                  d="M3.0459 0C4.7282 0 6.09253 1.36365 6.09277 3.0459C6.09277 4.72836 4.72836 6.09277 3.0459 6.09277C1.36365 6.09253 0 4.7282 0 3.0459C0.000248117 1.36381 1.36381 0.000248117 3.0459 0ZM3.04688 1.01562C1.92524 1.01562 1.01562 1.92524 1.01562 3.04688C1.01581 4.16835 1.92535 5.07715 3.04688 5.07715C4.16824 5.07696 5.07696 4.16824 5.07715 3.04688C5.07715 1.92535 4.16835 1.01581 3.04688 1.01562Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[97.48px] size-[3.046px] top-[22.85px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 3.0459 3.0459"
+              >
+                <path
+                  d="M1.52344 0C2.36455 0.000139786 3.0459 0.682295 3.0459 1.52344C3.04576 2.36446 2.36446 3.04576 1.52344 3.0459C0.682295 3.0459 0.000139786 2.36455 0 1.52344C0 0.682209 0.682209 0 1.52344 0ZM1.52344 0.507812C0.962619 0.507812 0.507812 0.962619 0.507812 1.52344C0.507906 2.08418 0.962676 2.53906 1.52344 2.53906C2.08412 2.53897 2.53897 2.08412 2.53906 1.52344C2.53906 0.962676 2.08418 0.507906 1.52344 0.507812Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[77.68px] size-[3.046px] top-0" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 3.0459 3.0459"
+              >
+                <path
+                  d="M1.52344 0C2.36455 0.000139786 3.0459 0.682295 3.0459 1.52344C3.04576 2.36446 2.36446 3.04576 1.52344 3.0459C0.682295 3.0459 0.000139786 2.36455 0 1.52344C0 0.682209 0.682209 0 1.52344 0ZM1.52344 0.507812C0.962619 0.507812 0.507812 0.962619 0.507812 1.52344C0.507906 2.08418 0.962676 2.53906 1.52344 2.53906C2.08412 2.53897 2.53897 2.08412 2.53906 1.52344C2.53906 0.962676 2.08418 0.507906 1.52344 0.507812Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[76.16px] size-[4.57px] top-[9.14px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 4.56934 4.56934"
+              >
+                <path
+                  d="M2.28516 0C3.54682 0.000209744 4.56934 1.02344 4.56934 2.28516C4.56913 3.54669 3.54669 4.56913 2.28516 4.56934C1.02344 4.56934 0.000209744 3.54682 0 2.28516C0 1.02331 1.02331 0 2.28516 0ZM2.28516 0.761719C1.44393 0.761719 0.761719 1.44393 0.761719 2.28516C0.761859 3.12627 1.44401 3.80762 2.28516 3.80762C3.12618 3.80748 3.80748 3.12618 3.80762 2.28516C3.80762 1.44401 3.12627 0.761859 2.28516 0.761719Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[82.25px] size-[9.139px] top-[25.89px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 9.13867 9.13867"
+              >
+                <path
+                  d="M4.56934 0C7.09295 0 9.13856 2.04574 9.13867 4.56934C9.13867 7.09302 7.09302 9.13867 4.56934 9.13867C2.04574 9.13856 0 7.09295 0 4.56934C0.000108229 2.04581 2.04581 0.000108229 4.56934 0ZM4.56934 1.52344C2.88724 1.52369 1.52369 2.88724 1.52344 4.56934C1.52344 6.25164 2.88709 7.61596 4.56934 7.61621C6.25179 7.61621 7.61621 6.25179 7.61621 4.56934C7.61596 2.88709 6.25164 1.52344 4.56934 1.52344Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[89.87px] size-[6.093px] top-[7.62px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 6.09277 6.09277"
+              >
+                <path
+                  d="M3.0459 0C4.7282 0 6.09253 1.36365 6.09277 3.0459C6.09277 4.72836 4.72836 6.09277 3.0459 6.09277C1.36365 6.09253 0 4.7282 0 3.0459C0.000248117 1.36381 1.36381 0.000248117 3.0459 0ZM3.04688 1.01562C1.92524 1.01562 1.01562 1.92524 1.01562 3.04688C1.01581 4.16835 1.92535 5.07715 3.04688 5.07715C4.16824 5.07696 5.07696 4.16824 5.07715 3.04688C5.07715 1.92535 4.16835 1.01581 3.04688 1.01562Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div
+              class="absolute flex items-center justify-center left-[92.91px] size-[2.285px] top-[15.99px]"
+            >
+              <div class="-scale-y-100 flex-none">
+                <div class="relative size-[2.285px]" data-name="Subtract">
+                  <svg
+                    class="absolute block inset-0 size-full"
+                    fill="none"
+                    preserveAspectRatio="none"
+                    viewBox="0 0 2.28516 2.28516"
+                  >
+                    <path
+                      d="M1.14258 0C1.77341 0.000104872 2.28516 0.511722 2.28516 1.14258C2.28505 1.77335 1.77335 2.28505 1.14258 2.28516C0.511722 2.28516 0.000104872 1.77341 0 1.14258C0 0.511657 0.511657 0 1.14258 0ZM1.14453 0.378906C0.723917 0.378906 0.382812 0.720011 0.382812 1.14062C0.382882 1.56118 0.72396 1.90234 1.14453 1.90234C1.56504 1.90227 1.90618 1.56114 1.90625 1.14062C1.90625 0.720054 1.56509 0.378976 1.14453 0.378906Z"
+                      fill="var(--fill-0, #191D4B)"
+                      id="Subtract"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="absolute flex items-center justify-center left-[86.82px] size-[1.523px] top-[20.56px]"
+            >
+              <div class="-scale-y-100 flex-none">
+                <div class="relative size-[1.523px]" data-name="Subtract">
+                  <svg
+                    class="absolute block inset-0 size-full"
+                    fill="none"
+                    preserveAspectRatio="none"
+                    viewBox="0 0 1.52344 1.52344"
+                  >
+                    <path
+                      d="M0.761719 0C1.18227 6.98931e-05 1.52344 0.341148 1.52344 0.761719C1.52337 1.18223 1.18223 1.52337 0.761719 1.52344C0.341148 1.52344 6.98931e-05 1.18227 0 0.761719C0 0.341105 0.341105 0 0.761719 0ZM0.761719 0.253906C0.481309 0.253906 0.253906 0.481309 0.253906 0.761719C0.253953 1.04209 0.481338 1.26953 0.761719 1.26953C1.04206 1.26948 1.26948 1.04206 1.26953 0.761719C1.26953 0.481338 1.04209 0.253953 0.761719 0.253906Z"
+                      fill="var(--fill-0, #191D4B)"
+                      id="Subtract"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="absolute flex items-center justify-center left-[92.91px] size-[1.523px] top-[47.22px]"
+            >
+              <div class="-scale-y-100 flex-none">
+                <div class="relative size-[1.523px]" data-name="Subtract">
+                  <svg
+                    class="absolute block inset-0 size-full"
+                    fill="none"
+                    preserveAspectRatio="none"
+                    viewBox="0 0 1.52344 1.52344"
+                  >
+                    <path
+                      d="M0.761719 0C1.18227 6.98931e-05 1.52344 0.341148 1.52344 0.761719C1.52337 1.18223 1.18223 1.52337 0.761719 1.52344C0.341148 1.52344 6.98931e-05 1.18227 0 0.761719C0 0.341105 0.341105 0 0.761719 0ZM0.761719 0.253906C0.481309 0.253906 0.253906 0.481309 0.253906 0.761719C0.253953 1.04209 0.481338 1.26953 0.761719 1.26953C1.04206 1.26948 1.26948 1.04206 1.26953 0.761719C1.26953 0.481338 1.04209 0.253953 0.761719 0.253906Z"
+                      fill="var(--fill-0, #191D4B)"
+                      id="Subtract"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="absolute flex items-center justify-center left-[100.53px] size-[1.523px] top-[30.46px]"
+            >
+              <div class="-scale-y-100 flex-none">
+                <div class="relative size-[1.523px]" data-name="Subtract">
+                  <svg
+                    class="absolute block inset-0 size-full"
+                    fill="none"
+                    preserveAspectRatio="none"
+                    viewBox="0 0 1.52344 1.52344"
+                  >
+                    <path
+                      d="M0.761719 0C1.18227 6.98931e-05 1.52344 0.341148 1.52344 0.761719C1.52337 1.18223 1.18223 1.52337 0.761719 1.52344C0.341148 1.52344 6.98931e-05 1.18227 0 0.761719C0 0.341105 0.341105 0 0.761719 0ZM0.761719 0.253906C0.481309 0.253906 0.253906 0.481309 0.253906 0.761719C0.254077 1.04198 0.481415 1.26953 0.761719 1.26953C1.04194 1.26944 1.26936 1.04192 1.26953 0.761719C1.26953 0.481368 1.04205 0.254001 0.761719 0.253906Z"
+                      fill="var(--fill-0, #191D4B)"
+                      id="Subtract"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pasalubong | Entree</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/site.css" />
+    <script src="../assets/js/data.js" defer></script>
+    <script src="../assets/js/app.js" defer></script>
+  </head>
+  <body data-page="pasalubong">
+    <div
+      class="flex flex-col min-h-screen font-sans text-slate-900 bg-white selection:bg-[#CCFF00] selection:text-black overflow-x-hidden"
+    >
+      <header
+        class="fixed top-0 left-0 w-full z-50 px-6 md:px-10 py-4 flex justify-between items-center h-20 transition-all duration-300 shadow-md border-b border-white/10"
+        style="
+          background-image: url(../assets/images/ocean-background.png);
+          background-size: cover;
+          background-position: center top;
+        "
+      >
+        <div class="flex-1 flex items-center">
+          <button
+            class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm flex items-center justify-center text-white transition-all border border-white/20 shadow-sm"
+            aria-label="Go back"
+            data-action="back"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-left w-5 h-5 stroke-[2.5]"
+            >
+              <path d="m12 19-7-7 7-7"></path>
+              <path d="M19 12H5"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="flex items-center space-x-4 md:space-x-5 shrink-0 justify-end">
+          <div class="flex flex-col gap-2 items-end">
+            <a
+              class="border-2 border-[#FFCC00] text-[#FFCC00] text-[12px] md:text-[13px] font-bold rounded-full px-6 py-2 flex items-center justify-center shadow-sm"
+              href="verify-booking.html"
+              data-discover="true"
+              >Buy Pasalubong</a
+            >
+          </div>
+          <button
+            class="border-2 border-[#CCFF00] text-[#CCFF00] text-[12px] md:text-[13px] font-bold rounded-full px-6 py-2 flex items-center space-x-2 shadow-sm"
+            data-action="go:login"
+          >
+            <span>Log-in</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-log-in w-4 h-4 stroke-[2.5]"
+            >
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" x2="3" y1="12" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+      </header>
+      <main class="flex-1 flex flex-col relative w-full h-full">
+        <div class="w-full bg-gray-50 flex-1 flex flex-col items-center pb-20 pt-20">
+          <div
+            class="bg-[#CCFF00] w-full py-3 px-6 flex justify-center items-center shadow-sm z-10 sticky top-20 border-b border-[#bce600]"
+          >
+            <div
+              class="flex items-center justify-center space-x-6 max-w-5xl w-full text-black font-semibold text-sm"
+            >
+              <div class="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-ship w-5 h-5 mr-2 stroke-[2.5]"
+                >
+                  <path d="M12 10.189V14"></path>
+                  <path d="M12 2v3"></path>
+                  <path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"></path>
+                  <path
+                    d="M19.38 20A11.6 11.6 0 0 0 21 14l-8.188-3.639a2 2 0 0 0-1.624 0L3 14a11.6 11.6 0 0 0 2.81 7.76"
+                  ></path>
+                  <path
+                    d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"
+                  ></path>
+                </svg>
+                <span>Delivery to your vessel</span>
+              </div>
+              <div class="hidden sm:block w-1.5 h-1.5 rounded-full bg-black/30"></div>
+              <div class="flex items-center hidden sm:flex">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-clock w-5 h-5 mr-2 stroke-[2.5]"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Arrives on your travel day</span>
+              </div>
+            </div>
+          </div>
+          <div class="max-w-7xl w-full mx-auto px-6 py-12 flex flex-col lg:flex-row gap-10">
+            <div class="flex-1">
+              <div class="mb-8">
+                <h1
+                  class="font-[&#x27;Schoolbell&#x27;,cursive] text-[52px] md:text-[60px] leading-none font-normal tracking-wide mt-2 mb-3 text-black"
+                >
+                  shop pasalubong
+                </h1>
+                <p class="text-gray-600 font-medium text-lg">
+                  Pre-order local gifts and souvenirs. We&#x27;ll bring them straight to your seat
+                  before departure.
+                </p>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div
+                  class="bg-white rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border-2 flex flex-col hover:-translate-y-1 border-gray-100"
+                >
+                  <div
+                    class="w-full h-56 bg-gray-200 bg-cover bg-center relative group"
+                    style="
+                      background-image: url(https://images.unsplash.com/photo-1605879883262-0cd26b362f54?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkcmllZCUyMG1hbmdvZXMlMjBzbmFja3xlbnwxfHx8fDE3NzMzNzU5MjN8MA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=1080);
+                    "
+                  >
+                    <button
+                      class="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-full shadow-md transition-all z-10 flex items-center justify-center"
+                      data-action="product-image"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-chevron-right w-5 h-5 text-black"
+                      >
+                        <path d="m9 18 6-6-6-6"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="p-6 flex flex-col flex-1">
+                    <div class="flex justify-between items-start mb-3">
+                      <div>
+                        <h3 class="text-xl font-bold text-gray-900 leading-tight pr-4 mb-1">
+                          Premium Dried Mangoes
+                        </h3>
+                        <div class="flex items-center text-gray-400 text-sm font-medium">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-store w-3.5 h-3.5 mr-1.5"
+                          >
+                            <path
+                              d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"
+                            ></path>
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                            <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"></path>
+                            <path d="M2 7h20"></path>
+                            <path
+                              d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"
+                            ></path></svg
+                          >Cebu Best Sweets
+                        </div>
+                      </div>
+                      <span
+                        class="font-black text-[#84a300] text-lg bg-[#CCFF00]/20 px-3 py-1 rounded-xl whitespace-nowrap"
+                        >$15.00</span
+                      >
+                    </div>
+                    <p class="text-sm text-gray-500 mb-6 flex-1 font-medium leading-relaxed">
+                      Locally sourced, naturally sweet dried mangoes. The perfect travel snack.
+                    </p>
+                    <button
+                      data-product="1"
+                      class="w-full border-2 font-bold rounded-full py-3.5 transition-colors flex justify-center items-center border-black hover:bg-black hover:text-[#CCFF00] text-black"
+                      data-action="product"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-plus w-5 h-5 mr-2 stroke-[2.5]"
+                      >
+                        <path d="M5 12h14"></path>
+                        <path d="M12 5v14"></path>
+                      </svg>
+                      <span class="text-[15px]">Add to Trip</span>
+                    </button>
+                  </div>
+                </div>
+                <div
+                  class="bg-white rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border-2 flex flex-col hover:-translate-y-1 border-gray-100"
+                >
+                  <div
+                    class="w-full h-56 bg-gray-200 bg-cover bg-center relative group"
+                    style="
+                      background-image: url(https://images.unsplash.com/photo-1770782912845-2b456ac83628?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b3ZlbiUyMGJhZyUyMGNyYWZ0fGVufDF8fHx8MTc3MzM3NTkyM3ww&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=1080);
+                    "
+                  >
+                    <button
+                      class="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-full shadow-md transition-all z-10 flex items-center justify-center"
+                      data-action="product-image"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-chevron-right w-5 h-5 text-black"
+                      >
+                        <path d="m9 18 6-6-6-6"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="p-6 flex flex-col flex-1">
+                    <div class="flex justify-between items-start mb-3">
+                      <div>
+                        <h3 class="text-xl font-bold text-gray-900 leading-tight pr-4 mb-1">
+                          Artisan Woven Tote Bag
+                        </h3>
+                        <div class="flex items-center text-gray-400 text-sm font-medium">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-store w-3.5 h-3.5 mr-1.5"
+                          >
+                            <path
+                              d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"
+                            ></path>
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                            <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"></path>
+                            <path d="M2 7h20"></path>
+                            <path
+                              d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"
+                            ></path></svg
+                          >Isla Crafts &amp; Co.
+                        </div>
+                      </div>
+                      <span
+                        class="font-black text-[#84a300] text-lg bg-[#CCFF00]/20 px-3 py-1 rounded-xl whitespace-nowrap"
+                        >$45.00</span
+                      >
+                    </div>
+                    <p class="text-sm text-gray-500 mb-6 flex-1 font-medium leading-relaxed">
+                      Handcrafted locally with traditional weaving techniques. Great for beach
+                      trips.
+                    </p>
+                    <button
+                      data-product="2"
+                      class="w-full border-2 font-bold rounded-full py-3.5 transition-colors flex justify-center items-center border-black hover:bg-black hover:text-[#CCFF00] text-black"
+                      data-action="product"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-plus w-5 h-5 mr-2 stroke-[2.5]"
+                      >
+                        <path d="M5 12h14"></path>
+                        <path d="M12 5v14"></path>
+                      </svg>
+                      <span class="text-[15px]">Add to Trip</span>
+                    </button>
+                  </div>
+                </div>
+                <div
+                  class="bg-white rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border-2 flex flex-col hover:-translate-y-1 border-gray-100"
+                >
+                  <div
+                    class="w-full h-56 bg-gray-200 bg-cover bg-center relative group"
+                    style="
+                      background-image: url(https://images.unsplash.com/photo-1763141180228-78f21f192a3c?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsb2NhbCUyMHBhc3RyaWVzJTIwYnJlYWR8ZW58MXx8fHwxNzczMzc1OTIzfDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=1080);
+                    "
+                  >
+                    <button
+                      class="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-full shadow-md transition-all z-10 flex items-center justify-center"
+                      data-action="product-image"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-chevron-right w-5 h-5 text-black"
+                      >
+                        <path d="m9 18 6-6-6-6"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="p-6 flex flex-col flex-1">
+                    <div class="flex justify-between items-start mb-3">
+                      <div>
+                        <h3 class="text-xl font-bold text-gray-900 leading-tight pr-4 mb-1">
+                          Fresh Local Pastries Box
+                        </h3>
+                        <div class="flex items-center text-gray-400 text-sm font-medium">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-store w-3.5 h-3.5 mr-1.5"
+                          >
+                            <path
+                              d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"
+                            ></path>
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                            <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"></path>
+                            <path d="M2 7h20"></path>
+                            <path
+                              d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"
+                            ></path></svg
+                          >Delicias Bakery
+                        </div>
+                      </div>
+                      <span
+                        class="font-black text-[#84a300] text-lg bg-[#CCFF00]/20 px-3 py-1 rounded-xl whitespace-nowrap"
+                        >$24.50</span
+                      >
+                    </div>
+                    <p class="text-sm text-gray-500 mb-6 flex-1 font-medium leading-relaxed">
+                      An assortment of traditional baked delicacies. Baked fresh on travel day.
+                    </p>
+                    <button
+                      data-product="3"
+                      class="w-full border-2 font-bold rounded-full py-3.5 transition-colors flex justify-center items-center border-black hover:bg-black hover:text-[#CCFF00] text-black"
+                      data-action="product"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-plus w-5 h-5 mr-2 stroke-[2.5]"
+                      >
+                        <path d="M5 12h14"></path>
+                        <path d="M12 5v14"></path>
+                      </svg>
+                      <span class="text-[15px]">Add to Trip</span>
+                    </button>
+                  </div>
+                </div>
+                <div
+                  class="bg-white rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border-2 flex flex-col hover:-translate-y-1 border-gray-100"
+                >
+                  <div
+                    class="w-full h-56 bg-gray-200 bg-cover bg-center relative group"
+                    style="
+                      background-image: url(https://images.unsplash.com/photo-1770845402911-b6cf32921d66?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZWFzaGVsbCUyMG5lY2tsYWNlJTIwc291dmVuaXJ8ZW58MXx8fHwxNzczMzc1OTIzfDA&amp;ixlib=rb-4.1.0&amp;q=80&amp;w=1080);
+                    "
+                  >
+                    <button
+                      class="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-2 rounded-full shadow-md transition-all z-10 flex items-center justify-center"
+                      data-action="product-image"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-chevron-right w-5 h-5 text-black"
+                      >
+                        <path d="m9 18 6-6-6-6"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="p-6 flex flex-col flex-1">
+                    <div class="flex justify-between items-start mb-3">
+                      <div>
+                        <h3 class="text-xl font-bold text-gray-900 leading-tight pr-4 mb-1">
+                          Puka Shell Keepsake Necklace
+                        </h3>
+                        <div class="flex items-center text-gray-400 text-sm font-medium">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="lucide lucide-store w-3.5 h-3.5 mr-1.5"
+                          >
+                            <path
+                              d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"
+                            ></path>
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                            <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"></path>
+                            <path d="M2 7h20"></path>
+                            <path
+                              d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"
+                            ></path></svg
+                          >Ocean Trinkets
+                        </div>
+                      </div>
+                      <span
+                        class="font-black text-[#84a300] text-lg bg-[#CCFF00]/20 px-3 py-1 rounded-xl whitespace-nowrap"
+                        >$18.00</span
+                      >
+                    </div>
+                    <p class="text-sm text-gray-500 mb-6 flex-1 font-medium leading-relaxed">
+                      Authentic coastal shells, beautifully strung into a memorable souvenir.
+                    </p>
+                    <button
+                      data-product="4"
+                      class="w-full border-2 font-bold rounded-full py-3.5 transition-colors flex justify-center items-center border-black hover:bg-black hover:text-[#CCFF00] text-black"
+                      data-action="product"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-plus w-5 h-5 mr-2 stroke-[2.5]"
+                      >
+                        <path d="M5 12h14"></path>
+                        <path d="M12 5v14"></path>
+                      </svg>
+                      <span class="text-[15px]">Add to Trip</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="w-full lg:w-[420px] shrink-0">
+              <div
+                class="bg-white rounded-[32px] shadow-xl p-8 sticky top-40 border border-gray-100"
+              >
+                <div class="flex items-center space-x-3 mb-8">
+                  <div class="bg-black text-[#CCFF00] p-3 rounded-full shadow-md">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-shopping-bag w-5 h-5"
+                    >
+                      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+                      <path d="M3 6h18"></path>
+                      <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                  </div>
+                  <h2 class="text-2xl font-extrabold tracking-tight">Your Add-ons</h2>
+                </div>
+                <div
+                  class="text-center py-12 bg-gray-50 rounded-3xl border border-dashed border-gray-200"
+                >
+                  <div
+                    class="bg-white w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-ship w-6 h-6 text-gray-300"
+                    >
+                      <path d="M12 10.189V14"></path>
+                      <path d="M12 2v3"></path>
+                      <path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"></path>
+                      <path
+                        d="M19.38 20A11.6 11.6 0 0 0 21 14l-8.188-3.639a2 2 0 0 0-1.624 0L3 14a11.6 11.6 0 0 0 2.81 7.76"
+                      ></path>
+                      <path
+                        d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"
+                      ></path>
+                    </svg>
+                  </div>
+                  <p class="text-[15px] text-gray-500 font-medium px-8 leading-relaxed">
+                    Select some items to have them delivered to your ferry.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <div class="mascot" aria-hidden="true">
+        <div class="mascot-bubble">Doode says: Speed it up! 🚀</div>
+        <div class="mascot-art">
+          <div class="relative size-full">
+            <div class="absolute contents left-0 top-[9.9px]" data-name="Mask group">
+              <div
+                class="absolute h-[121.854px] left-0 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[0px_11.426px] mask-size-[115px_109.668px] top-[-1.52px] w-[115.508px]"
+                style="mask-image:url(&#x27;data:image/svg+xml,%3Csvg%20preserveAspectRatio%3D%22none%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20overflow%3D%22visible%22%20style%3D%22display%3A%20block%3B%22%20viewBox%3D%220%200%20115%20109.669%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20id%3D%22Vector%203%22%20d%3D%22M0%200H58.6424L70.8278%2026.6556L89.8676%2040.3642H115V109.669H0V0Z%22%20fill%3D%22var(--fill-0%2C%20%23D9D9D9)%22%2F%3E%0A%3C%2Fsvg%3E%0A&#x27;)"
+                data-name="dud-removebg-preview 1"
+              >
+                <img
+                  alt=""
+                  class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
+                  src="../assets/images/doode-turtle.png"
+                />
+              </div>
+            </div>
+            <div class="absolute left-[92.91px] size-[6.093px] top-[36.55px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 6.09277 6.09277"
+              >
+                <path
+                  d="M3.0459 0C4.7282 0 6.09253 1.36365 6.09277 3.0459C6.09277 4.72836 4.72836 6.09277 3.0459 6.09277C1.36365 6.09253 0 4.7282 0 3.0459C0.000248117 1.36381 1.36381 0.000248117 3.0459 0ZM3.04688 1.01562C1.92524 1.01562 1.01562 1.92524 1.01562 3.04688C1.01581 4.16835 1.92535 5.07715 3.04688 5.07715C4.16824 5.07696 5.07696 4.16824 5.07715 3.04688C5.07715 1.92535 4.16835 1.01581 3.04688 1.01562Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[97.48px] size-[3.046px] top-[22.85px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 3.0459 3.0459"
+              >
+                <path
+                  d="M1.52344 0C2.36455 0.000139786 3.0459 0.682295 3.0459 1.52344C3.04576 2.36446 2.36446 3.04576 1.52344 3.0459C0.682295 3.0459 0.000139786 2.36455 0 1.52344C0 0.682209 0.682209 0 1.52344 0ZM1.52344 0.507812C0.962619 0.507812 0.507812 0.962619 0.507812 1.52344C0.507906 2.08418 0.962676 2.53906 1.52344 2.53906C2.08412 2.53897 2.53897 2.08412 2.53906 1.52344C2.53906 0.962676 2.08418 0.507906 1.52344 0.507812Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[77.68px] size-[3.046px] top-0" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 3.0459 3.0459"
+              >
+                <path
+                  d="M1.52344 0C2.36455 0.000139786 3.0459 0.682295 3.0459 1.52344C3.04576 2.36446 2.36446 3.04576 1.52344 3.0459C0.682295 3.0459 0.000139786 2.36455 0 1.52344C0 0.682209 0.682209 0 1.52344 0ZM1.52344 0.507812C0.962619 0.507812 0.507812 0.962619 0.507812 1.52344C0.507906 2.08418 0.962676 2.53906 1.52344 2.53906C2.08412 2.53897 2.53897 2.08412 2.53906 1.52344C2.53906 0.962676 2.08418 0.507906 1.52344 0.507812Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[76.16px] size-[4.57px] top-[9.14px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 4.56934 4.56934"
+              >
+                <path
+                  d="M2.28516 0C3.54682 0.000209744 4.56934 1.02344 4.56934 2.28516C4.56913 3.54669 3.54669 4.56913 2.28516 4.56934C1.02344 4.56934 0.000209744 3.54682 0 2.28516C0 1.02331 1.02331 0 2.28516 0ZM2.28516 0.761719C1.44393 0.761719 0.761719 1.44393 0.761719 2.28516C0.761859 3.12627 1.44401 3.80762 2.28516 3.80762C3.12618 3.80748 3.80748 3.12618 3.80762 2.28516C3.80762 1.44401 3.12627 0.761859 2.28516 0.761719Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[82.25px] size-[9.139px] top-[25.89px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 9.13867 9.13867"
+              >
+                <path
+                  d="M4.56934 0C7.09295 0 9.13856 2.04574 9.13867 4.56934C9.13867 7.09302 7.09302 9.13867 4.56934 9.13867C2.04574 9.13856 0 7.09295 0 4.56934C0.000108229 2.04581 2.04581 0.000108229 4.56934 0ZM4.56934 1.52344C2.88724 1.52369 1.52369 2.88724 1.52344 4.56934C1.52344 6.25164 2.88709 7.61596 4.56934 7.61621C6.25179 7.61621 7.61621 6.25179 7.61621 4.56934C7.61596 2.88709 6.25164 1.52344 4.56934 1.52344Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div class="absolute left-[89.87px] size-[6.093px] top-[7.62px]" data-name="Subtract">
+              <svg
+                class="absolute block inset-0 size-full"
+                fill="none"
+                preserveAspectRatio="none"
+                viewBox="0 0 6.09277 6.09277"
+              >
+                <path
+                  d="M3.0459 0C4.7282 0 6.09253 1.36365 6.09277 3.0459C6.09277 4.72836 4.72836 6.09277 3.0459 6.09277C1.36365 6.09253 0 4.7282 0 3.0459C0.000248117 1.36381 1.36381 0.000248117 3.0459 0ZM3.04688 1.01562C1.92524 1.01562 1.01562 1.92524 1.01562 3.04688C1.01581 4.16835 1.92535 5.07715 3.04688 5.07715C4.16824 5.07696 5.07696 4.16824 5.07715 3.04688C5.07715 1.92535 4.16835 1.01581 3.04688 1.01562Z"
+                  fill="var(--fill-0, #191D4B)"
+                  id="Subtract"
+                ></path>
+              </svg>
+            </div>
+            <div
+              class="absolute flex items-center justify-center left-[92.91px] size-[2.285px] top-[15.99px]"
+            >
+              <div class="-scale-y-100 flex-none">
+                <div class="relative size-[2.285px]" data-name="Subtract">
+                  <svg
+                    class="absolute block inset-0 size-full"
+                    fill="none"
+                    preserveAspectRatio="none"
+                    viewBox="0 0 2.28516 2.28516"
+                  >
+                    <path
+                      d="M1.14258 0C1.77341 0.000104872 2.28516 0.511722 2.28516 1.14258C2.28505 1.77335 1.77335 2.28505 1.14258 2.28516C0.511722 2.28516 0.000104872 1.77341 0 1.14258C0 0.511657 0.511657 0 1.14258 0ZM1.14453 0.378906C0.723917 0.378906 0.382812 0.720011 0.382812 1.14062C0.382882 1.56118 0.72396 1.90234 1.14453 1.90234C1.56504 1.90227 1.90618 1.56114 1.90625 1.14062C1.90625 0.720054 1.56509 0.378976 1.14453 0.378906Z"
+                      fill="var(--fill-0, #191D4B)"
+                      id="Subtract"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="absolute flex items-center justify-center left-[86.82px] size-[1.523px] top-[20.56px]"
+            >
+              <div class="-scale-y-100 flex-none">
+                <div class="relative size-[1.523px]" data-name="Subtract">
+                  <svg
+                    class="absolute block inset-0 size-full"
+                    fill="none"
+                    preserveAspectRatio="none"
+                    viewBox="0 0 1.52344 1.52344"
+                  >
+                    <path
+                      d="M0.761719 0C1.18227 6.98931e-05 1.52344 0.341148 1.52344 0.761719C1.52337 1.18223 1.18223 1.52337 0.761719 1.52344C0.341148 1.52344 6.98931e-05 1.18227 0 0.761719C0 0.341105 0.341105 0 0.761719 0ZM0.761719 0.253906C0.481309 0.253906 0.253906 0.481309 0.253906 0.761719C0.253953 1.04209 0.481338 1.26953 0.761719 1.26953C1.04206 1.26948 1.26948 1.04206 1.26953 0.761719C1.26953 0.481338 1.04209 0.253953 0.761719 0.253906Z"
+                      fill="var(--fill-0, #191D4B)"
+                      id="Subtract"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="absolute flex items-center justify-center left-[92.91px] size-[1.523px] top-[47.22px]"
+            >
+              <div class="-scale-y-100 flex-none">
+                <div class="relative size-[1.523px]" data-name="Subtract">
+                  <svg
+                    class="absolute block inset-0 size-full"
+                    fill="none"
+                    preserveAspectRatio="none"
+                    viewBox="0 0 1.52344 1.52344"
+                  >
+                    <path
+                      d="M0.761719 0C1.18227 6.98931e-05 1.52344 0.341148 1.52344 0.761719C1.52337 1.18223 1.18223 1.52337 0.761719 1.52344C0.341148 1.52344 6.98931e-05 1.18227 0 0.761719C0 0.341105 0.341105 0 0.761719 0ZM0.761719 0.253906C0.481309 0.253906 0.253906 0.481309 0.253906 0.761719C0.253953 1.04209 0.481338 1.26953 0.761719 1.26953C1.04206 1.26948 1.26948 1.04206 1.26953 0.761719C1.26953 0.481338 1.04209 0.253953 0.761719 0.253906Z"
+                      fill="var(--fill-0, #191D4B)"
+                      id="Subtract"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div
+              class="absolute flex items-center justify-center left-[100.53px] size-[1.523px] top-[30.46px]"
+            >
+              <div class="-scale-y-100 flex-none">
+                <div class="relative size-[1.523px]" data-name="Subtract">
+                  <svg
+                    class="absolute block inset-0 size-full"
+                    fill="none"
+                    preserveAspectRatio="none"
+                    viewBox="0 0 1.52344 1.52344"
+                  >
+                    <path
+                      d="M0.761719 0C1.18227 6.98931e-05 1.52344 0.341148 1.52344 0.761719C1.52337 1.18223 1.18223 1.52337 0.761719 1.52344C0.341148 1.52344 6.98931e-05 1.18227 0 0.761719C0 0.341105 0.341105 0 0.761719 0ZM0.761719 0.253906C0.481309 0.253906 0.253906 0.481309 0.253906 0.761719C0.254077 1.04198 0.481415 1.26953 0.761719 1.26953C1.04194 1.26944 1.26936 1.04192 1.26953 0.761719C1.26953 0.481368 1.04205 0.254001 0.761719 0.253906Z"
+                      fill="var(--fill-0, #191D4B)"
+                      id="Subtract"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
