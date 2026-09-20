@@ -235,8 +235,38 @@
     data.MOCK_BOOKINGS.find((b) => b.id === selectedId) || data.MOCK_BOOKINGS[0];
   let selectedPayment = null,
     selectedFerry = null;
-  let cart = [];
-  let currentMonth = new Date();
+  function getPhilippineDate() {
+    try {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: "Asia/Manila",
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: false,
+      }).formatToParts(new Date());
+      const p = {};
+      for (const { type, value } of parts) {
+        p[type] = value;
+      }
+      return new Date(
+        Number(p.year),
+        Number(p.month) - 1,
+        Number(p.day),
+        Number(p.hour || 0),
+        Number(p.minute || 0),
+        Number(p.second || 0),
+      );
+    } catch {
+      const now = new Date();
+      const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+      return new Date(utc + 8 * 3600000);
+    }
+  }
+
+  let currentMonth = new Date(getPhilippineDate().getFullYear(), getPhilippineDate().getMonth(), 1);
   const initialFieldValues = new Map();
   let hasManualDateChange = false;
   let hasManualCounterChange = false;
@@ -421,11 +451,13 @@
     })) {
       const heading = allText(label)[0],
         box = heading?.nextElementSibling;
-      if (!box) continue;
+      if (!box || box.querySelector("select")) continue;
       box.innerHTML = `<select class="plain-select" aria-label="${label}">${options.map((o) => `<option>${o}</option>`).join("")}</select>`;
     }
-    const origin = allText("From")[0];
-    if (origin) {
+
+    // Wire up origin & destination
+    const origin = $("#origin") || allText("From")[0];
+    if (origin && origin.tagName !== "INPUT") {
       const input = document.createElement("input");
       input.placeholder = "From";
       input.setAttribute("aria-label", "From");
@@ -433,41 +465,81 @@
       input.id = "origin";
       origin.replaceWith(input);
     }
-    const destination = $('input[placeholder="To"]');
-    destination.setAttribute("aria-label", "To");
-    destination.id = "destination";
-    const clear = destination
-      .closest("div.flex.items-center.justify-between")
-      ?.querySelector("button");
-    if (clear) {
-      clear.setAttribute("aria-label", "Clear destination");
-      clear.onclick = () => {
-        destination.value = "";
-        destination.focus();
+    const destination = $("#destination") || $('input[placeholder="To"]');
+    if (destination) {
+      destination.setAttribute("aria-label", "To");
+      destination.id = "destination";
+      const clear = destination
+        .closest(".hero-sub-glass, div")
+        ?.parentElement
+        ?.querySelector("button.clear-btn, button[aria-label='Clear destination']") ||
+        destination.closest(".hero-sub-glass")?.querySelector("button.clear-btn") ||
+        $("button.clear-btn");
+      if (clear) {
+        clear.setAttribute("aria-label", "Clear destination");
+        clear.onclick = (e) => {
+          e.preventDefault();
+          destination.value = "";
+          destination.focus();
+        };
+      }
+    }
+
+    // Wire up swap button
+    const swap = $("[data-action='swap']") || $("div.absolute.right-0.top-1\\/2");
+    if (swap) action(swap, "swap");
+
+    // Wire up travel type pills
+    const travelTypeSelect = $('select[aria-label="Travel Type"]');
+    const pills = $$(".travel-type-pill");
+    function updateTravelTypeUI(val) {
+      const dates = $$(".dates-input-group [data-date], [data-date]");
+      if (dates[1]) {
+        dates[1].classList.toggle("date-field-disabled", val === "One Way");
+      }
+      pills.forEach((p) => {
+        const isActive = p.dataset.travelType === val;
+        p.classList.toggle("is-active", isActive);
+        p.setAttribute("aria-selected", String(isActive));
+      });
+      if (travelTypeSelect && travelTypeSelect.value !== val) {
+        travelTypeSelect.value = val;
+        travelTypeSelect.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    }
+
+    pills.forEach((pill) => {
+      pill.onclick = () => {
+        updateTravelTypeUI(pill.dataset.travelType);
+      };
+    });
+
+    if (travelTypeSelect) {
+      travelTypeSelect.onchange = (e) => {
+        updateTravelTypeUI(e.target.value);
       };
     }
-    const swap = $("div.absolute.right-0.top-1\\/2");
-    if (swap) action(swap, "swap");
-    for (const [label, value] of [
-      ["Wed, Oct 30", "2024-10-30"],
-      ["Mon, Nov 4", "2024-11-04"],
-    ]) {
-      const el = allText(label)[0];
-      if (!el) continue;
-      el.dataset.date = value;
-      el.tabIndex = 0;
-      el.setAttribute("role", "button");
-      el.setAttribute("aria-label", (label.startsWith("Wed") ? "Departure" : "Return") + " date");
-      el.onclick = () => {
+
+    // Wire up date pickers
+    const dateCards = $$(".dates-input-group [data-date]");
+    const targetCards = dateCards.length ? dateCards : $$("[data-date]");
+    targetCards.forEach((card, idx) => {
+      const isDeparture = idx === 0 || (card.getAttribute("aria-label") && card.getAttribute("aria-label").toLowerCase().includes("departure"));
+      const labelText = isDeparture ? "Departure date" : "Return date";
+      card.tabIndex = 0;
+      card.setAttribute("role", "button");
+      card.setAttribute("aria-label", labelText);
+      card.onclick = () => {
         const d = dialog(
-          el.getAttribute("aria-label"),
-          `<label>Choose date <input type="date" value="${el.dataset.date}" required></label><button class="dialog-action">Apply</button>`,
+          labelText,
+          `<label>Choose date <input type="date" value="${card.dataset.date || '2026-10-30'}" required></label><button class="dialog-action">Apply</button>`,
         );
         $(".dialog-action", d).onclick = () => {
           const input = $("input", d);
           if (!input.reportValidity()) return;
-          el.dataset.date = input.value;
-          el.textContent = new Date(input.value + "T12:00:00").toLocaleDateString("en-US", {
+          card.dataset.date = input.value;
+          const textEl = card.querySelector(".input-val-text") || card;
+          textEl.textContent = new Date(input.value + "T12:00:00").toLocaleDateString("en-US", {
             weekday: "short",
             month: "short",
             day: "numeric",
@@ -476,28 +548,54 @@
           d.close();
         };
       };
-      el.onkeydown = (e) => {
+      card.onkeydown = (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          el.click();
+          card.click();
         }
       };
+    });
+
+    // Wire up Passenger Popover
+    const popoverTrigger = $("#passenger-popover-trigger");
+    const popover = $("#passenger-popover");
+    const summarySpan = $("#passenger-summary-text");
+
+    function updatePassengerSummary() {
+      if (!summarySpan) return;
+      const pCount = $("[data-counter-type='passengers'] span")?.textContent || "2";
+      const vCount = $("[data-counter-type='vehicles'] span")?.textContent || "0";
+      const petCount = $("[data-counter-type='pets'] span")?.textContent || "0";
+
+      const parts = [`${pCount} Passenger${pCount === "1" ? "" : "s"}`];
+      if (Number(vCount) > 0) parts.push(`${vCount} Vehicle${vCount === "1" ? "" : "s"}`);
+      if (Number(petCount) > 0) parts.push(`${petCount} Pet${petCount === "1" ? "" : "s"}`);
+      summarySpan.textContent = parts.join(" · ");
     }
 
-    function updateTravelTypeUI(val) {
-      const dates = $$("[data-date]");
-      if (dates[1]) {
-        dates[1].style.opacity = val === "One Way" ? "0.3" : "1";
-        dates[1].style.pointerEvents = val === "One Way" ? "none" : "";
+    if (popoverTrigger && popover) {
+      popoverTrigger.onclick = (e) => {
+        e.stopPropagation();
+        popover.classList.toggle("is-open");
+      };
+      document.addEventListener("click", (e) => {
+        if (!popover.contains(e.target) && !popoverTrigger.contains(e.target)) {
+          popover.classList.remove("is-open");
+        }
+      });
+      const doneBtn = $(".passenger-popover-done", popover);
+      if (doneBtn) {
+        doneBtn.onclick = () => popover.classList.remove("is-open");
       }
     }
 
-    const travelTypeSelect = $('select[aria-label="Travel Type"]');
-    if (travelTypeSelect) {
-      travelTypeSelect.onchange = (e) => {
-        updateTravelTypeUI(e.target.value);
-      };
-    }
+    // Listen for counter actions to update the summary
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-action^='counter:']");
+      if (btn) {
+        setTimeout(updatePassengerSummary, 10);
+      }
+    });
   }
 
   // Figma-exported booking screens contain text-shaped controls.
@@ -532,32 +630,97 @@
     const previous = $('[data-action="month:-1"]');
     if (!previous) return;
     const heading = previous.parentElement;
-    $("h3", heading).textContent = currentMonth.toLocaleDateString("en-US", {
-      month: "short",
-      year: "numeric",
-    });
+    const monthTitle = $("h3", heading);
+    if (monthTitle) {
+      monthTitle.textContent = currentMonth.toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric",
+      });
+    }
+
+    const phtNow = getPhilippineDate();
+    const phtYear = phtNow.getFullYear();
+    const phtMonth = phtNow.getMonth();
+    const phtDay = phtNow.getDate();
+
+    // Update date string (formatted in Philippine Time)
+    const dateStrEl = $("#pht-date-str");
+    if (dateStrEl) {
+      try {
+        const dayFormatter = new Intl.DateTimeFormat("en-US", {
+          timeZone: "Asia/Manila",
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+        dateStrEl.textContent = dayFormatter.format(new Date());
+      } catch {
+        dateStrEl.textContent = phtNow.toLocaleDateString("en-US", {
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+      }
+    }
+
     const grid = heading.nextElementSibling;
+    if (!grid) return;
     grid.innerHTML = "";
-    const year = currentMonth.getFullYear(),
-      month = currentMonth.getMonth();
-    for (const day of ["S", "M", "T", "W", "T", "F", "S"])
-      grid.insertAdjacentHTML("beforeend", `<div class="text-center text-[11px]">${day}</div>`);
-    for (let i = 0; i < new Date(year, month, 1).getDay(); i++)
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+
+    for (const day of ["S", "M", "T", "W", "T", "F", "S"]) {
+      grid.insertAdjacentHTML(
+        "beforeend",
+        `<div class="text-center text-[10px] font-['Poppins:SemiBold',sans-serif] text-[#999] py-1">${day}</div>`,
+      );
+    }
+
+    const firstDayIndex = new Date(year, month, 1).getDay();
+    for (let i = 0; i < firstDayIndex; i++) {
       grid.append(document.createElement("div"));
-    for (let day = 1; day <= new Date(year, month + 1, 0).getDate(); day++) {
+    }
+
+    const totalDays = new Date(year, month + 1, 0).getDate();
+    for (let day = 1; day <= totalDays; day++) {
       const date = new Date(year, month, day);
-      const highlighted = data.MOCK_BOOKINGS.some(
+      const isToday = year === phtYear && month === phtMonth && day === phtDay;
+      const matchedBooking = data.MOCK_BOOKINGS.find(
         (b) =>
           date >= new Date(b.departureDate + "T00:00:00") &&
           date <= new Date((b.returnDate || b.departureDate) + "T23:59:59"),
       );
+      const isTrip = Boolean(matchedBooking);
+
+      let cellClass =
+        "aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all cursor-default select-none ";
+      let title = `${currentMonth.toLocaleDateString("en-US", { month: "short" })} ${day}, ${year}`;
+
+      if (isTrip && isToday) {
+        cellClass += "bg-[#CCFF00] text-black font-bold ring-2 ring-gray-600 shadow-sm ";
+        title += ` • Today & Trip: ${matchedBooking.reference} (${matchedBooking.route.origin} → ${matchedBooking.route.destination})`;
+      } else if (isTrip) {
+        cellClass += "bg-[#CCFF00] text-black font-bold shadow-sm hover:scale-105 ";
+        title += ` • Trip: ${matchedBooking.reference} (${matchedBooking.route.origin} → ${matchedBooking.route.destination})`;
+      } else if (isToday) {
+        cellClass += "bg-gray-200 text-[#1f2937] font-bold ring-1 ring-gray-400 ";
+        title += " • Today";
+      } else {
+        cellClass += "text-[#666] hover:bg-gray-100 ";
+      }
+
       grid.insertAdjacentHTML(
         "beforeend",
-        `<div class="aspect-square flex items-center justify-center rounded text-[11px]" style="background:${highlighted ? "#ccff00" : "transparent"}">${day}</div>`,
+        `<div class="${cellClass}" title="${escape(title)}">${day}</div>`,
       );
     }
   }
-  if (page === "bookings") renderCalendar();
+  if (page === "bookings") {
+    currentMonth = new Date(getPhilippineDate().getFullYear(), getPhilippineDate().getMonth(), 1);
+    renderCalendar();
+  }
 
   function renderCart() {
     const heading = allText("Your Add-ons")[0];
@@ -824,7 +987,12 @@
         notice("Copy is unavailable here. Use Print to save the trip.");
       }
     } else if (name === "month") {
-      currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + Number(arg), 1);
+      if (arg === "today") {
+        const pht = getPhilippineDate();
+        currentMonth = new Date(pht.getFullYear(), pht.getMonth(), 1);
+      } else {
+        currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + Number(arg), 1);
+      }
       renderCalendar();
     } else if (name === "product") productMenu(el.dataset.product);
     else if (name === "product-image") {
