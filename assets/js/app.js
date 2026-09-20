@@ -1009,7 +1009,10 @@
         bubble.classList.remove("is-visible");
       }
 
+      let resetPositionTimer = null;
+
       function showMascot() {
+        clearTimeout(resetPositionTimer);
         mascot.classList.add("is-visible");
         scheduleNextMove(3500);
       }
@@ -1017,6 +1020,19 @@
       function hideMascot() {
         mascot.classList.remove("is-visible");
         stopTravel();
+        clearTimeout(resetPositionTimer);
+        // Silently reset position back to left after the fade-out completes
+        resetPositionTimer = setTimeout(() => {
+          if (!mascot.classList.contains("is-visible")) {
+            mascot.classList.remove("is-inverted");
+            isAtRight = false;
+            mascot.style.transition = "none";
+            mascot.style.left = "4%";
+            mascot.style.top = "56%";
+            void mascot.offsetHeight; // force reflow
+            mascot.style.transition = "";
+          }
+        }, 500);
       }
 
       // ----------------------------------------------------------------------
@@ -1040,10 +1056,6 @@
         travelFinishTimer = null;
         isMoving = false;
         mascot.classList.remove("is-traveling");
-        mascot.classList.remove("is-inverted");
-        isAtRight = false;
-        mascot.style.left = "4%";
-        mascot.style.top = "56%";
       }
 
       function travelToRight() {
