@@ -960,19 +960,14 @@ dialog select {
   padding: 7px 20px;
   border-radius: 9999px;
   border: 2px solid #C2F800;
-  background: transparent;
-  color: #C2F800;
+  background: #C2F800;
+  color: #051821;
   font-family: Poppins, sans-serif;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgba(194, 248, 0, 0.2);
-}
-
-.entree-login-btn:hover {
-  background: #C2F800;
-  color: #051821;
 }
 
 /* Hero Section Container */
