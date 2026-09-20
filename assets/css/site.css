@@ -2,12 +2,35 @@
 html {
   scroll-behavior: smooth;
 }
+
 [class*="Poppins:"] {
   font-family: Poppins, sans-serif;
 }
+
+[class*="Poppins:Bold"] {
+  font-family: Poppins, sans-serif;
+  font-weight: 700;
+}
+
+[class*="Poppins:SemiBold"] {
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+[class*="Poppins:Medium"] {
+  font-family: Poppins, sans-serif;
+  font-weight: 500;
+}
+
+[class*="Poppins:Regular"] {
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
 [class*="Montserrat:"] {
   font-family: Montserrat, sans-serif;
 }
+
 .plain-select {
   appearance: none;
   padding-right: 18px;
@@ -15,70 +38,349 @@ html {
   background-repeat: no-repeat;
   background-position: right center;
 }
+
 input.plain-select {
   background-image: none;
 }
+
 button,
 [role="button"],
 [data-action] {
   cursor: pointer;
 }
+
 button:disabled {
   cursor: not-allowed;
 }
+
 :focus-visible {
   outline: 2px solid #007f70;
   outline-offset: 4px;
 }
+
 [hidden] {
   display: none !important;
 }
+
+/* ==========================================================================
+   Mascot (Doode the Sea Turtle)
+   ========================================================================== */
 .mascot {
   position: fixed;
   left: 4%;
-  top: 50%;
-  width: 128px;
-  height: 128px;
-  z-index: 60;
+  top: 55%;
+  width: 130px;
+  height: 130px;
+  z-index: 1000;
   pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.88);
   transition:
-    left 3s ease,
-    top 3s ease;
+    opacity 1.45s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 1.45s ease,
+    transform 1.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    left 4s cubic-bezier(1.45, 0.05, 0.55, 0.95),
+    top 4s cubic-bezier(1.45, 0.05, 0.55, 0.95);
+  will-change: left, top, opacity, transform;
 }
+
+.mascot.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+/* Directional flipping / horizontal inversion wrapper
+   NOTE: This element handles ONLY the horizontal flip via transform+transition.
+   The float animation lives on the child div to avoid transform conflicts. */
 .mascot-art {
   width: 128px;
   height: 128px;
-  animation: swim 2s ease-in-out infinite;
-  filter: drop-shadow(0 5px 5px #0003);
+  transform-origin: 50% 50%;
+  transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.18));
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
 }
+
+/* Invert turtle horizontally when traveling/resting on the right */
+.mascot.is-inverted .mascot-art {
+  transform: scaleX(-1);
+}
+
+/* Smooth Floating Animation Layer — on the CHILD to avoid conflicting
+   with the parent's transform:scaleX / transition on the same property */
+.mascot-art>div {
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 50%;
+  animation: turtle-float-idle 3.8s ease-in-out infinite;
+}
+
+/* Dynamic Swimming Animation when traveling across the screen */
+.mascot.is-traveling .mascot-art>div {
+  animation: turtle-swim-travel 1.5s ease-in-out infinite;
+}
+
+/* Interactive click bounce */
+.mascot-art.is-clicked>div {
+  animation: turtle-hop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Floating animation while idling / resting */
+@keyframes turtle-float-idle {
+  0% {
+    transform: translateY(0px) rotate(0deg) scale(1);
+  }
+
+  22% {
+    transform: translateY(-9px) rotate(-2.8deg) scale(1.02);
+  }
+
+  48% {
+    transform: translateY(-16px) rotate(1.2deg) scale(1.03);
+  }
+
+  72% {
+    transform: translateY(-6px) rotate(3deg) scale(0.99);
+  }
+
+  88% {
+    transform: translateY(2px) rotate(0.8deg) scale(0.985);
+  }
+
+  100% {
+    transform: translateY(0px) rotate(0deg) scale(1);
+  }
+}
+
+/* Energetic forward stroke swimming animation while traveling */
+@keyframes turtle-swim-travel {
+  0% {
+    transform: translateY(0px) rotate(-2deg) scale(1, 1);
+  }
+
+  28% {
+    transform: translateY(-12px) rotate(4deg) scale(1.04, 0.96);
+  }
+
+  62% {
+    transform: translateY(-3px) rotate(-3deg) scale(0.97, 1.03);
+  }
+
+  100% {
+    transform: translateY(0px) rotate(-2deg) scale(1, 1);
+  }
+}
+
+/* Playful hop micro-animation */
+@keyframes turtle-hop {
+  0% {
+    transform: scale(1);
+  }
+
+  30% {
+    transform: scale(1.25) translateY(-22px) rotate(6deg);
+  }
+
+  60% {
+    transform: scale(0.95) translateY(4px) rotate(-3deg);
+  }
+
+  100% {
+    transform: scale(1) translateY(0) rotate(0deg);
+  }
+}
+
+/* Ambient bubble float effect for the vector bubbles */
+.mascot-art [data-name="Subtract"] {
+  animation: ambient-bubble 2.5s ease-in-out infinite alternate;
+  transform-origin: center center;
+}
+
+.mascot-art [data-name="Subtract"]:nth-of-type(2) {
+  animation-duration: 3.1s;
+  animation-delay: -0.5s;
+}
+
+.mascot-art [data-name="Subtract"]:nth-of-type(3) {
+  animation-duration: 2.2s;
+  animation-delay: -1.1s;
+}
+
+.mascot-art [data-name="Subtract"]:nth-of-type(4) {
+  animation-duration: 2.8s;
+  animation-delay: -1.7s;
+}
+
+.mascot-art [data-name="Subtract"]:nth-of-type(5) {
+  animation-duration: 3.4s;
+  animation-delay: -0.8s;
+}
+
+@keyframes ambient-bubble {
+  0% {
+    transform: translateY(0) scale(0.85);
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translateY(-8px) scale(1.15);
+    opacity: 0.95;
+  }
+}
+
+/* ==========================================================================
+   Message Textbox (.mascot-bubble)
+   ========================================================================== */
 .mascot-bubble {
   position: absolute;
-  bottom: 100%;
-  left: 40%;
-  margin-bottom: 15px;
-  white-space: nowrap;
-  padding: 12px 16px;
+  bottom: 108%;
+  left: 20px;
+  right: auto;
+  margin-bottom: 12px;
+  min-width: 170px;
+  max-width: 270px;
+  padding: 10px 16px;
   border: 2px solid #ccff00;
-  border-radius: 16px;
-  background: white;
-  color: #363636;
-  font:
-    bold 14px Poppins,
-    sans-serif;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow:
+    0 10px 25px -4px rgba(0, 0, 0, 0.16),
+    0 4px 10px -2px rgba(0, 0, 0, 0.06);
+  color: #1a202c;
+  font: 600 13px/1.45 "Poppins", system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.01em;
+  pointer-events: none;
+  cursor: pointer;
+  white-space: normal;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px) scale(0.92);
+  transition:
+    left 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    right 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.3s ease,
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 20;
 }
+
+.mascot-bubble.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.mascot-bubble.is-visible:hover {
+  box-shadow:
+    0 14px 28px -4px rgba(0, 0, 0, 0.22),
+    0 6px 14px -2px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px) scale(1);
+}
+
+/* Pointer tail */
 .mascot-bubble::after {
   content: "";
   position: absolute;
-  left: 25px;
-  top: 100%;
-  border: 8px solid transparent;
-  border-top-color: #ccff00;
+  bottom: -9px;
+  left: 28px;
+  right: auto;
+  border-width: 9px 8px 0 8px;
+  border-style: solid;
+  border-color: #ccff00 transparent transparent transparent;
+  transition: left 0.4s ease, right 0.4s ease;
 }
-@keyframes swim {
+
+/* Inner text container with smooth fade/slide transition */
+.mascot-bubble .bubble-text {
+  display: block;
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* State during text change */
+.mascot-bubble.is-updating .bubble-text {
+  opacity: 0;
+  transform: translateY(-5px) scale(0.97);
+}
+
+/* Positioning adjustments when inverted / resting on right side */
+.mascot.is-inverted .mascot-bubble {
+  left: auto;
+  right: 15px;
+}
+
+.mascot.is-inverted .mascot-bubble::after {
+  left: auto;
+  right: 28px;
+}
+
+/* Subtle speech badge/tag */
+.mascot-bubble-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #007f70;
+  margin-bottom: 2px;
+}
+
+.mascot-bubble-badge::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
   50% {
-    transform: translateY(-10px) rotate(3deg);
+    opacity: 0.5;
+    transform: scale(0.8);
   }
 }
+
+@media (max-width: 768px) {
+  .mascot {
+    width: 96px;
+    height: 96px;
+  }
+
+  .mascot-art {
+    width: 96px;
+    height: 96px;
+  }
+
+  .mascot-bubble {
+    min-width: 150px;
+    max-width: 220px;
+    font-size: 11.5px;
+    padding: 8px 12px;
+  }
+}
+
 .plain-select,
 .plain-date {
   width: 100%;
@@ -92,18 +394,22 @@ button:disabled {
   outline: none;
   min-width: 0;
 }
+
 .plain-date {
   font-size: 12px;
 }
+
 .selected-option {
   border-color: #ccff00 !important;
   background-color: #ccff001a !important;
 }
+
 .primary-action {
   background: #ccff00 !important;
   color: #000 !important;
   cursor: pointer !important;
 }
+
 .user-menu {
   position: absolute;
   top: 68px;
@@ -115,6 +421,7 @@ button:disabled {
   color: #363636;
   box-shadow: 0 10px 30px #0003;
 }
+
 .user-menu a,
 .user-menu button {
   display: block;
@@ -124,15 +431,18 @@ button:disabled {
   font-size: 14px;
   border-radius: 8px;
 }
+
 .user-menu a:hover,
 .user-menu button:hover {
   background: #ccff0026;
 }
+
 dialog {
   position: fixed;
   inset: 0;
   margin: auto;
   width: min(560px, calc(100% - 32px));
+  height: fit-content;
   max-height: 85vh;
   overflow-y: auto;
   padding: 32px;
@@ -142,29 +452,76 @@ dialog {
   background: white;
   box-shadow: 0 20px 80px #0004;
   font-family: Poppins, sans-serif;
+  outline: none !important;
+  transition:
+    border-color 0.45s ease-out,
+    box-shadow 0.45s ease-out;
 }
+
+dialog.dialog-enter {
+  animation: unsaved-pop 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+dialog:focus,
+dialog:focus-visible {
+  outline: none !important;
+}
+
+dialog.is-shaking {
+  box-shadow:
+    0 20px 80px rgba(0, 0, 0, 0.32),
+    0 0 0 4px rgba(239, 68, 68, 0.22) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  outline: none !important;
+}
+
 dialog::backdrop {
   background: #0008;
 }
+
 dialog h2 {
   font-size: 24px;
   margin-bottom: 16px;
 }
+
 dialog p {
   margin: 12px 0;
 }
+
+dialog label {
+  display: block;
+  font-weight: 500;
+  margin: 14px 0 18px;
+  color: #374151;
+}
+
 dialog input,
 dialog select {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
   border: 1px solid #dbdcd9;
   border-radius: 8px;
   padding: 10px;
   max-width: 100%;
 }
+
 .dialog-close {
   float: right;
   padding: 0 6px;
   font-size: 24px;
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s ease;
 }
+
+.dialog-close:hover {
+  color: #111827;
+}
+
 .dialog-action {
   display: inline-block;
   border-radius: 999px;
@@ -173,7 +530,178 @@ dialog select {
   padding: 12px 22px;
   margin: 12px 8px 0 0;
   font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
+
+.dialog-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* ==========================================================================
+   Unsaved Changes Warning Modal
+   ========================================================================== */
+.unsaved-dialog {
+  max-width: 460px;
+  width: min(460px, calc(100% - 32px));
+  height: fit-content;
+  border-radius: 24px;
+  padding: 28px 28px 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  outline: none !important;
+  transition:
+    border-color 0.45s ease-out,
+    box-shadow 0.45s ease-out;
+}
+
+.unsaved-dialog.unsaved-dialog-enter {
+  animation: unsaved-pop 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.unsaved-dialog:focus,
+.unsaved-dialog:focus-visible {
+  outline: none !important;
+}
+
+@keyframes unsaved-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.unsaved-dialog.is-shaking {
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.32),
+    0 0 0 4px rgba(239, 68, 68, 0.22) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  outline: none !important;
+}
+
+@keyframes modal-shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  12% {
+    transform: translateX(-14px);
+  }
+
+  24% {
+    transform: translateX(13px);
+  }
+
+  36% {
+    transform: translateX(-10px);
+  }
+
+  48% {
+    transform: translateX(9px);
+  }
+
+  60% {
+    transform: translateX(-6px);
+  }
+
+  72% {
+    transform: translateX(5px);
+  }
+
+  84% {
+    transform: translateX(-2px);
+  }
+
+  94% {
+    transform: translateX(1px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.unsaved-dialog .unsaved-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.unsaved-dialog .unsaved-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fef3c7;
+  color: #d97706;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.unsaved-dialog h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.unsaved-dialog p {
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 8px 0 22px;
+}
+
+.unsaved-dialog .unsaved-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.unsaved-dialog .btn-stay {
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #f3f4f6;
+  color: #374151;
+  font-weight: 600;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.unsaved-dialog .btn-stay:hover {
+  background: #e5e7eb;
+}
+
+.unsaved-dialog .btn-discard {
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: none;
+  background: #ef4444;
+  color: white;
+  font-weight: 600;
+  font-size: 13.5px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+  transition: all 0.2s ease;
+}
+
+.unsaved-dialog .btn-discard:hover {
+  background: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.45);
+}
+
 .cart-row {
   display: flex;
   align-items: center;
@@ -181,15 +709,18 @@ dialog select {
   padding: 14px 0;
   border-bottom: 1px solid #e5e7eb;
 }
+
 .cart-row .description {
   flex: 1;
 }
+
 .cart-row button {
   border: 1px solid #dbdcd9;
   border-radius: 50%;
   width: 30px;
   height: 30px;
 }
+
 .form-error {
   padding: 12px;
   margin: 12px 0;
@@ -197,6 +728,7 @@ dialog select {
   background: #fff1f2;
   color: #9f1239;
 }
+
 .notice {
   position: fixed;
   bottom: 22px;
@@ -210,6 +742,7 @@ dialog select {
   z-index: 200;
   box-shadow: 0 5px 20px #0003;
 }
+
 .schedule {
   display: block;
   padding: 16px;
@@ -219,45 +752,56 @@ dialog select {
   width: 100%;
   text-align: left;
 }
+
 .calendar-days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 4px;
 }
+
 .calendar-days span {
   text-align: center;
   padding: 10px 0;
 }
+
 .calendar-days .trip-day {
   background: #ccff0050;
   border-radius: 50%;
 }
+
 @media (max-width: 767px) {
   body[data-page="index"] section {
     padding-top: 105px;
   }
-  body[data-page="index"] section > div.relative {
+
+  body[data-page="index"] section>div.relative {
     gap: 28px;
     padding: 28px 16px;
   }
-  body[data-page="index"] section > div.relative > div:first-child {
+
+  body[data-page="index"] section>div.relative>div:first-child {
     margin-top: 0;
     align-self: center;
   }
+
   body[data-page="index"] h1 {
     font-size: 52px;
   }
+
   body[data-page="index"] h2 {
     font-size: 19px;
   }
-  body[data-page="index"] section > div.relative > div:last-child {
+
+  body[data-page="index"] section>div.relative>div:last-child {
     width: min(410px, 100%);
     margin-top: 0;
   }
-  body[data-page="index"] section > div.relative > div:last-child > div {
+
+  body[data-page="index"] section>div.relative>div:last-child>div {
     width: 100%;
     padding: 24px 20px;
   }
+
   .mascot {
     left: 8px !important;
     top: auto !important;
@@ -265,41 +809,76 @@ dialog select {
     transform: scale(0.6);
     transform-origin: bottom left;
   }
+
   .mascot-bubble {
     display: none;
   }
-  header > div.absolute {
+
+  header>div.absolute {
     display: none;
   }
+
   header {
     padding-left: 16px !important;
     padding-right: 16px !important;
   }
+
   header a,
   header button {
     padding-left: 14px;
     padding-right: 14px;
   }
-  body[data-page="payment"] main > div > div:last-child {
+
+  body[data-page="payment"] main>div>div:last-child {
     padding: 24px 16px;
   }
-  body[data-page="payment"] main > div > div:last-child > div {
+
+  body[data-page="payment"] main>div>div:last-child>div {
     padding: 20px;
   }
+
   .user-menu {
     right: 16px;
   }
 }
+
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+
+  *:not(.mascot):not(.mascot *):not(.unsaved-dialog):not(.unsaved-dialog *),
+  *:not(.mascot):not(.mascot *):not(.unsaved-dialog):not(.unsaved-dialog *)::before,
+  *:not(.mascot):not(.mascot *):not(.unsaved-dialog):not(.unsaved-dialog *)::after {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
   }
+
+  .mascot {
+    transition:
+      opacity 0.45s ease !important,
+      visibility 0.45s ease !important,
+      left 4s cubic-bezier(0.45, 0.05, 0.55, 0.95) !important,
+      top 4s cubic-bezier(0.45, 0.05, 0.55, 0.95) !important;
+  }
+
+  .mascot-art {
+    transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  }
+
+  .mascot-art>div {
+    animation: turtle-float-idle 3.8s ease-in-out infinite !important;
+  }
+
+  .mascot.is-traveling .mascot-art>div {
+    animation: turtle-swim-travel 1.5s ease-in-out infinite !important;
+  }
+
+  .mascot-art.is-clicked>div {
+    animation: turtle-hop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  }
 }
+
 @media print {
+
   header,
   .mascot,
   .dialog-close,
@@ -307,13 +886,15 @@ dialog select {
   .notice {
     display: none !important;
   }
+
   dialog {
     position: static;
     max-height: none;
     width: 100%;
     box-shadow: none;
   }
-  body:has(dialog[open]) > div {
+
+  body:has(dialog[open])>div {
     display: none;
   }
 }

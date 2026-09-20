@@ -13,7 +13,8 @@
   const store = {
     get(key, fallback = null) {
       try {
-        return JSON.parse(localStorage.getItem("entree." + key)) ?? fallback;
+        const item = localStorage.getItem("entree." + key);
+        return item !== null ? JSON.parse(item) : fallback;
       } catch {
         return fallback;
       }
@@ -25,9 +26,154 @@
         /* File mode and private browsing can disable storage. */
       }
     },
+    remove(key) {
+      try {
+        localStorage.removeItem("entree." + key);
+      } catch { }
+    },
+  };
+  let isSaved = false;
+  function markSaved() {
+    isSaved = true;
+  }
+
+  function attachModalAttention(el) {
+    let currentShakeAnim = null;
+    let outsideClickCount = 0;
+    let resetClicksTimer = null;
+
+    const cleanupEnterAnim = () => {
+      el.classList.remove("unsaved-dialog-enter", "dialog-enter");
+      el.style.animation = "none";
+    };
+    el.addEventListener("animationend", cleanupEnterAnim, { once: true });
+    setTimeout(cleanupEnterAnim, 260);
+
+    function shakeModal() {
+      if (currentShakeAnim) {
+        try {
+          currentShakeAnim.cancel();
+        } catch {}
+      }
+      cleanupEnterAnim();
+      el.classList.add("is-shaking");
+      try {
+        currentShakeAnim = el.animate(
+          [
+            { transform: "translateX(0)" },
+            { transform: "translateX(-14px)" },
+            { transform: "translateX(13px)" },
+            { transform: "translateX(-10px)" },
+            { transform: "translateX(9px)" },
+            { transform: "translateX(-6px)" },
+            { transform: "translateX(5px)" },
+            { transform: "translateX(-2px)" },
+            { transform: "translateX(1px)" },
+            { transform: "translateX(0)" },
+          ],
+          {
+            duration: 480,
+            easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+          },
+        );
+        currentShakeAnim.onfinish = () => {
+          el.classList.remove("is-shaking");
+          el.style.transform = "";
+          currentShakeAnim = null;
+        };
+      } catch {
+        setTimeout(() => {
+          el.classList.remove("is-shaking");
+          el.style.transform = "";
+          currentShakeAnim = null;
+        }, 480);
+      }
+    }
+
+    function handleOutsideInteraction(event) {
+      if (event.target === el) {
+        const r = el.getBoundingClientRect();
+        const isOutside =
+          event.clientX < r.left ||
+          event.clientX > r.right ||
+          event.clientY < r.top ||
+          event.clientY > r.bottom;
+        if (isOutside) {
+          event.preventDefault();
+
+          clearTimeout(resetClicksTimer);
+          outsideClickCount++;
+
+          // Reset count if user stops clicking for 2.5 seconds
+          resetClicksTimer = setTimeout(() => {
+            outsideClickCount = 0;
+          }, 2500);
+
+          // Only triggers if the user clicks 3x outside the modal
+          if (outsideClickCount >= 3) {
+            outsideClickCount = 0;
+            shakeModal();
+          }
+        }
+      }
+    }
+
+    const outsideEventType = window.PointerEvent ? "pointerdown" : "click";
+    el.addEventListener(outsideEventType, handleOutsideInteraction);
+
+    return { shakeModal, cleanupEnterAnim };
+  }
+
+  function confirmUnsavedChanges(onConfirm) {
+    $("dialog.unsaved-dialog")?.remove();
+    const el = document.createElement("dialog");
+    el.className = "unsaved-dialog unsaved-dialog-enter";
+    el.innerHTML = `
+      <div class="unsaved-header">
+        <h2>Unsaved Changes</h2>
+      </div>
+      <p>You have unsaved changes. If you leave or refresh this page, your changes will be lost.</p>
+      <div class="unsaved-actions">
+        <button class="btn-stay" type="button">Stay</button>
+        <button class="btn-discard" type="button">Discard Changes</button>
+      </div>
+    `;
+    document.body.append(el);
+
+    attachModalAttention(el);
+
+    const close = () => {
+      el.close();
+      el.remove();
+    };
+    $(".btn-stay", el).onclick = () => {
+      close();
+    };
+    $(".btn-discard", el).onclick = () => {
+      markSaved();
+      close();
+      if (typeof onConfirm === "function") {
+        onConfirm();
+      }
+    };
+
+    el.addEventListener("cancel", (e) => {
+      e.preventDefault();
+      close();
+    });
+    el.showModal();
+    return el;
+  }
+
+  const navigateTo = (name, id) => {
+    location.href = `${name}.html${id ? "?id=" + encodeURIComponent(id) : ""}`;
   };
   const go = (name, id) => {
-    location.href = `${name}.html${id ? "?id=" + encodeURIComponent(id) : ""}`;
+    if (!isSaved && isDirty()) {
+      confirmUnsavedChanges(() => navigateTo(name, id));
+      return;
+    }
+    navigateTo(name, id);
   };
   const text = (el) => el.textContent.trim().replace(/\s+/g, " ");
   const allText = (value, root = document) =>
@@ -46,21 +192,27 @@
   function dialog(title, content) {
     $("dialog")?.remove();
     const el = document.createElement("dialog");
+    el.className = "dialog-enter";
     el.innerHTML = `<button class="dialog-close" aria-label="Close dialog">×</button><h2>${escape(title)}</h2>${content}`;
     document.body.append(el);
-    $(".dialog-close", el).onclick = () => el.close();
-    el.addEventListener("click", (event) => {
-      if (event.target === el) {
-        const r = el.getBoundingClientRect();
-        if (
-          event.clientX < r.left ||
-          event.clientX > r.right ||
-          event.clientY < r.top ||
-          event.clientY > r.bottom
-        )
-          el.close();
-      }
+
+    attachModalAttention(el);
+
+    const close = () => {
+      store.remove("active_product_id");
+      el.close();
+      el.remove();
+    };
+
+    $(".dialog-close", el).onclick = () => {
+      close();
+    };
+
+    el.addEventListener("cancel", (e) => {
+      e.preventDefault();
+      close();
     });
+
     el.showModal();
     return el;
   }
@@ -83,10 +235,74 @@
     data.MOCK_BOOKINGS.find((b) => b.id === selectedId) || data.MOCK_BOOKINGS[0];
   let selectedPayment = null,
     selectedFerry = null;
-  let cart = store
-    .get("cart", [])
-    .filter((row) => Number.isInteger(row.quantity) && row.quantity > 0);
+  let cart = [];
   let currentMonth = new Date();
+  const initialFieldValues = new Map();
+  let hasManualDateChange = false;
+  let hasManualCounterChange = false;
+
+  function snapshotInitialState() {
+    initialFieldValues.clear();
+    $$("input,select,textarea").forEach((el) => {
+      if (el.type === "password" || el.type === "hidden" || el.type === "submit" || el.type === "button") return;
+      if (el.type === "checkbox" || el.type === "radio") {
+        initialFieldValues.set(el, el.checked);
+      } else {
+        initialFieldValues.set(el, el.value);
+      }
+    });
+  }
+
+  function isDirty() {
+    if (isSaved) return false;
+
+    // Cart items or add-ons
+    if (cart && cart.length > 0) return true;
+
+    // Selected payment on payment page
+    if (selectedPayment !== null) return true;
+
+    // Selected ferry schedule on rebook page
+    if (selectedFerry !== null) return true;
+
+    // Manual date or counter adjustments on index
+    if (hasManualDateChange || hasManualCounterChange) return true;
+
+    // Compare tracked form controls against snapshot
+    const controls = $$("input,select,textarea");
+    for (const el of controls) {
+      if (el.type === "password" || el.type === "hidden" || el.type === "submit" || el.type === "button") {
+        continue;
+      }
+      if (initialFieldValues.has(el)) {
+        const init = initialFieldValues.get(el);
+        if (el.type === "checkbox" || el.type === "radio") {
+          if (el.checked !== init) return true;
+        } else {
+          if (el.value !== init) return true;
+        }
+      } else {
+        if (el.type === "checkbox" || el.type === "radio") {
+          if (el.checked) return true;
+        } else if (el.value && el.value.trim() !== "") {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  document.addEventListener("input", (e) => {
+    if (e.target.matches("input,select,textarea")) {
+      isSaved = false;
+    }
+  });
+  document.addEventListener("change", (e) => {
+    if (e.target.matches("input,select,textarea")) {
+      isSaved = false;
+    }
+  });
 
   // Label native form controls, retaining the original visual markup.
   $$("input,select,textarea").forEach((input, i) => {
@@ -97,6 +313,7 @@
     if (!input.getAttribute("aria-label") && !label)
       input.setAttribute("aria-label", input.placeholder || input.name || "Option");
   });
+
   $$("[data-action]").forEach((el) => action(el, el.dataset.action));
   $$("button").forEach((el) => {
     if (!text(el) && !el.getAttribute("aria-label"))
@@ -146,8 +363,9 @@
       event.preventDefault();
       if (!form.reportValidity()) return;
       if (page === "login") {
+        markSaved();
         store.set("session", { email: $('input[type="email"]', form).value });
-        go("index");
+        navigateTo("index");
       } else if (page === "signup") {
         const p = $('[name="password"]', form),
           confirm = $('[name="confirmPassword"]', form);
@@ -156,15 +374,17 @@
           confirm.focus();
           return;
         }
+        markSaved();
         store.set("session", { email: $('[name="email"]', form).value });
-        go("index");
+        navigateTo("index");
       } else if (page === "verify-booking") {
         const fields = $$("input", form);
+        markSaved();
         store.set("verification", {
           reference: fields[0].value.toUpperCase(),
           surname: fields[1].value,
         });
-        go("pasalubong");
+        navigateTo("pasalubong");
       }
     });
   });
@@ -252,6 +472,7 @@
             month: "short",
             day: "numeric",
           });
+          hasManualDateChange = true;
           d.close();
         };
       };
@@ -262,11 +483,21 @@
         }
       };
     }
-    $('select[aria-label="Travel Type"]').onchange = (e) => {
+
+    function updateTravelTypeUI(val) {
       const dates = $$("[data-date]");
-      dates[1].style.opacity = e.target.value === "One Way" ? "0.3" : "1";
-      dates[1].style.pointerEvents = e.target.value === "One Way" ? "none" : "";
-    };
+      if (dates[1]) {
+        dates[1].style.opacity = val === "One Way" ? "0.3" : "1";
+        dates[1].style.pointerEvents = val === "One Way" ? "none" : "";
+      }
+    }
+
+    const travelTypeSelect = $('select[aria-label="Travel Type"]');
+    if (travelTypeSelect) {
+      travelTypeSelect.onchange = (e) => {
+        updateTravelTypeUI(e.target.value);
+      };
+    }
   }
 
   // Figma-exported booking screens contain text-shaped controls.
@@ -285,6 +516,7 @@
     if (info)
       info.textContent =
         "Demo payment only. No money is charged and no payment details are collected.";
+    // Fresh session: no payment preselected on reload
   }
 
   function showBooking(id, share = false) {
@@ -355,7 +587,6 @@
       (cart.length
         ? `<p class="mt-4 font-bold">Total: $${total.toFixed(2)}</p><button class="dialog-action" data-action="checkout">Proceed to Checkout</button>`
         : "");
-    store.set("cart", cart);
   }
   function productMenu(id) {
     const product = data.PRODUCTS.find((p) => p.id === Number(id));
@@ -365,7 +596,9 @@
       `<p>${escape(product.description)}</p>${product.menu.map((item) => `<div class="cart-row"><div class="description">${escape(item.name)}<br>$${item.price.toFixed(2)}</div><button aria-label="Add ${escape(item.name)}" data-action="add-item:${product.id}:${item.id}">+</button></div>`).join("")}<button class="dialog-action" data-action="close-dialog">Done</button>`,
     );
   }
-  if (page === "pasalubong") renderCart();
+  if (page === "pasalubong") {
+    renderCart();
+  }
 
   function schedules() {
     const input = $('input[type="date"]'),
@@ -417,7 +650,9 @@
       const boxes = $$('main input[type="checkbox"]');
       list.nextElementSibling.textContent = `${boxes.filter((b) => b.checked).length} of ${boxes.length} passengers selected`;
     }
-    $('input[type="date"]').addEventListener("change", schedules);
+    $('input[type="date"]').addEventListener("change", () => {
+      schedules();
+    });
     $$('input[type="checkbox"]').forEach((input) =>
       input.addEventListener("change", () => {
         input.closest("label").style.borderColor = input.checked ? "#ccff00" : "#e5e7eb";
@@ -426,6 +661,20 @@
       }),
     );
     updatePassengers();
+  }
+  if (page === "refund") {
+    const reasonTextarea = $("textarea");
+    if (reasonTextarea) {
+      reasonTextarea.value = "";
+    }
+  }
+  if (page === "verify-booking") {
+    const v = store.get("verification");
+    const fields = $$("form input");
+    if (v && fields.length >= 2) {
+      if (v.reference && !fields[0].value) fields[0].value = v.reference;
+      if (v.surname && !fields[1].value) fields[1].value = v.surname;
+    }
   }
   if (page === "rebook" || page === "refund") {
     const b = booking();
@@ -458,6 +707,11 @@
         preferences[i] = input.type === "checkbox" ? input.checked : input.value;
         store.set("preferences", preferences);
         notice("Preferences saved on this device.");
+        if (input.type === "checkbox") {
+          initialFieldValues.set(input, input.checked);
+        } else {
+          initialFieldValues.set(input, input.value);
+        }
       });
     });
     allText("Add Payment Method").forEach((el) => action(el, "payment-info"));
@@ -466,6 +720,24 @@
     const email = $('input[type="email"]');
     if (email) email.value = store.get("session")?.email || "";
   }
+
+  // Snapshot initial values for change detection
+  snapshotInitialState();
+
+  // Intercept standard link navigation if unsaved changes exist
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("[data-action]")) return;
+    const link = e.target.closest("a[href]");
+    if (!link) return;
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#") || href.startsWith("javascript:")) return;
+    if (!isSaved && isDirty()) {
+      e.preventDefault();
+      confirmUnsavedChanges(() => {
+        location.href = href;
+      });
+    }
+  });
 
   document.addEventListener("click", async (event) => {
     const el = event.target.closest("[data-action]");
@@ -487,11 +759,7 @@
           notice("Return date must be on or after departure.");
           return;
         }
-        store.set("search", {
-          origin: $("#origin").value,
-          destination: $("#destination").value,
-          dates: dates.map((d) => d.dataset.date),
-        });
+        markSaved();
       }
       go(arg, ["rebook", "refund"].includes(arg) ? id : null);
     } else if (name === "back") {
@@ -511,14 +779,23 @@
       const value = $("span", el.parentElement),
         minimum = arg === "passengers" ? 1 : 0;
       value.textContent = Math.max(minimum, Number(value.textContent) + Number(amount));
+      if (page === "index") {
+        hasManualCounterChange = true;
+      }
     } else if (name === "swap") {
       const a = $("#origin"),
         b = $("#destination");
-      [a.value, b.value] = [b.value, a.value];
+      if (a && b) {
+        [a.value, b.value] = [b.value, a.value];
+        a.dispatchEvent(new Event("input", { bubbles: true }));
+        b.dispatchEvent(new Event("input", { bubbles: true }));
+      }
     } else if (name === "account") accountMenu();
     else if (name === "logout") {
+      markSaved();
       store.set("session", null);
-      go("index");
+      store.remove("verification");
+      navigateTo("index");
     } else if (name === "payment") {
       selectedPayment = arg;
       $$('[data-action^="payment:"]').forEach((b) => {
@@ -528,8 +805,9 @@
       enable($('[data-action="complete-payment"]'));
     } else if (name === "complete-payment") {
       if (selectedPayment) {
+        markSaved();
         store.set("demoPayment", selectedPayment);
-        go("confirmation");
+        navigateTo("confirmation");
       }
     } else if (name === "booking" || name === "share") showBooking(id, name === "share");
     else if (name === "addons")
@@ -578,14 +856,21 @@
         `<p>Total: $${cart.reduce((s, r) => s + r.price * r.quantity, 0).toFixed(2)}</p><p>Demo checkout — no charge will be made.</p><label>Payment method <select><option>GCash</option><option>Online Banking</option></select></label><button class="dialog-action" data-action="demo-order">Confirm demo order</button>`,
       );
     else if (name === "demo-order") {
+      markSaved();
       cart = [];
       renderCart();
       dialog(
         "Demo order complete",
         '<p>Your sample order is complete. No payment was taken.</p><a class="dialog-action" href="bookings.html">My Bookings</a>',
       );
-    } else if (name === "close-dialog") $("dialog").close();
-    else if (name === "select-passengers") {
+    } else if (name === "close-dialog") {
+      const d = $("dialog");
+      if (d) {
+        store.remove("active_product_id");
+        d.close();
+        d.remove();
+      }
+    } else if (name === "select-passengers") {
       const boxes = $$('main input[type="checkbox"]'),
         checked = !boxes.every((b) => b.checked);
       boxes.forEach((b) => {
@@ -605,6 +890,7 @@
         notice("Please select at least one passenger.");
         return;
       }
+      markSaved();
       dialog(
         "Demo reschedule complete",
         '<p>This sample booking has been rescheduled for this demonstration. No live reservation was changed.</p><a class="dialog-action" href="bookings.html">Back to bookings</a>',
@@ -616,6 +902,7 @@
         reason.reportValidity();
         return;
       }
+      markSaved();
       dialog(
         "Demo refund request",
         '<p>Your sample refund request is complete. No live reservation or payment was changed.</p><a class="dialog-action" href="bookings.html">Back to bookings</a>',
@@ -633,23 +920,340 @@
       );
   });
 
-  // Lightweight mascot animation; respect reduced-motion preferences.
-  const mascot = $(".mascot");
-  if (mascot && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const messages = [
-      "Hi! I'm Doode! 🐢",
-      "Your next island adventure awaits! ⛴️",
-      "Doode says: Speed it up! 🚀",
-    ];
-    let index = 0;
-    setInterval(() => {
-      if (document.hidden) return;
-      $(".mascot-bubble").textContent = messages[index++ % messages.length];
-      if (innerWidth > 1000) {
-        mascot.style.left =
-          (index % 2 ? 4 : Math.max(4, ((innerWidth - 260) / innerWidth) * 100)) + "%";
-        mascot.style.top = (index % 2 ? 50 : 75) + "%";
+  // Intercept refresh shortcuts (F5, Ctrl+R, Cmd+R)
+  window.addEventListener("keydown", (e) => {
+    const isReload =
+      e.key === "F5" ||
+      ((e.ctrlKey || e.metaKey) && (e.key === "r" || e.key === "R"));
+    if (isReload && !isSaved && isDirty()) {
+      e.preventDefault();
+      confirmUnsavedChanges(() => {
+        location.reload();
+      });
+    }
+  });
+
+  // Browser beforeunload fallback for reload button and tab closing
+  window.addEventListener("beforeunload", (e) => {
+    if (!isSaved && isDirty()) {
+      e.preventDefault();
+      e.returnValue = "";
+      return "";
+    }
+  });
+
+  // ==========================================================================
+  // Mascot Controller (Doode the Sea Turtle)
+  // Inactivity Detection: 5s idle -> Turtle + Message (10s) -> Turtle only (10s break) -> repeat
+  // ==========================================================================
+  try {
+    const mascot = $(".mascot");
+    if (mascot) {
+      const mascotArt = mascot.querySelector(".mascot-art");
+      const bubble = mascot.querySelector(".mascot-bubble");
+
+      const messages = [
+        "Hi! I'm Doode! Your friendly island guide!",
+        "Ready for an island getaway? Check our top routes!",
+        "Book your ferry tickets smoothly with Entree!",
+        "Don't forget to pack delicious local Pasalubong!",
+        "Enjoy the fresh ocean breeze on your voyage!",
+        "Check out today's trip schedules & terminal guides!",
+        "Doode says: Speed it up! Book early to secure seats!",
+        "Pro tip: Window seats offer breathtaking open sea views!",
+        "Have your booking confirmation QR code ready at the gate!",
+      ];
+
+      let msgIndex = 0;
+      let textSpan = null;
+
+      // Set up modern dialogue card structure in bubble
+      if (bubble) {
+        mascot.removeAttribute("aria-hidden");
+        bubble.setAttribute("role", "status");
+        bubble.setAttribute("aria-live", "polite");
+
+        const badge = document.createElement("div");
+        badge.className = "mascot-bubble-badge";
+        badge.textContent = "Doode 🐢";
+
+        textSpan = document.createElement("span");
+        textSpan.className = "bubble-text";
+        textSpan.textContent = messages[0];
+
+        bubble.innerHTML = "";
+        bubble.appendChild(badge);
+        bubble.appendChild(textSpan);
+
+        // Clicking the bubble should not dismiss the mascot
+        bubble.addEventListener("click", (e) => e.stopPropagation());
       }
-    }, 12000);
+
+      function updateMessageText(text) {
+        if (!bubble || !textSpan) return;
+        bubble.classList.add("is-updating");
+        setTimeout(() => {
+          textSpan.textContent = text;
+          bubble.classList.remove("is-updating");
+        }, 180);
+      }
+
+      function showBubble(text) {
+        if (!bubble) return;
+        if (text) updateMessageText(text);
+        bubble.classList.add("is-visible");
+      }
+
+      function hideBubble() {
+        if (!bubble) return;
+        bubble.classList.remove("is-visible");
+      }
+
+      function showMascot() {
+        mascot.classList.add("is-visible");
+        scheduleNextMove(3500);
+      }
+
+      function hideMascot() {
+        mascot.classList.remove("is-visible");
+        stopTravel();
+      }
+
+      // ----------------------------------------------------------------------
+      // Travel & Swimming state machine
+      // ----------------------------------------------------------------------
+      let isAtRight = false;
+      let isMoving = false;
+      let travelScheduleTimer = null;
+      let travelFinishTimer = null;
+
+      function getRightPosition() {
+        const w = window.innerWidth;
+        const mascotWidth = w <= 768 ? 105 : 160;
+        return Math.max(20, w - mascotWidth - 25);
+      }
+
+      function stopTravel() {
+        clearTimeout(travelScheduleTimer);
+        clearTimeout(travelFinishTimer);
+        travelScheduleTimer = null;
+        travelFinishTimer = null;
+        isMoving = false;
+        mascot.classList.remove("is-traveling");
+        mascot.classList.remove("is-inverted");
+        isAtRight = false;
+        mascot.style.left = "4%";
+        mascot.style.top = "56%";
+      }
+
+      function travelToRight() {
+        if (isMoving || !mascot.classList.contains("is-visible")) return;
+        isMoving = true;
+
+        mascot.classList.add("is-inverted");
+        mascot.classList.add("is-traveling");
+
+        const rightPx = getRightPosition();
+        const topPercent = Math.random() > 0.5 ? 48 : 68;
+
+        mascot.style.left = rightPx + "px";
+        mascot.style.top = topPercent + "%";
+
+        travelFinishTimer = setTimeout(() => {
+          isMoving = false;
+          isAtRight = true;
+          mascot.classList.remove("is-traveling");
+        }, 4500);
+      }
+
+      function travelToLeft() {
+        if (isMoving || !mascot.classList.contains("is-visible")) return;
+        isMoving = true;
+
+        mascot.classList.remove("is-inverted");
+        mascot.classList.add("is-traveling");
+
+        const topPercent = Math.random() > 0.5 ? 54 : 72;
+        mascot.style.left = "4%";
+        mascot.style.top = topPercent + "%";
+
+        travelFinishTimer = setTimeout(() => {
+          isMoving = false;
+          isAtRight = false;
+          mascot.classList.remove("is-traveling");
+        }, 4500);
+      }
+
+      function scheduleNextMove(delayMs) {
+        clearTimeout(travelScheduleTimer);
+        travelScheduleTimer = setTimeout(() => {
+          if (document.hidden || window.innerWidth < 480 || !mascot.classList.contains("is-visible")) {
+            scheduleNextMove(5000);
+            return;
+          }
+          if (!isAtRight) {
+            travelToRight();
+            scheduleNextMove(13000); // 4.5s travel + ~8.5s dwell
+          } else {
+            travelToLeft();
+            scheduleNextMove(13000);
+          }
+        }, delayMs);
+      }
+
+      // Initial positioning
+      mascot.style.left = "4%";
+      mascot.style.top = "56%";
+
+      // ----------------------------------------------------------------------
+      // Inactivity & Message State Machine
+      // Flow: User active -> 5s inactivity -> Turtle + Message (10s) -> Turtle only (10s break) -> Next Message (10s) -> Turtle only (10s break) -> repeat
+      // ----------------------------------------------------------------------
+      let currentState = "ACTIVE"; // "ACTIVE" | "MESSAGE" | "BREAK"
+      let inactivityTimer = null;
+      let messageTimer = null;
+      let breakTimer = null;
+
+      function clearCycleTimers() {
+        if (inactivityTimer) { clearTimeout(inactivityTimer); inactivityTimer = null; }
+        if (messageTimer) { clearTimeout(messageTimer); messageTimer = null; }
+        if (breakTimer) { clearTimeout(breakTimer); breakTimer = null; }
+      }
+
+      // Step 1: User has been inactive for 5 seconds
+      function onInactiveTriggered() {
+        clearCycleTimers();
+        currentState = "MESSAGE";
+
+        // 1. Turtle mascot appears
+        showMascot();
+
+        // 2. Shows guidance message for 10 seconds
+        startMessagePhase();
+      }
+
+      // Step 2 & 5: Message phase (10s)
+      function startMessagePhase() {
+        clearTimeout(messageTimer);
+        clearTimeout(breakTimer);
+        currentState = "MESSAGE";
+
+        showBubble(messages[msgIndex]);
+
+        // 3. Message remains visible for 10 seconds
+        messageTimer = setTimeout(() => {
+          onMessageExpired();
+        }, 10000);
+      }
+
+      // Step 3 & 4: Break phase (10s)
+      function onMessageExpired() {
+        clearTimeout(messageTimer);
+        clearTimeout(breakTimer);
+        currentState = "BREAK";
+
+        // Message box disappears completely, leaving only the turtle mascot visible
+        hideBubble();
+
+        // Enter 10-second break / pause period
+        breakTimer = setTimeout(() => {
+          onBreakExpired();
+        }, 10000);
+      }
+
+      // Step 5: After 10s break, advance message and show next
+      function onBreakExpired() {
+        msgIndex = (msgIndex + 1) % messages.length;
+        startMessagePhase();
+      }
+
+      // User interaction resets idle behavior
+      let lastActivityTime = 0;
+      function onUserInteraction(e) {
+        // Clicks on the mascot itself are handled separately
+        if (e && mascot.contains(e.target)) {
+          return;
+        }
+
+        const now = Date.now();
+        // If already active, debounce rapid mouse moves to keep performance high
+        if (currentState === "ACTIVE" && now - lastActivityTime < 150) {
+          clearTimeout(inactivityTimer);
+          inactivityTimer = setTimeout(onInactiveTriggered, 5000);
+          return;
+        }
+        lastActivityTime = now;
+
+        clearCycleTimers();
+
+        // Hide the message box immediately
+        hideBubble();
+
+        // Hide the turtle mascot
+        hideMascot();
+
+        currentState = "ACTIVE";
+
+        // Reset inactivity timer: must be inactive for another 5 seconds
+        inactivityTimer = setTimeout(onInactiveTriggered, 5000);
+      }
+
+      // Interactive click/tap micro-delight on the turtle
+      if (mascotArt) {
+        mascotArt.addEventListener("click", (e) => {
+          e.stopPropagation();
+          mascotArt.classList.add("is-clicked");
+          setTimeout(() => mascotArt.classList.remove("is-clicked"), 650);
+
+          const funReactions = [
+            "Weee! Let's explore the islands!",
+            "Splash! Having a wonderful trip?",
+            "Click 'Buy Pasalubong' for tasty treats!",
+            "Need to rebook? We've got you covered!",
+          ];
+          const reaction = funReactions[Math.floor(Math.random() * funReactions.length)];
+
+          // Show reaction message
+          showBubble(reaction);
+
+          // Reset the 10-second message timer so user can read the reaction
+          clearTimeout(messageTimer);
+          clearTimeout(breakTimer);
+          currentState = "MESSAGE";
+          messageTimer = setTimeout(() => {
+            onMessageExpired();
+          }, 10000);
+        });
+      }
+
+      // Listen for all user interaction events across window/document
+      const interactionEvents = ["mousemove", "mousedown", "keydown", "touchstart", "scroll", "wheel"];
+      interactionEvents.forEach((evt) => {
+        window.addEventListener(evt, onUserInteraction, { passive: true });
+      });
+
+      // Handle page visibility (e.g. switching tabs)
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          clearCycleTimers();
+        } else {
+          onUserInteraction();
+        }
+      });
+
+      // Keep right-aligned turtle properly bounded on resize
+      window.addEventListener("resize", () => {
+        if (isAtRight && !isMoving) {
+          mascot.style.left = getRightPosition() + "px";
+        }
+      });
+
+      // Initial start: User is active on load -> start 5-second countdown
+      inactivityTimer = setTimeout(onInactiveTriggered, 5000);
+    }
+  } catch (e) {
+    // Mascot is non-critical; log but don't break the page
+    console.warn("Mascot controller error:", e);
   }
 })();
+
