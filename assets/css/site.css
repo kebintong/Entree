@@ -897,10 +897,6 @@ dialog select {
   align-items: center;
   justify-content: space-between;
   padding: 0 32px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
 }
 
