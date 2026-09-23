@@ -234,7 +234,8 @@
   const booking = () =>
     data.MOCK_BOOKINGS.find((b) => b.id === selectedId) || data.MOCK_BOOKINGS[0];
   let selectedPayment = null,
-    selectedFerry = null;
+    selectedFerry = null,
+    cart = [];
   function getPhilippineDate() {
     try {
       const parts = new Intl.DateTimeFormat("en-US", {
@@ -357,26 +358,116 @@
   });
 
   // The source contains a mock session only. Never save passwords.
+  // Logged-in header: [Buy Pasalubong] [Notifications bell] [Initial avatar ▾]
+  const ICONS = {
+    bell: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>',
+    chevron: '<svg class="account-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>',
+    calendar: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>',
+    bag: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
+    user: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+    gear: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>',
+    logout: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>',
+  };
+  const DEMO_NOTIFICATIONS = [
+    { id: "n1", title: "Trip reminder", text: "Cebu → Tagbilaran sails Oct 30, 9:00 AM. Arrive 1 hour early.", href: "bookings.html" },
+    { id: "n2", title: "Pasalubong deal", text: "Dried mangoes are 10% off when you add them to your trip.", href: "verify-booking.html" },
+  ];
+  const escHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+  function sessionInfo() {
+    const s = store.get("session") || {};
+    const email = s.email || "";
+    const local = email.split("@")[0] || "Guest";
+    const name = (s.name || local.replace(/[._-]+/g, " ")).trim();
+    const pretty = name.replace(/\b\w/g, (c) => c.toUpperCase());
+    return { name: pretty, email, initial: (pretty[0] || "?").toUpperCase() };
+  }
+  const unreadNotifications = () => {
+    const read = store.get("notificationsRead") || [];
+    return DEMO_NOTIFICATIONS.filter((n) => !read.includes(n.id));
+  };
+  function updateBellBadge() {
+    const badge = $(".account-bell .account-badge");
+    if (!badge) return;
+    const n = unreadNotifications().length;
+    badge.textContent = n;
+    badge.hidden = n === 0;
+    $(".account-bell")?.setAttribute("aria-label", `Notifications${n ? `, ${n} unread` : ""}`);
+  }
+
   if (store.get("session")) {
     const login = $('header [data-action="go:login"]');
     if (login) {
-      login.innerHTML = "<span>My Account ▾</span>";
-      action(login, "account");
+      const info = sessionInfo();
+      const cluster = document.createElement("div");
+      cluster.className = "account-cluster";
+      cluster.innerHTML =
+        `<button type="button" class="account-icon-btn account-bell" data-action="notifications" aria-haspopup="true" aria-expanded="false">${ICONS.bell}<span class="account-badge"></span></button>` +
+        `<button type="button" class="account-trigger" data-action="account" aria-haspopup="true" aria-expanded="false" aria-label="Account menu for ${escHtml(info.name)}"><span class="account-avatar">${escHtml(info.initial)}</span>${ICONS.chevron}</button>`;
+      login.replaceWith(cluster);
+      updateBellBadge();
     }
   }
-  function accountMenu() {
-    const existing = $(".user-menu");
-    if (existing) {
-      existing.remove();
-      return;
-    }
+
+  function closeHeaderMenus() {
+    $$(".user-menu").forEach((m) => m.remove());
+    $$(".account-trigger, .account-bell").forEach((b) => {
+      b.setAttribute("aria-expanded", "false");
+      b.classList.remove("is-open");
+    });
+  }
+  function openHeaderMenu(kind, trigger, html) {
+    const alreadyOpen = $(`.user-menu[data-kind="${kind}"]`);
+    closeHeaderMenus();
+    if (alreadyOpen) return null;
+    const header = trigger.closest("header") || $("header");
     const menu = document.createElement("nav");
     menu.className = "user-menu";
-    menu.setAttribute("aria-label", "Account");
-    menu.innerHTML =
-      '<a href="index.html">Home</a><a href="bookings.html">My Bookings</a><a href="verify-booking.html">Buy Pasalubong</a><a href="travel-instructions.html">Travel Instructions</a><a href="settings.html">Settings</a><button data-action="logout">Log out</button>';
-    $("header").append(menu);
+    menu.dataset.kind = kind;
+    menu.setAttribute("aria-label", kind === "account" ? "Account" : "Notifications");
+    menu.innerHTML = html;
+    header.append(menu);
+    const hr = header.getBoundingClientRect();
+    const tr = trigger.getBoundingClientRect();
+    menu.style.top = tr.bottom - hr.top + 12 + "px";
+    menu.style.right = Math.max(12, hr.right - tr.right - 4) + "px";
+    trigger.setAttribute("aria-expanded", "true");
+    trigger.classList.add("is-open");
+    return menu;
   }
+  function accountMenu() {
+    const trigger = $(".account-trigger");
+    if (!trigger) return;
+    const info = sessionInfo();
+    openHeaderMenu(
+      "account",
+      trigger,
+      `<div class="user-menu-head"><p class="user-menu-name">${escHtml(info.name)}</p><p class="user-menu-email">${escHtml(info.email)}</p></div>` +
+        `<div class="user-menu-list">` +
+        `<a href="bookings.html">${ICONS.calendar}<span>My Bookings</span></a>` +
+        `<a href="verify-booking.html">${ICONS.bag}<span>Buy Pasalubong</span></a>` +
+        `<a href="travel-instructions.html">${ICONS.user}<span>Travel Instructions</span></a>` +
+        `<a href="settings.html">${ICONS.gear}<span>Settings</span></a>` +
+        `</div>` +
+        `<div class="user-menu-foot"><button type="button" class="user-menu-logout" data-action="logout">${ICONS.logout}<span>Log Out</span></button></div>`,
+    );
+  }
+  function notificationsMenu() {
+    const trigger = $(".account-bell");
+    if (!trigger) return;
+    const unread = unreadNotifications().map((n) => n.id);
+    const items = DEMO_NOTIFICATIONS.map(
+      (n) =>
+        `<a href="${n.href}" class="user-menu-notif${unread.includes(n.id) ? " is-unread" : ""}"><span class="notif-dot" aria-hidden="true"></span><span><span class="notif-title">${escHtml(n.title)}</span><span class="notif-text">${escHtml(n.text)}</span></span></a>`,
+    ).join("");
+    const menu = openHeaderMenu("notifications", trigger, `<div class="user-menu-head"><p class="user-menu-name">Notifications</p></div><div class="user-menu-list">${items}</div>`);
+    if (menu) {
+      store.set("notificationsRead", DEMO_NOTIFICATIONS.map((n) => n.id));
+      updateBellBadge();
+    }
+  }
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && $(".user-menu")) closeHeaderMenus();
+  });
   function formError(form, message) {
     $(".form-error", form)?.remove();
     const el = document.createElement("p");
@@ -405,7 +496,10 @@
           return;
         }
         markSaved();
-        store.set("session", { email: $('[name="email"]', form).value });
+        store.set("session", {
+          email: $('[name="email"]', form).value,
+          name: [$('[name="firstName"]', form)?.value, $('[name="lastName"]', form)?.value].filter(Boolean).join(" "),
+        });
         navigateTo("index");
       } else if (page === "verify-booking") {
         const fields = $$("input", form);
@@ -451,7 +545,7 @@
     })) {
       const heading = allText(label)[0],
         box = heading?.nextElementSibling;
-      if (!box || box.querySelector("select")) continue;
+      if (!box || box.querySelector("select") || heading.closest(".custom-dropdown-wrap")) continue;
       box.innerHTML = `<select class="plain-select" aria-label="${label}">${options.map((o) => `<option>${o}</option>`).join("")}</select>`;
     }
 
@@ -520,6 +614,90 @@
       };
     }
 
+    // Setup Custom Dropdown Lists for Line and Cabin
+    const dropdownWraps = $$(".custom-dropdown-wrap");
+    dropdownWraps.forEach((wrap) => {
+      const trigger = wrap.querySelector(".custom-dropdown-trigger");
+      const menu = wrap.querySelector(".custom-dropdown-menu");
+      const valEl = wrap.querySelector(".dropdown-value");
+      const hiddenSelect = wrap.querySelector("select");
+      const options = wrap.querySelectorAll(".dropdown-option");
+
+      if (!trigger || !menu) return;
+
+      function openMenu() {
+        dropdownWraps.forEach((w) => {
+          if (w !== wrap) {
+            w.querySelector(".custom-dropdown-trigger")?.classList.remove("is-open");
+            w.querySelector(".custom-dropdown-trigger")?.setAttribute("aria-expanded", "false");
+            w.querySelector(".custom-dropdown-menu")?.classList.remove("is-open");
+          }
+        });
+        trigger.classList.add("is-open");
+        trigger.setAttribute("aria-expanded", "true");
+        menu.classList.add("is-open");
+      }
+
+      function closeMenu() {
+        trigger.classList.remove("is-open");
+        trigger.setAttribute("aria-expanded", "false");
+        menu.classList.remove("is-open");
+      }
+
+      trigger.onclick = (e) => {
+        e.stopPropagation();
+        const isOpen = menu.classList.contains("is-open");
+        if (isOpen) closeMenu();
+        else openMenu();
+      };
+
+      options.forEach((opt) => {
+        opt.onclick = (e) => {
+          e.stopPropagation();
+          const val = opt.dataset.value;
+          if (valEl) valEl.textContent = val;
+
+          options.forEach((o) => {
+            const isMatch = o === opt;
+            o.classList.toggle("is-active", isMatch);
+            o.setAttribute("aria-selected", String(isMatch));
+          });
+
+          if (hiddenSelect) {
+            hiddenSelect.value = val;
+            hiddenSelect.dispatchEvent(new Event("change", { bubbles: true }));
+          }
+
+          closeMenu();
+
+          // Tactile feedback bounce on trigger
+          trigger.classList.remove("is-selected-pop");
+          void trigger.offsetWidth;
+          trigger.classList.add("is-selected-pop");
+        };
+      });
+    });
+
+    // Close custom dropdowns on outside click or Escape key
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".custom-dropdown-wrap")) {
+        dropdownWraps.forEach((w) => {
+          w.querySelector(".custom-dropdown-trigger")?.classList.remove("is-open");
+          w.querySelector(".custom-dropdown-trigger")?.setAttribute("aria-expanded", "false");
+          w.querySelector(".custom-dropdown-menu")?.classList.remove("is-open");
+        });
+      }
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        dropdownWraps.forEach((w) => {
+          w.querySelector(".custom-dropdown-trigger")?.classList.remove("is-open");
+          w.querySelector(".custom-dropdown-trigger")?.setAttribute("aria-expanded", "false");
+          w.querySelector(".custom-dropdown-menu")?.classList.remove("is-open");
+        });
+      }
+    });
+
     // Wire up date pickers
     const dateCards = $$(".dates-input-group [data-date]");
     const targetCards = dateCards.length ? dateCards : $$("[data-date]");
@@ -554,47 +732,6 @@
           card.click();
         }
       };
-    });
-
-    // Wire up Passenger Popover
-    const popoverTrigger = $("#passenger-popover-trigger");
-    const popover = $("#passenger-popover");
-    const summarySpan = $("#passenger-summary-text");
-
-    function updatePassengerSummary() {
-      if (!summarySpan) return;
-      const pCount = $("[data-counter-type='passengers'] span")?.textContent || "2";
-      const vCount = $("[data-counter-type='vehicles'] span")?.textContent || "0";
-      const petCount = $("[data-counter-type='pets'] span")?.textContent || "0";
-
-      const parts = [`${pCount} Passenger${pCount === "1" ? "" : "s"}`];
-      if (Number(vCount) > 0) parts.push(`${vCount} Vehicle${vCount === "1" ? "" : "s"}`);
-      if (Number(petCount) > 0) parts.push(`${petCount} Pet${petCount === "1" ? "" : "s"}`);
-      summarySpan.textContent = parts.join(" · ");
-    }
-
-    if (popoverTrigger && popover) {
-      popoverTrigger.onclick = (e) => {
-        e.stopPropagation();
-        popover.classList.toggle("is-open");
-      };
-      document.addEventListener("click", (e) => {
-        if (!popover.contains(e.target) && !popoverTrigger.contains(e.target)) {
-          popover.classList.remove("is-open");
-        }
-      });
-      const doneBtn = $(".passenger-popover-done", popover);
-      if (doneBtn) {
-        doneBtn.onclick = () => popover.classList.remove("is-open");
-      }
-    }
-
-    // Listen for counter actions to update the summary
-    document.addEventListener("click", (e) => {
-      const btn = e.target.closest("[data-action^='counter:']");
-      if (btn) {
-        setTimeout(updatePassengerSummary, 10);
-      }
     });
   }
 
@@ -722,44 +859,332 @@
     renderCalendar();
   }
 
-  function renderCart() {
-    const heading = allText("Your Add-ons")[0];
-    const container =
-      $("#vanilla-cart") ||
-      (() => {
-        const el = document.createElement("div");
-        el.id = "vanilla-cart";
-        const sidebar = heading?.parentElement.parentElement;
-        if (sidebar) {
-          sidebar.append(el);
-        } else {
-          $("main").append(el);
+  // ==========================================================================
+  // Pasalubong shop
+  // Product grid (pick an option right on the card) + sticky cart with
+  // GCash / Online Bank checkout. Prices are in Philippine pesos.
+  // ==========================================================================
+  const peso = (n) =>
+    "₱" +
+    Number(n).toLocaleString("en-PH", {
+      minimumFractionDigits: Number(n) % 1 ? 2 : 0,
+      maximumFractionDigits: 2,
+    });
+  const PAY_METHODS = {
+    gcash: {
+      label: "GCash",
+      sub: "Pay from your GCash wallet",
+      icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>',
+    },
+    bank: {
+      label: "Online Bank",
+      sub: "BPI, BDO, UnionBank and more",
+      icon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>',
+    },
+  };
+
+  if (page === "pasalubong") setupShop();
+
+  function setupShop() {
+    const grid = $("#pz-grid");
+    const cartBody = $("#pz-cart-body");
+    if (!grid || !cartBody) return;
+    const products = data.PRODUCTS || [];
+    const categories = data.PRODUCT_CATEGORIES || [{ id: "all", label: "All" }];
+    const catLabel = (id) => categories.find((c) => c.id === id)?.label || "";
+    const shop = { cat: "all", q: "", selected: {}, photo: {}, payment: null, processing: false, placed: null };
+    products.forEach((p) => {
+      shop.selected[p.id] = p.menu[0].id;
+      shop.photo[p.id] = 0;
+    });
+
+    // Which trip the order is for (from the Verify Booking step)
+    const verification = store.get("verification");
+    const trip =
+      (verification && data.MOCK_BOOKINGS.find((b) => b.reference.toUpperCase() === String(verification.reference).toUpperCase())) ||
+      booking();
+    const tripDate = new Date(trip.departureDate + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+    const tripBox = $("#pz-trip");
+    if (tripBox) {
+      tripBox.innerHTML =
+        `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>` +
+        `<span>Shopping for <strong>${escape(verification?.reference || trip.reference)}</strong> · ${escape(trip.route.origin)} → ${escape(trip.route.destination)} · ${escape(tripDate)}</span>` +
+        `<a href="verify-booking.html">Change</a>`;
+      tripBox.hidden = false;
+    }
+
+    // ---- Category chips ------------------------------------------------------
+    const chips = $("#pz-chips");
+    chips.innerHTML = categories
+      .map((c) => `<button type="button" role="tab" class="pz-chip" data-cat="${c.id}" aria-selected="${c.id === shop.cat}">${escape(c.label)}</button>`)
+      .join("");
+    chips.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-cat]");
+      if (!b) return;
+      shop.cat = b.dataset.cat;
+      $$("[data-cat]", chips).forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+      renderGrid();
+    });
+    $("#pz-search").addEventListener("input", (e) => {
+      shop.q = e.target.value.trim().toLowerCase();
+      renderGrid();
+    });
+
+    // ---- Product grid ----------------------------------------------------------
+    const inCart = (variantId) => cart.find((r) => r.id === variantId);
+    function visibleProducts() {
+      return products.filter((p) => {
+        if (shop.cat !== "all" && p.category !== shop.cat) return false;
+        if (!shop.q) return true;
+        const hay = [p.name, p.merchant, p.description, ...p.menu.map((m) => m.name)].join(" ").toLowerCase();
+        return hay.includes(shop.q);
+      });
+    }
+    function cardHTML(p) {
+      const variant = p.menu.find((m) => m.id === shop.selected[p.id]) || p.menu[0];
+      const line = inCart(variant.id);
+      const photo = shop.photo[p.id] % p.images.length;
+      const many = p.images.length > 1;
+      const buy = line
+        ? `<div class="pz-stepper" role="group" aria-label="${escape(variant.name)} quantity">
+             <button type="button" data-pz="dec:${variant.id}" data-focus="dec-${variant.id}" aria-label="Remove one ${escape(variant.name)}">−</button>
+             <span aria-live="polite">${line.quantity} in cart</span>
+             <button type="button" data-pz="inc:${variant.id}" data-focus="inc-${variant.id}" aria-label="Add one more ${escape(variant.name)}">+</button>
+           </div>`
+        : `<button type="button" class="pz-add" data-pz="add:${p.id}" data-focus="add-${p.id}">
+             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+             Add to trip
+           </button>`;
+      return `<article class="pz-card">
+        <div class="pz-media">
+          <img src="${escape(p.images[photo])}" alt="${escape(p.name)}" loading="lazy" />
+          <span class="pz-tag">${escape(catLabel(p.category))}</span>
+          ${
+            many
+              ? `<button type="button" class="pz-photo-btn pz-prev" data-pz="photo:${p.id}:-1" data-focus="prev-${p.id}" aria-label="Previous photo of ${escape(p.name)}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+                 <button type="button" class="pz-photo-btn pz-next" data-pz="photo:${p.id}:1" data-focus="next-${p.id}" aria-label="Next photo of ${escape(p.name)}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+                 <div class="pz-dots" aria-hidden="true">${p.images.map((_, i) => `<span class="${i === photo ? "is-on" : ""}"></span>`).join("")}</div>`
+              : ""
+          }
+        </div>
+        <div class="pz-body">
+          <p class="pz-merchant"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/></svg>${escape(p.merchant)}</p>
+          <h3 class="pz-name">${escape(p.name)}</h3>
+          <p class="pz-desc">${escape(p.description)}</p>
+          <div class="pz-variants" role="radiogroup" aria-label="Choose an option for ${escape(p.name)}">
+            ${p.menu
+              .map(
+                (m) =>
+                  `<button type="button" role="radio" aria-checked="${m.id === variant.id}" class="pz-variant" data-pz="variant:${p.id}:${m.id}" data-focus="var-${m.id}">
+                     <span class="pz-variant-name">${escape(m.name)}</span>
+                     <span class="pz-variant-price">${peso(m.price)}</span>
+                     ${inCart(m.id) ? `<span class="pz-variant-qty" aria-label="${inCart(m.id).quantity} in cart">×${inCart(m.id).quantity}</span>` : ""}
+                   </button>`,
+              )
+              .join("")}
+          </div>
+          <div class="pz-buy">
+            <div class="pz-price"><span>${escape(variant.name)}</span><strong>${peso(variant.price)}</strong></div>
+            ${buy}
+          </div>
+        </div>
+      </article>`;
+    }
+    function renderGrid(focusKey) {
+      const list = visibleProducts();
+      grid.innerHTML = list.map(cardHTML).join("");
+      $("#pz-noresults").hidden = list.length > 0;
+      if (focusKey) $(`[data-focus="${focusKey}"]`, grid)?.focus({ preventScroll: true });
+    }
+    grid.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-pz]");
+      if (!b) return;
+      const [act, a, c] = b.dataset.pz.split(":");
+      const product = products.find((p) => p.id === Number(a));
+      let focus = b.dataset.focus;
+      if (act === "variant") shop.selected[a] = Number(c);
+      else if (act === "photo") shop.photo[a] = (shop.photo[a] + Number(c) + product.images.length) % product.images.length;
+      else if (act === "add") {
+        const v = product.menu.find((m) => m.id === shop.selected[a]);
+        addToCart(product, v);
+        focus = `inc-${v.id}`;
+      } else if (act === "inc" || act === "dec") {
+        changeQty(Number(a), act === "inc" ? 1 : -1);
+        if (!inCart(Number(a))) {
+          const owner = products.find((p) => p.menu.some((m) => m.id === Number(a)));
+          focus = `add-${owner.id}`;
         }
-        return el;
-      })();
-    const empty = heading?.parentElement.nextElementSibling;
-    if (empty && empty.id !== "vanilla-cart") empty.hidden = cart.length > 0;
-    const total = cart.reduce((sum, row) => sum + row.price * row.quantity, 0);
-    container.innerHTML =
-      cart
-        .map(
-          (row) =>
-            `<div class="cart-row"><div class="description"><strong>${escape(row.name)}</strong><br>$${row.price.toFixed(2)}</div><button aria-label="Decrease ${escape(row.name)}" data-action="cart:${row.id}:-1">−</button><span>${row.quantity}</span><button aria-label="Increase ${escape(row.name)}" data-action="cart:${row.id}:1">+</button></div>`,
-        )
-        .join("") +
-      (cart.length
-        ? `<p class="mt-4 font-bold">Total: $${total.toFixed(2)}</p><button class="dialog-action" data-action="checkout">Proceed to Checkout</button>`
-        : "");
-  }
-  function productMenu(id) {
-    const product = data.PRODUCTS.find((p) => p.id === Number(id));
-    if (!product) return;
-    const d = dialog(
-      product.merchant,
-      `<p>${escape(product.description)}</p>${product.menu.map((item) => `<div class="cart-row"><div class="description">${escape(item.name)}<br>$${item.price.toFixed(2)}</div><button aria-label="Add ${escape(item.name)}" data-action="add-item:${product.id}:${item.id}">+</button></div>`).join("")}<button class="dialog-action" data-action="close-dialog">Done</button>`,
-    );
-  }
-  if (page === "pasalubong") {
+      }
+      renderGrid(focus);
+      renderCart();
+    });
+    // Arrow keys move between options inside a card
+    grid.addEventListener("keydown", (e) => {
+      const b = e.target.closest(".pz-variant");
+      if (!b || !["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp"].includes(e.key)) return;
+      e.preventDefault();
+      const all = $$(".pz-variant", b.parentElement);
+      const next = all[(all.indexOf(b) + (e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : all.length - 1)) % all.length];
+      next.click();
+    });
+
+    // ---- Cart ----------------------------------------------------------------------
+    function addToCart(product, variant) {
+      const line = inCart(variant.id);
+      if (line) line.quantity += 1;
+      else
+        cart.push({
+          id: variant.id,
+          productId: product.id,
+          name: variant.name,
+          productName: product.name,
+          merchant: product.merchant,
+          image: product.images[0],
+          price: variant.price,
+          quantity: 1,
+        });
+      isSaved = false;
+      shop.placed = null;
+      notice(`${variant.name} added to your trip.`);
+    }
+    function changeQty(variantId, delta) {
+      const line = inCart(variantId);
+      if (!line) return;
+      line.quantity += delta;
+      cart = cart.filter((r) => r.quantity > 0);
+    }
+    const count = () => cart.reduce((s, r) => s + r.quantity, 0);
+    const total = () => cart.reduce((s, r) => s + r.price * r.quantity, 0);
+
+    function renderCart() {
+      const n = count();
+      const badge = $("#pz-cart-count");
+      badge.textContent = n;
+      badge.hidden = n === 0;
+      const bar = $("#pz-mobilebar");
+      bar.hidden = n === 0 || !!shop.placed;
+      $("#pz-mobilebar-count").textContent = `${n} item${n === 1 ? "" : "s"}`;
+      $("#pz-mobilebar-total").textContent = peso(total());
+
+      if (shop.placed) {
+        const o = shop.placed;
+        cartBody.innerHTML = `<div class="pz-done" role="status">
+            <span class="pz-done-check" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+            <h3>Order placed!</h3>
+            <p>${o.items} item${o.items === 1 ? "" : "s"} · <strong>${peso(o.total)}</strong> paid with ${escape(PAY_METHODS[o.method].label)}</p>
+            <p class="pz-done-ref">Order ${escape(o.ref)}</p>
+            <p class="pz-done-note">We'll bring everything to your seat on ${escape(tripDate)}, before the ferry leaves.</p>
+            <div class="pz-done-actions">
+              <a class="pz-btn-primary" href="bookings.html">View My Bookings</a>
+              <button type="button" class="pz-btn-ghost" data-cart="shop-more">Shop more</button>
+            </div>
+          </div>`;
+        return;
+      }
+      if (!cart.length) {
+        const appSrc = document.querySelector('script[src*="app.js"]')?.src;
+        const art = appSrc ? new URL("../images/doode/doode-happy.webp", appSrc).href : "";
+        cartBody.innerHTML = `<div class="pz-empty">
+            ${art ? `<img src="${art}" alt="" width="88" height="88" />` : ""}
+            <p class="pz-empty-title">Your cart is empty</p>
+            <p>Pick a treat and it'll be waiting at your seat on ${escape(tripDate)}.</p>
+          </div>`;
+        return;
+      }
+      const method = shop.payment;
+      cartBody.innerHTML = `
+        <ul class="pz-lines" aria-label="Items in your cart">
+          ${cart
+            .map(
+              (r) => `<li class="pz-line">
+                <img src="${escape(r.image)}" alt="" />
+                <div class="pz-line-info">
+                  <p class="pz-line-name">${escape(r.name)}</p>
+                  <p class="pz-line-meta">${escape(r.merchant)} · ${peso(r.price)}</p>
+                  <div class="pz-stepper pz-stepper-sm" role="group" aria-label="${escape(r.name)} quantity">
+                    <button type="button" data-cart="dec:${r.id}" aria-label="Remove one ${escape(r.name)}">−</button>
+                    <span>${r.quantity}</span>
+                    <button type="button" data-cart="inc:${r.id}" aria-label="Add one more ${escape(r.name)}">+</button>
+                  </div>
+                </div>
+                <div class="pz-line-end">
+                  <strong>${peso(r.price * r.quantity)}</strong>
+                  <button type="button" class="pz-remove" data-cart="remove:${r.id}" aria-label="Remove ${escape(r.name)} from cart">Remove</button>
+                </div>
+              </li>`,
+            )
+            .join("")}
+        </ul>
+        <dl class="pz-summary">
+          <div><dt>Subtotal</dt><dd>${peso(total())}</dd></div>
+          <div><dt>Delivery</dt><dd><span class="pz-free">Free with trip</span></dd></div>
+          <div class="pz-summary-total"><dt>Total</dt><dd>${peso(total())}</dd></div>
+        </dl>
+        <fieldset class="pz-pay">
+          <legend>Pay with</legend>
+          <div class="pz-pay-options" role="radiogroup" aria-label="Payment method">
+            ${Object.entries(PAY_METHODS)
+              .map(
+                ([key, m]) => `<button type="button" role="radio" aria-checked="${method === key}" class="pz-pay-option pz-pay-${key}" data-cart="pay:${key}">
+                  <span class="pz-pay-icon">${m.icon}</span>
+                  <span class="pz-pay-text"><span class="pz-pay-label">${m.label}</span><span class="pz-pay-sub">${m.sub}</span></span>
+                  <span class="pz-radio" aria-hidden="true"></span>
+                </button>`,
+              )
+              .join("")}
+          </div>
+        </fieldset>
+        <button type="button" class="pz-pay-btn" data-cart="checkout" ${method && !shop.processing ? "" : "disabled"} aria-busy="${shop.processing}">
+          ${shop.processing ? '<span class="pz-spinner" aria-hidden="true"></span>Processing payment…' : method ? `Pay ${peso(total())} with ${PAY_METHODS[method].label}` : "Choose a payment method"}
+        </button>
+        <p class="pz-secure"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Demo checkout. No real payment is taken.</p>`;
+    }
+    cartBody.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-cart]");
+      if (!b || shop.processing) return;
+      const [act, arg] = b.dataset.cart.split(":");
+      if (act === "inc" || act === "dec") changeQty(Number(arg), act === "inc" ? 1 : -1);
+      else if (act === "remove") cart = cart.filter((r) => r.id !== Number(arg));
+      else if (act === "pay") shop.payment = arg;
+      else if (act === "shop-more") {
+        shop.placed = null;
+        shop.payment = null;
+        $("#pz-title").scrollIntoView({ behavior: "smooth", block: "start" });
+      } else if (act === "checkout") {
+        if (!shop.payment || !cart.length) return;
+        shop.processing = true;
+        renderCart();
+        setTimeout(() => {
+          const order = {
+            ref: "PSL-" + Math.random().toString(36).slice(2, 8).toUpperCase(),
+            total: total(),
+            items: count(),
+            method: shop.payment,
+            booking: verification?.reference || trip.reference,
+            lines: cart.map((r) => ({ id: r.id, name: r.name, qty: r.quantity, price: r.price })),
+            placedAt: new Date().toISOString(),
+          };
+          const history = store.get("pasalubongOrders") || [];
+          history.push(order);
+          store.set("pasalubongOrders", history);
+          cart = [];
+          shop.processing = false;
+          shop.placed = order;
+          markSaved();
+          renderGrid();
+          renderCart();
+          $("#pz-cart").scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 1400);
+        return;
+      }
+      renderGrid();
+      renderCart();
+      const again = b.dataset.cart && $(`[data-cart="${b.dataset.cart}"]`, cartBody);
+      again?.focus({ preventScroll: true });
+    });
+    $("#pz-mobilebar").addEventListener("click", () => $("#pz-cart").scrollIntoView({ behavior: "smooth", block: "start" }));
+
+    renderGrid();
     renderCart();
   }
 
@@ -905,7 +1330,7 @@
   document.addEventListener("click", async (event) => {
     const el = event.target.closest("[data-action]");
     if (!el) {
-      if (!event.target.closest(".user-menu")) $(".user-menu")?.remove();
+      if (!event.target.closest(".user-menu")) closeHeaderMenus();
       return;
     }
     if (el.disabled) return;
@@ -954,6 +1379,7 @@
         b.dispatchEvent(new Event("input", { bubbles: true }));
       }
     } else if (name === "account") accountMenu();
+    else if (name === "notifications") notificationsMenu();
     else if (name === "logout") {
       markSaved();
       store.set("session", null);
@@ -994,43 +1420,6 @@
         currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + Number(arg), 1);
       }
       renderCalendar();
-    } else if (name === "product") productMenu(el.dataset.product);
-    else if (name === "product-image") {
-      const card = el.parentElement.parentElement;
-      const button = $("[data-product]", card);
-      const product = data.PRODUCTS.find((p) => p.id === Number(button.dataset.product));
-      const index = (Number(el.dataset.index || 0) + 1) % product.images.length;
-      el.dataset.index = index;
-      el.parentElement.style.backgroundImage = `url("${product.images[index]}")`;
-    } else if (name === "add-item") {
-      const item = data.PRODUCTS.find((p) => p.id === Number(arg)).menu.find(
-        (i) => i.id === Number(amount),
-      );
-      const row = cart.find((r) => r.id === item.id);
-      if (row) row.quantity++;
-      else cart.push({ ...item, quantity: 1 });
-      renderCart();
-      notice(item.name + " added.");
-    } else if (name === "cart") {
-      const row = cart.find((r) => r.id === Number(arg));
-      if (row) {
-        row.quantity += Number(amount);
-        cart = cart.filter((r) => r.quantity > 0);
-        renderCart();
-      }
-    } else if (name === "checkout")
-      dialog(
-        "Checkout",
-        `<p>Total: $${cart.reduce((s, r) => s + r.price * r.quantity, 0).toFixed(2)}</p><p>Demo checkout — no charge will be made.</p><label>Payment method <select><option>GCash</option><option>Online Banking</option></select></label><button class="dialog-action" data-action="demo-order">Confirm demo order</button>`,
-      );
-    else if (name === "demo-order") {
-      markSaved();
-      cart = [];
-      renderCart();
-      dialog(
-        "Demo order complete",
-        '<p>Your sample order is complete. No payment was taken.</p><a class="dialog-action" href="bookings.html">My Bookings</a>',
-      );
     } else if (name === "close-dialog") {
       const d = $("dialog");
       if (d) {
@@ -1112,324 +1501,802 @@
 
   // ==========================================================================
   // Mascot Controller (Doode the Sea Turtle)
-  // Inactivity Detection: 5s idle -> Turtle + Message (10s) -> Turtle only (10s break) -> repeat
+  //
+  // States:
+  //   hidden      -> not on screen
+  //   appearing   -> pops in (after the user has been inactive for a while)
+  //   talking     -> Quote 1: a joke about where the user left off
+  //   questioning -> Quote 2: teases the user to continue (with buttons)
+  //   suggesting  -> Quote 3: random suggestion / fun line
+  //   idle        -> floats around and wanders to random spots
+  //   dragging    -> the user is dragging Doode around
+  //   closing     -> waves goodbye and sinks (reappears after inactivity)
+  //   guiding     -> swims to a step on the page ("Show me" / tour)
+  //   pointing    -> points at the highlighted step and explains it
+  //
+  // User activity NEVER hides Doode anymore. Only the close button does.
   // ==========================================================================
   try {
     const mascot = $(".mascot");
     if (mascot) {
       const mascotArt = mascot.querySelector(".mascot-art");
       const bubble = mascot.querySelector(".mascot-bubble");
+      const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
-      const messages = [
-        "Hi! I'm Doode! Your friendly island guide!",
-        "Ready for an island getaway? Check our top routes!",
-        "Book your ferry tickets smoothly with Entree!",
-        "Don't forget to pack delicious local Pasalubong!",
-        "Enjoy the fresh ocean breeze on your voyage!",
-        "Check out today's trip schedules & terminal guides!",
-        "Doode says: Speed it up! Book early to secure seats!",
-        "Pro tip: Window seats offer breathtaking open sea views!",
-        "Have your booking confirmation QR code ready at the gate!",
+      // ---- Timing (ms) -----------------------------------------------------
+      const FIRST_APPEAR_IDLE = 6000; // inactivity before Doode first shows up
+      const CHAT_AGAIN_IDLE = 18000; // inactivity (while visible) before a new chat
+      const REAPPEAR_IDLE = 25000; // inactivity (after closing) before he comes back
+      const APPEAR_MS = 700;
+      const CLOSE_MS = 650;
+      const READ_AFTER_TYPING = 3200;
+      const QUESTION_MS = 8000;
+      const SUGGEST_MS = 6500;
+
+      // ---- Small helpers ---------------------------------------------------
+      const store2 = {
+        get(k) {
+          try {
+            return localStorage.getItem("doode:" + k);
+          } catch {
+            return null;
+          }
+        },
+        set(k, v) {
+          try {
+            localStorage.setItem("doode:" + k, v);
+          } catch {
+            /* storage unavailable */
+          }
+        },
+      };
+      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+      const lastQuotes = new Set();
+      function pickFresh(arr) {
+        const fresh = arr.filter((q) => !lastQuotes.has(q));
+        const q = pick(fresh.length ? fresh : arr);
+        lastQuotes.add(q);
+        if (lastQuotes.size > 12) lastQuotes.delete(lastQuotes.values().next().value);
+        return q;
+      }
+      const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+      // ---- What the user "left off" at --------------------------------------
+      const PAGE_NAMES = {
+        index: "the home page",
+        login: "the login page",
+        signup: "the sign-up page",
+        trips: "the trip list",
+        "passenger-details": "passenger details",
+        payment: "the payment page",
+        confirmation: "your confirmation",
+        bookings: "your bookings",
+        pasalubong: "the pasalubong shop",
+        rebook: "rebooking",
+        refund: "the refund page",
+        settings: "settings",
+        "travel-instructions": "travel instructions",
+        "verify-booking": "booking verification",
+      };
+      const prevPage = store2.get("lastPage");
+      store2.set("lastPage", page || "");
+
+      let lastField = "";
+      document.addEventListener(
+        "focusin",
+        (e) => {
+          const el = e.target;
+          if (!el || mascot.contains(el) || !el.matches?.("input, select, textarea")) return;
+          const label =
+            el.getAttribute("aria-label") ||
+            (el.id && document.querySelector(`label[for="${el.id}"]`)?.textContent) ||
+            el.placeholder ||
+            "";
+          lastField = label.trim().replace(/\s+/g, " ").slice(0, 30);
+        },
+        true,
+      );
+
+      function context() {
+        const val = (sel) => ($(sel)?.value || "").trim();
+        const typed = $$("input:not([type=hidden]):not([type=checkbox]):not([type=radio])").some(
+          (i) => !mascot.contains(i) && i.offsetParent && i.value.trim() && !i.defaultValue,
+        );
+        return {
+          from: val("#origin") || "somewhere",
+          to: val("#destination") || "paradise",
+          field: lastField,
+          typed,
+          prev: prevPage && prevPage !== page ? PAGE_NAMES[prevPage] : "",
+        };
+      }
+
+      // Quote 1 — "where you left off" (per page). Functions receive context().
+      const LEFT_OFF = {
+        index: [
+          (c) => `${c.from} to ${c.to}... the ferry's ready. Are you?`,
+          () => "You've been staring at this form like it owes you money.",
+          () => "Those Search Ferries buttons don't press themselves. Trust me, I've tried. No thumbs.",
+          (c) => `${c.to} called. It asked why you're still here.`,
+          () => "I've seen jellyfish make faster decisions. And they don't have brains.",
+        ],
+        login: [
+          () => "So... when are you gonna log in? I'm not getting any younger. I'm 80.",
+          () => "The password box is lonely. Go say hi.",
+          (c) => (c.typed ? "You typed something, then ghosted me. Classic." : "Forgot your password? Happens. I forgot where I left my shell once."),
+          () => "Logging in takes 5 seconds. You've been here for way longer.",
+        ],
+        signup: [
+          () => "Signing up is free. Unlike my therapy after seeing this unfinished form.",
+          (c) => (c.field ? `You were halfway through "${c.field}". It misses you.` : "A blank sign-up form. How mysterious."),
+          () => "Join us! We have ferries. And me. Mostly ferries.",
+        ],
+        trips: [
+          () => "Picking a trip is hard, I know. I just follow the currents.",
+          () => "These ferries won't wait forever. Well, until departure. Then they really won't.",
+          () => "Scrolling trips again? Pick one! Eeny, meeny, miny... boat.",
+        ],
+        "passenger-details": [
+          (c) => (c.field ? `You stopped at "${c.field}". Commitment issues?` : "Passenger details: the paperwork before the paradise."),
+          () => "Names, please. I'd fill it in for you but... flippers.",
+          () => "Almost there! Just a few more boxes between you and the sea.",
+        ],
+        payment: [
+          () => "Your wallet is shy. I get it. I hide in my shell too.",
+          () => "One click away from sea breeze. Or one click away from me nagging you more.",
+          () => "Payment page staring contest? The page always wins.",
+        ],
+        confirmation: [
+          () => "You're booked! Now go pack. Not everything. Leave room for pasalubong.",
+          () => "Confirmed! I'd high-five you but, again, flippers.",
+        ],
+        bookings: [
+          () => "Admiring your bookings? Me too. Very organized. Very adult.",
+          () => "Looking for a trip? It's in there somewhere. Like my car keys. I don't have a car.",
+        ],
+        pasalubong: [
+          () => "Your cart looks hungry. Feed it some dried mangoes.",
+          () => "Going home without pasalubong? Bold. Your titas will remember this.",
+          () => "Window shopping? I'd do it too, but I don't have windows. Or money.",
+        ],
+        rebook: [
+          () => "Changing plans? Relatable. I change direction every 12 seconds.",
+          () => "Pick a new schedule! The sea isn't going anywhere. Literally.",
+        ],
+        refund: [
+          () => "Refunds are like tides. They come back... eventually.",
+          () => "Leaving us? My shell is cracking. Emotionally.",
+        ],
+        settings: [
+          () => "Tweaking settings like it's a video game. Respect.",
+          () => "Don't forget to save. I learned that the hard way.",
+        ],
+        "travel-instructions": [
+          () => "Reading the instructions? A responsible traveler. Rare species. Like me.",
+          () => "Pro tip: arrive early. The ferry doesn't do 'Filipino time'.",
+        ],
+        "verify-booking": [
+          () => "Verifying your booking? Trust issues. I like it.",
+          () => "Type in that reference code. I'd do it myself but I'd type 'ksjdhfk'.",
+        ],
+      };
+      const LEFT_OFF_GENERIC = [
+        () => "You've gone quiet. Did the Wi-Fi drown?",
+        () => "Hello? Anyone? I'm talking to a screen again, aren't I.",
       ];
 
-      let msgIndex = 0;
-      let textSpan = null;
+      // Quote 2 — teasing to continue (asked as a question)
+      const TEASE = {
+        index: ["Shall we search for ferries before the sea evaporates?", "Want me to point you to the Search button? It's the big green one. Very subtle."],
+        login: ["Ready to type that password? I promise I won't look.", "Log in now and I'll stop bothering you. Deal?"],
+        signup: ["Finish signing up? I'll do a little dance. Probably.", "Shall we fill in the rest together?"],
+        trips: ["Pick a trip and let's sail?", "Shall I choose for you? Warning: I always choose the slow one."],
+        "passenger-details": ["Finish those details so we can go?", "Just a few boxes left. Continue?"],
+        payment: ["Complete the payment and hear the waves call?", "Ready to make it official?"],
+        pasalubong: ["Add something to the cart? The dried mangoes are begging.", "Shall we shop a little more?"],
+        refund: ["Sure you want to leave? ...Continue anyway?", "Shall we finish this refund?"],
+        rebook: ["Pick a new time and carry on?", "Continue rebooking?"],
+        "verify-booking": ["Enter the reference and let's check?", "Shall we verify it now?"],
+      };
+      const TEASE_GENERIC = ["Shall we continue where you left off?", "Pick up where you stopped? I'll wait. I'm very slow anyway."];
 
-      // Set up modern dialogue card structure in bubble
+      // Quote 3 — randomized suggestions / fun facts
+      const SUGGESTIONS = [
+        { text: "Pro tip: book early and snag the window seat. Great views, fewer elbows.", go: null },
+        { text: "Don't forget pasalubong! Your relatives are counting. Literally.", go: "pasalubong", label: "Shop pasalubong" },
+        { text: "Plans changed? You can rebook from My Bookings.", go: "bookings", label: "My bookings" },
+        { text: "Fun fact: sea turtles can hold their breath for hours. You can't. Please breathe.", go: null },
+        { text: "Bring a jacket. Ferry aircon is set to 'Arctic'.", go: null },
+        { text: "Lost? I know this page like the back of my flipper. Want a tour?", tour: true, label: "Show me around" },
+        { text: "New here? I can swim you through every step on this page.", tour: true, label: "Take the tour" },
+        { text: "Read the travel instructions so the terminal doesn't surprise you.", go: "travel-instructions", label: "Read tips" },
+        { text: "Fun fact: I'm 80 years old and I've never missed a ferry. Just saying.", go: null },
+        { text: "Keep your booking QR code handy at the gate. Screenshots count!", go: null },
+      ];
+      const DRAG_LINES = ["Wheee! Put me somewhere nice.", "I get seasick on land, you know.", "Nice throw. 10/10.", "Oh, a new spot. Very feng shui.", "Careful! My shell isn't dishwasher safe."];
+      const CLICK_LINES = ["Hey! That tickles.", "Boop received.", "Yes? I'm listening. Slowly.", "Hi! Drag me anywhere, or hit × if I'm too much."];
+      const HELLO_BACK_LINES = ["I'm baaack. Did you miss me?", "Surprise! Couldn't stay away.", "You closed me, but you can't close my heart."];
+
+      function buildQuote1(c) {
+        let pool = (LEFT_OFF[page] || LEFT_OFF_GENERIC).slice();
+        if (c.prev) pool.push(() => `You came here from ${c.prev}. Brave. Let's finish this one.`);
+        return pickFresh(pool.map((fn) => fn(c)));
+      }
+
+      // ---- Build the bubble & close button ---------------------------------
+      mascot.removeAttribute("aria-hidden");
+      mascot.setAttribute("role", "complementary");
+      mascot.setAttribute("aria-label", "Doode the sea turtle helper");
+      let textSpan, actionsBox;
       if (bubble) {
-        mascot.removeAttribute("aria-hidden");
         bubble.setAttribute("role", "status");
         bubble.setAttribute("aria-live", "polite");
-
+        bubble.innerHTML = "";
         const badge = document.createElement("div");
         badge.className = "mascot-bubble-badge";
-        badge.textContent = "Doode 🐢";
-
+        badge.textContent = "Doode";
         textSpan = document.createElement("span");
         textSpan.className = "bubble-text";
-        textSpan.textContent = messages[0];
-
-        bubble.innerHTML = "";
-        bubble.appendChild(badge);
-        bubble.appendChild(textSpan);
-
-        // Clicking the bubble should not dismiss the mascot
+        actionsBox = document.createElement("div");
+        actionsBox.className = "mascot-bubble-actions";
+        bubble.append(badge, textSpan, actionsBox);
         bubble.addEventListener("click", (e) => e.stopPropagation());
       }
 
-      function updateMessageText(text) {
-        if (!bubble || !textSpan) return;
-        bubble.classList.add("is-updating");
-        setTimeout(() => {
-          textSpan.textContent = text;
-          bubble.classList.remove("is-updating");
-        }, 180);
-      }
+      const closeBtn = document.createElement("button");
+      closeBtn.type = "button";
+      closeBtn.className = "mascot-close";
+      closeBtn.setAttribute("aria-label", "Close Doode");
+      closeBtn.title = "Close";
+      closeBtn.innerHTML =
+        '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+      mascot.appendChild(closeBtn);
 
-      function showBubble(text) {
-        if (!bubble) return;
-        if (text) updateMessageText(text);
-        bubble.classList.add("is-visible");
-      }
-
-      function hideBubble() {
-        if (!bubble) return;
-        bubble.classList.remove("is-visible");
-      }
-
-      let resetPositionTimer = null;
-
-      function showMascot() {
-        clearTimeout(resetPositionTimer);
-        mascot.classList.add("is-visible");
-        scheduleNextMove(3500);
-      }
-
-      function hideMascot() {
-        mascot.classList.remove("is-visible");
-        stopTravel();
-        clearTimeout(resetPositionTimer);
-        // Silently reset position back to left after the fade-out completes
-        resetPositionTimer = setTimeout(() => {
-          if (!mascot.classList.contains("is-visible")) {
-            mascot.classList.remove("is-inverted");
-            isAtRight = false;
-            mascot.style.transition = "none";
-            mascot.style.left = "4%";
-            mascot.style.top = "56%";
-            void mascot.offsetHeight; // force reflow
-            mascot.style.transition = "";
-          }
-        }, 500);
-      }
-
-      // ----------------------------------------------------------------------
-      // Travel & Swimming state machine
-      // ----------------------------------------------------------------------
-      let isAtRight = false;
-      let isMoving = false;
-      let travelScheduleTimer = null;
-      let travelFinishTimer = null;
-
-      function getRightPosition() {
-        const w = window.innerWidth;
-        const mascotWidth = w <= 768 ? 105 : 160;
-        return Math.max(20, w - mascotWidth - 25);
-      }
-
-      function stopTravel() {
-        clearTimeout(travelScheduleTimer);
-        clearTimeout(travelFinishTimer);
-        travelScheduleTimer = null;
-        travelFinishTimer = null;
-        isMoving = false;
-        mascot.classList.remove("is-traveling");
-      }
-
-      function travelToRight() {
-        if (isMoving || !mascot.classList.contains("is-visible")) return;
-        isMoving = true;
-
-        mascot.classList.add("is-inverted");
-        mascot.classList.add("is-traveling");
-
-        const rightPx = getRightPosition();
-        const topPercent = Math.random() > 0.5 ? 48 : 68;
-
-        mascot.style.left = rightPx + "px";
-        mascot.style.top = topPercent + "%";
-
-        travelFinishTimer = setTimeout(() => {
-          isMoving = false;
-          isAtRight = true;
-          mascot.classList.remove("is-traveling");
-        }, 4500);
-      }
-
-      function travelToLeft() {
-        if (isMoving || !mascot.classList.contains("is-visible")) return;
-        isMoving = true;
-
-        mascot.classList.remove("is-inverted");
-        mascot.classList.add("is-traveling");
-
-        const topPercent = Math.random() > 0.5 ? 54 : 72;
-        mascot.style.left = "4%";
-        mascot.style.top = topPercent + "%";
-
-        travelFinishTimer = setTimeout(() => {
-          isMoving = false;
-          isAtRight = false;
-          mascot.classList.remove("is-traveling");
-        }, 4500);
-      }
-
-      function scheduleNextMove(delayMs) {
-        clearTimeout(travelScheduleTimer);
-        travelScheduleTimer = setTimeout(() => {
-          if (document.hidden || window.innerWidth < 480 || !mascot.classList.contains("is-visible")) {
-            scheduleNextMove(5000);
-            return;
-          }
-          if (!isAtRight) {
-            travelToRight();
-            scheduleNextMove(13000); // 4.5s travel + ~8.5s dwell
-          } else {
-            travelToLeft();
-            scheduleNextMove(13000);
-          }
-        }, delayMs);
-      }
-
-      // Initial positioning
-      mascot.style.left = "4%";
-      mascot.style.top = "56%";
-
-      // ----------------------------------------------------------------------
-      // Inactivity & Message State Machine
-      // Flow: User active -> 5s inactivity -> Turtle + Message (10s) -> Turtle only (10s break) -> Next Message (10s) -> Turtle only (10s break) -> repeat
-      // ----------------------------------------------------------------------
-      let currentState = "ACTIVE"; // "ACTIVE" | "MESSAGE" | "BREAK"
-      let inactivityTimer = null;
-      let messageTimer = null;
-      let breakTimer = null;
-
-      function clearCycleTimers() {
-        if (inactivityTimer) { clearTimeout(inactivityTimer); inactivityTimer = null; }
-        if (messageTimer) { clearTimeout(messageTimer); messageTimer = null; }
-        if (breakTimer) { clearTimeout(breakTimer); breakTimer = null; }
-      }
-
-      // Step 1: User has been inactive for 5 seconds
-      function onInactiveTriggered() {
-        clearCycleTimers();
-        currentState = "MESSAGE";
-
-        // 1. Turtle mascot appears
-        showMascot();
-
-        // 2. Shows guidance message for 10 seconds
-        startMessagePhase();
-      }
-
-      // Step 2 & 5: Message phase (10s)
-      function startMessagePhase() {
-        clearTimeout(messageTimer);
-        clearTimeout(breakTimer);
-        currentState = "MESSAGE";
-
-        showBubble(messages[msgIndex]);
-
-        // 3. Message remains visible for 10 seconds
-        messageTimer = setTimeout(() => {
-          onMessageExpired();
-        }, 10000);
-      }
-
-      // Step 3 & 4: Break phase (10s)
-      function onMessageExpired() {
-        clearTimeout(messageTimer);
-        clearTimeout(breakTimer);
-        currentState = "BREAK";
-
-        // Message box disappears completely, leaving only the turtle mascot visible
-        hideBubble();
-
-        // Enter 10-second break / pause period
-        breakTimer = setTimeout(() => {
-          onBreakExpired();
-        }, 10000);
-      }
-
-      // Step 5: After 10s break, advance message and show next
-      function onBreakExpired() {
-        msgIndex = (msgIndex + 1) % messages.length;
-        startMessagePhase();
-      }
-
-      // User interaction resets idle behavior
-      let lastActivityTime = 0;
-      function onUserInteraction(e) {
-        // Clicks on the mascot itself are handled separately
-        if (e && mascot.contains(e.target)) {
-          return;
-        }
-
-        const now = Date.now();
-        // If already active, debounce rapid mouse moves to keep performance high
-        if (currentState === "ACTIVE" && now - lastActivityTime < 150) {
-          clearTimeout(inactivityTimer);
-          inactivityTimer = setTimeout(onInactiveTriggered, 5000);
-          return;
-        }
-        lastActivityTime = now;
-
-        clearCycleTimers();
-
-        // Hide the message box immediately
-        hideBubble();
-
-        // Hide the turtle mascot
-        hideMascot();
-
-        currentState = "ACTIVE";
-
-        // Reset inactivity timer: must be inactive for another 5 seconds
-        inactivityTimer = setTimeout(onInactiveTriggered, 5000);
-      }
-
-      // Interactive click/tap micro-delight on the turtle
+      // ---- State artwork (one drawing per state) ---------------------------
+      const appScript = document.querySelector('script[src*="app.js"]');
+      const spriteBase = new URL("../images/doode/", appScript ? appScript.src : location.href).href;
+      const SPRITES = {
+        appearing: "doode-appearing.webp",
+        talking: "doode-talking.webp",
+        questioning: "doode-questioning.webp",
+        suggesting: "doode-suggesting.webp",
+        dragging: "doode-dragging.webp",
+        idle: "doode-idle.webp",
+        closing: "doode-closing.webp",
+        happy: "doode-happy.webp",
+        swimming: "doode-swimming.webp",
+      };
+      const STATE_SPRITE = { hidden: "idle", guiding: "swimming", pointing: "suggesting" };
+      Object.values(SPRITES).forEach((f) => {
+        const pre = new Image();
+        pre.src = spriteBase + f;
+      });
+      let spriteImg = null;
       if (mascotArt) {
-        mascotArt.addEventListener("click", (e) => {
-          e.stopPropagation();
-          mascotArt.classList.add("is-clicked");
-          setTimeout(() => mascotArt.classList.remove("is-clicked"), 650);
+        mascotArt.innerHTML = '<div class="mascot-sprite"><img alt="" draggable="false"></div>';
+        spriteImg = mascotArt.querySelector("img");
+      }
+      let currentSprite = "";
+      function setSprite(name) {
+        if (!spriteImg || !SPRITES[name] || currentSprite === name) return;
+        currentSprite = name;
+        spriteImg.src = spriteBase + SPRITES[name];
+        spriteImg.classList.remove("is-swapping");
+        void spriteImg.offsetWidth;
+        spriteImg.classList.add("is-swapping");
+      }
 
-          const funReactions = [
-            "Weee! Let's explore the islands!",
-            "Splash! Having a wonderful trip?",
-            "Click 'Buy Pasalubong' for tasty treats!",
-            "Need to rebook? We've got you covered!",
-          ];
-          const reaction = funReactions[Math.floor(Math.random() * funReactions.length)];
+      if (mascotArt) {
+        mascotArt.setAttribute("role", "button");
+        mascotArt.setAttribute("tabindex", "0");
+        mascotArt.setAttribute("aria-label", "Doode. Drag to move, press Enter to talk.");
+      }
 
-          // Show reaction message
-          showBubble(reaction);
+      // ---- State ----------------------------------------------------------
+      let state = "hidden";
+      let timers = [];
+      let typingTimer = null;
+      const later = (fn, ms) => {
+        const t = setTimeout(fn, ms);
+        timers.push(t);
+        return t;
+      };
+      const clearFlow = () => {
+        timers.forEach(clearTimeout);
+        timers = [];
+        clearInterval(typingTimer);
+      };
 
-          // Reset the 10-second message timer so user can read the reaction
-          clearTimeout(messageTimer);
-          clearTimeout(breakTimer);
-          currentState = "MESSAGE";
-          messageTimer = setTimeout(() => {
-            onMessageExpired();
-          }, 10000);
+      function setState(next) {
+        state = next;
+        mascot.dataset.state = next;
+        setSprite(STATE_SPRITE[next] || next);
+      }
+      setState("hidden");
+
+      // ---- Position -------------------------------------------------------
+      const SIZE = () => (window.innerWidth <= 768 ? 96 : 130);
+      let pos = { x: 0, y: 0 };
+      function bounds() {
+        const s = SIZE();
+        return { minX: 8, minY: 70, maxX: window.innerWidth - s - 8, maxY: window.innerHeight - s - 8 };
+      }
+      function placeBubble() {
+        const vw = window.innerWidth;
+        mascot.classList.toggle("bubble-align-right", pos.x + SIZE() / 2 > vw / 2);
+        mascot.classList.toggle("bubble-below", pos.y < 230);
+      }
+      function setPos(x, y, travelMs) {
+        const b = bounds();
+        const nx = clamp(x, b.minX, Math.max(b.minX, b.maxX));
+        const ny = clamp(y, b.minY, Math.max(b.minY, b.maxY));
+        if (nx !== pos.x) mascot.classList.toggle("is-inverted", nx > pos.x);
+        mascot.style.setProperty("--travel", (travelMs || 0) + "ms");
+        pos = { x: nx, y: ny };
+        mascot.style.left = nx + "px";
+        mascot.style.top = ny + "px";
+        placeBubble();
+      }
+      const saved = (store2.get("pos") || "").split(",").map(Number);
+      if (saved.length === 2 && saved.every((n) => Number.isFinite(n))) {
+        setPos(saved[0] * window.innerWidth, saved[1] * window.innerHeight, 0);
+      } else {
+        setPos(window.innerWidth * 0.04, window.innerHeight * 0.58, 0);
+      }
+      const savePos = () => store2.set("pos", `${(pos.x / window.innerWidth).toFixed(3)},${(pos.y / window.innerHeight).toFixed(3)}`);
+
+      // ---- Bubble ---------------------------------------------------------
+      function say(text, actions = [], onTyped) {
+        if (!bubble || !textSpan) return;
+        clearInterval(typingTimer);
+        actionsBox.innerHTML = "";
+        actionsBox.hidden = true;
+        bubble.classList.add("is-visible");
+        placeBubble();
+        const finish = () => {
+          textSpan.textContent = text;
+          mascot.classList.remove("is-typing");
+          if (actions.length) {
+            actions.forEach((a) => {
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = "mascot-bubble-btn" + (a.primary ? " is-primary" : "");
+              btn.textContent = a.label;
+              btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                a.run();
+              });
+              actionsBox.appendChild(btn);
+            });
+            actionsBox.hidden = false;
+          }
+          onTyped?.();
+        };
+        if (reduceMotion) return finish();
+        let i = 0;
+        textSpan.textContent = "";
+        mascot.classList.add("is-typing");
+        typingTimer = setInterval(() => {
+          i += 1;
+          textSpan.textContent = text.slice(0, i);
+          if (i >= text.length) {
+            clearInterval(typingTimer);
+            finish();
+          }
+        }, 24);
+      }
+      function hideBubble() {
+        clearInterval(typingTimer);
+        mascot.classList.remove("is-typing");
+        bubble?.classList.remove("is-visible");
+      }
+
+      // ---- Guide mode: Doode swims to each step on the page and points at it --
+      const byText = (t) => () => allText(t).find((el) => !mascot.contains(el) && el.getClientRects().length);
+      const bySel = (sel) => () => $$(sel).find((el) => !mascot.contains(el) && el.getClientRects().length);
+      const filled = (el) => !!(el && typeof el.value === "string" && el.value.trim());
+      const GUIDES = {
+        index: [
+          { find: bySel("#origin"), done: filled, say: "Start here! Where are you sailing from?" },
+          { find: bySel("#destination"), done: filled, say: "Now pick where you're going. Somewhere with good mangoes, ideally." },
+          { find: bySel('[aria-label="Departure date"]'), say: "Tap here to pick your travel date. Weekends go fast!" },
+          { find: bySel(".pax-counters"), say: "Tell me who's coming: passengers, vehicles, even pets. No judging." },
+          { find: bySel(".booking-quick-filters"), say: "Choose your ferry line and cabin here." },
+          { find: bySel(".hero-search-cta"), say: "Then hit Search Ferries. The big green button. You can't miss it. Please don't miss it." },
+        ],
+        login: [
+          { find: bySel('input[type="email"]'), done: filled, say: "Pop your email in here first." },
+          { find: bySel('input[type="password"]'), done: filled, say: "Then your password. I'm looking away, promise." },
+          { find: byText("Log In"), say: "Now press Log In and we're in business." },
+          { find: byText("Forgot password?"), say: "Forgot it? Happens to the best of us. Click here." },
+        ],
+        signup: [
+          { find: bySel('input[placeholder="Juan"]'), done: filled, say: "Let's start with your first name." },
+          { find: bySel('input[type="tel"]'), done: filled, say: "Your mobile number, so we can text you about your trip." },
+          { find: bySel('input[type="email"]'), done: filled, say: "Your email goes here. Tickets land in your inbox." },
+          { find: bySel('input[type="password"]'), done: filled, say: "Make a password. At least 8 characters. 'turtle123' is taken." },
+          { find: byText("Create Account"), say: "All set? Hit Create Account!" },
+        ],
+        trips: [
+          { find: bySel('[data-action="go:passenger-details"]'), say: "Found a trip you like? Tap Explore options to book it." },
+        ],
+        "passenger-details": [
+          { find: bySel('[data-action="go:payment"]'), say: "Once your details are in, continue to payment here." },
+          { find: bySel('[data-action="go:verify-booking"]'), say: "Want snacks for the trip? Grab pasalubong here." },
+        ],
+        payment: [
+          { find: bySel('[data-action="payment:gcash"]'), say: "Pick how you want to pay. GCash is the quickest." },
+          { find: bySel('[data-action="payment:bank"]'), say: "Or pay straight from your bank account." },
+          { find: bySel('[data-action="complete-payment"]'), say: "Then tap Complete Payment. Almost at sea!" },
+        ],
+        confirmation: [
+          { find: bySel('[data-action="go:index"]'), say: "All booked! Head back home from here whenever you're ready." },
+        ],
+        bookings: [
+          { find: bySel('[data-action="booking"]'), say: "Here are your trips. Tap one to see the details." },
+          { find: bySel('[data-action="go:rebook"]'), say: "Plans changed? Rebook from here." },
+          { find: bySel('[data-action="go:refund"]'), say: "Need your money back? Request a refund here." },
+          { find: bySel('[data-action="addons"]'), say: "Add extras like pasalubong to your trip here." },
+          { find: bySel('[data-action="share"]'), say: "Share your trip so your barkada knows when you sail." },
+        ],
+        pasalubong: [
+          { find: bySel("#pz-chips"), say: "Filter by what you're craving: snacks, pastries, crafts or souvenirs." },
+          { find: bySel(".pz-variants"), say: "Every item has options. Pick the one you like. Prices update right away." },
+          { find: bySel(".pz-add, .pz-card .pz-stepper"), say: "Then tap Add to trip. It'll be waiting at your seat." },
+          { find: bySel(".pz-pay-options"), say: "Done shopping? Choose GCash or Online Bank." },
+          { find: bySel(".pz-pay-btn"), say: "And pay here. That's it. Mangoes secured." },
+        ],
+        rebook: [
+          { find: bySel('[data-action="select-passengers"]'), say: "First, choose which passengers are rebooking." },
+          { find: bySel('input[type="date"]'), say: "Then pick your new travel date." },
+          { find: bySel('[data-action="reschedule"]'), say: "Happy with it? Confirm the reschedule here." },
+        ],
+        refund: [
+          { find: bySel("textarea"), done: filled, say: "Tell us why you need a refund. Short and sweet is fine." },
+          { find: bySel('[data-action="refund"]'), say: "Then send your refund request here." },
+        ],
+        settings: [
+          { find: bySel('input[type="email"]'), say: "Update your email here." },
+          { find: bySel('[data-action="profile"]'), say: "Save profile changes with this button." },
+          { find: bySel('[data-action="password-info"]'), say: "Change your password here. Make it a good one." },
+          { find: bySel('[data-action="payment-info"]'), say: "Save a payment method for faster checkout." },
+          { find: bySel("select"), say: "Pick your language here. Tagalog? English? Turtle? (Turtle coming soon.)" },
+        ],
+        "verify-booking": [
+          { find: bySel("#bookingRef"), done: filled, say: "Type your booking reference. It's in your confirmation email." },
+          { find: bySel("#surname"), done: filled, say: "Now the surname on the booking." },
+          { find: byText("Continue to Shop"), say: "Then tap Continue to Shop. Snacks await!" },
+        ],
+      };
+      const PRAISE = ["Nice!", "That's it!", "Look at you go!", "Perfect!", "Smooth sailing!"];
+
+      let guide = null; // { steps, i, tour, el, off }
+      function spotlight(el) {
+        $$(".doode-spotlight").forEach((n) => n.classList.remove("doode-spotlight"));
+        if (el) el.classList.add("doode-spotlight");
+      }
+      function guideSteps() {
+        return (GUIDES[page] || []).map((s) => ({ ...s, el: s.find() })).filter((s) => s.el);
+      }
+      const hasGuide = () => guideSteps().length > 0;
+      function unwatchTarget() {
+        guide?.off?.();
+        if (guide) guide.off = null;
+      }
+      function endGuide() {
+        unwatchTarget();
+        guide = null;
+        spotlight(null);
+        mascot.classList.remove("is-guiding");
+      }
+      function besidePosition(el) {
+        const r = el.getBoundingClientRect();
+        const s = SIZE();
+        const gap = 10;
+        let x;
+        let y = r.top + r.height / 2 - s / 2;
+        let faceRight = false;
+        if (r.left - s - gap >= 8) {
+          x = r.left - s - gap;
+          faceRight = true; // on the left of the target, looking right at it
+        } else if (r.right + gap + s <= window.innerWidth - 8) {
+          x = r.right + gap;
+        } else {
+          x = r.left + r.width / 2 - s / 2;
+          y = r.bottom + gap + s <= window.innerHeight - 8 ? r.bottom + gap : r.top - s - gap;
+        }
+        return { x, y, faceRight };
+      }
+      function startGuide(tour) {
+        const steps = guideSteps();
+        endGuide();
+        if (!steps.length) return goIdle();
+        let i = 0;
+        if (!tour) {
+          i = steps.findIndex((s) => !(s.done && s.done(s.el)));
+          if (i < 0) i = steps.length - 1;
+        }
+        guide = { steps, i, tour };
+        mascot.classList.add("is-guiding");
+        showStep();
+      }
+      function showStep() {
+        if (!guide) return;
+        clearFlow();
+        stopWander();
+        hideBubble();
+        unwatchTarget();
+        spotlight(null);
+        const step = guide.steps[guide.i];
+        const el = (step.el.isConnected && step.el) || step.find();
+        if (!el) return nextStep();
+        guide.el = el;
+        setState("guiding"); // swimming pose
+        el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+        later(() => {
+          const p = besidePosition(el);
+          const ms = reduceMotion ? 0 : clamp(Math.hypot(p.x - pos.x, p.y - pos.y) * 3.5, 700, 2200);
+          mascot.classList.add("is-traveling");
+          setPos(p.x, p.y, ms);
+          later(() => {
+            mascot.classList.remove("is-traveling");
+            mascot.classList.toggle("is-inverted", p.faceRight);
+            spotlight(el);
+            setState("pointing"); // lightbulb / pointing pose
+            const n = guide.steps.length;
+            const last = guide.i >= n - 1;
+            const counter = guide.tour && n > 1 ? `(${guide.i + 1}/${n}) ` : "";
+            const actions = guide.tour
+              ? [last ? { label: "Done", primary: true, run: finishGuide } : { label: "Next", primary: true, run: nextStep }, { label: "Stop", run: finishGuide }]
+              : [{ label: "Got it", primary: true, run: finishGuide }];
+            say(counter + step.say, actions);
+            watchTarget(el);
+          }, ms + 60);
+        }, reduceMotion ? 50 : 450);
+      }
+      // Advance when the user actually uses the highlighted thing
+      function watchTarget(el) {
+        const isField = el.matches("input, select, textarea");
+        const evt = isField ? "change" : "click";
+        const handler = () => {
+          if (!guide || guide.el !== el) return;
+          unwatchTarget();
+          spotlight(null);
+          clearFlow();
+          setState("talking");
+          setSprite("happy");
+          say(pick(PRAISE), [], () => later(() => (guide?.tour && guide.i < guide.steps.length - 1 ? nextStep() : finishGuide(true)), 900));
+        };
+        el.addEventListener(evt, handler, true);
+        guide.off = () => el.removeEventListener(evt, handler, true);
+      }
+      function nextStep() {
+        if (!guide) return;
+        guide.i += 1;
+        if (guide.i >= guide.steps.length) return finishGuide();
+        showStep();
+      }
+      function finishGuide(quiet) {
+        endGuide();
+        clearFlow();
+        if (quiet) return goIdle();
+        setState("talking");
+        setSprite("happy");
+        say(pick(["You're a natural!", "Easy, right? I'll be around.", "Tour over. Tips accepted in dried mangoes."]), [], () => later(goIdle, 2200));
+      }
+      // Keep Doode next to the highlighted element while the page scrolls
+      let guideRaf = 0;
+      function followTarget() {
+        if (!guide || state !== "pointing" || !guide.el) return;
+        cancelAnimationFrame(guideRaf);
+        guideRaf = requestAnimationFrame(() => {
+          const p = besidePosition(guide.el);
+          setPos(p.x, p.y, 180);
+          mascot.classList.toggle("is-inverted", p.faceRight);
         });
       }
+      window.addEventListener("scroll", followTarget, { passive: true });
+      window.addEventListener("resize", followTarget);
 
-      // Listen for all user interaction events across window/document
-      const interactionEvents = ["mousemove", "mousedown", "keydown", "touchstart", "scroll", "wheel"];
-      interactionEvents.forEach((evt) => {
-        window.addEventListener(evt, onUserInteraction, { passive: true });
+      // ---- Conversation flow: Quote1 -> Quote2 -> Quote3 -> Idle ----------
+      function startChat(opener) {
+        clearFlow();
+        stopWander();
+        const c = context();
+        setState("talking");
+        say(opener || buildQuote1(c), [], () => later(askQuestion, READ_AFTER_TYPING));
+      }
+      function askQuestion() {
+        setState("questioning");
+        const q = pickFresh(TEASE[page] || TEASE_GENERIC);
+        const acts = [];
+        if (hasGuide()) {
+          acts.push({ label: "Show me", primary: true, run: () => startGuide(false) });
+          acts.push({ label: "Give me a tour", run: () => startGuide(true) });
+        }
+        acts.push({ label: "Not now", run: () => suggest() });
+        say(q, acts);
+        later(suggest, QUESTION_MS);
+      }
+      function suggest() {
+        clearFlow();
+        setState("suggesting");
+        const canTour = hasGuide();
+        const pool = SUGGESTIONS.filter((s) => s.go !== page && (!s.tour || canTour));
+        const s = pickFresh(pool.map((p) => p.text));
+        const item = pool.find((p) => p.text === s);
+        const actions = item?.tour
+          ? [{ label: item.label, primary: true, run: () => startGuide(true) }]
+          : item?.go
+            ? [{ label: item.label, primary: true, run: () => go(item.go) }]
+            : [];
+        say(s, actions, () => later(goIdle, SUGGEST_MS));
+      }
+      function goIdle() {
+        clearFlow();
+        hideBubble();
+        setState("idle");
+        startWander(4000);
+        armInactivity();
+      }
+
+      // ---- Appear / Close -------------------------------------------------
+      let appearedOnce = false;
+      function appear() {
+        if (state !== "hidden") return;
+        clearFlow();
+        setPos(pos.x, pos.y, 0);
+        mascot.classList.add("is-visible");
+        setState("appearing");
+        const opener = appearedOnce && closedByUser ? pick(HELLO_BACK_LINES) + " " + buildQuote1(context()) : null;
+        appearedOnce = true;
+        closedByUser = false;
+        later(() => startChat(opener), APPEAR_MS);
+      }
+      let closedByUser = false;
+      function close() {
+        if (state === "hidden" || state === "closing") return;
+        clearFlow();
+        stopWander();
+        endGuide();
+        setState("closing");
+        say(pick(["Bye! I'll be around...", "Fine, I'll go. *dramatic sigh*", "See you later, sailor!"]));
+        later(() => {
+          hideBubble();
+          mascot.classList.remove("is-visible");
+          setState("hidden");
+          closedByUser = true;
+          armInactivity();
+        }, CLOSE_MS + 900);
+      }
+      closeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        close();
       });
+      closeBtn.addEventListener("pointerdown", (e) => e.stopPropagation());
 
-      // Handle page visibility (e.g. switching tabs)
+      // ---- Wandering (idle only) ------------------------------------------
+      let wanderTimer = null;
+      function stopWander() {
+        clearTimeout(wanderTimer);
+        mascot.classList.remove("is-traveling");
+      }
+      function startWander(delay) {
+        stopWander();
+        if (reduceMotion) return;
+        wanderTimer = setTimeout(function wander() {
+          if (state !== "idle" || document.hidden) {
+            wanderTimer = setTimeout(wander, 5000);
+            return;
+          }
+          const b = bounds();
+          const x = b.minX + Math.random() * Math.max(0, b.maxX - b.minX);
+          const y = b.minY + Math.random() * Math.max(0, b.maxY - b.minY);
+          const dist = Math.hypot(x - pos.x, y - pos.y);
+          const ms = clamp(dist * 9, 1800, 6000);
+          mascot.classList.add("is-traveling");
+          setSprite("swimming");
+          setPos(x, y, ms);
+          setTimeout(() => {
+            mascot.classList.remove("is-traveling");
+            if (state === "idle") setSprite("idle");
+            savePos();
+          }, ms);
+          wanderTimer = setTimeout(wander, ms + 7000 + Math.random() * 8000);
+        }, delay);
+      }
+
+      // ---- Dragging -------------------------------------------------------
+      let drag = null;
+      if (mascotArt) {
+        mascotArt.addEventListener("pointerdown", (e) => {
+          if (state === "hidden" || state === "closing" || e.button > 0) return;
+          drag = { sx: e.clientX, sy: e.clientY, ox: e.clientX - pos.x, oy: e.clientY - pos.y, moved: false, prev: state };
+          mascotArt.setPointerCapture?.(e.pointerId);
+        });
+        mascotArt.addEventListener("pointermove", (e) => {
+          if (!drag) return;
+          if (!drag.moved && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) < 6) return;
+          if (!drag.moved) {
+            drag.moved = true;
+            endGuide();
+            clearFlow();
+            stopWander();
+            hideBubble();
+            setState("dragging");
+          }
+          setPos(e.clientX - drag.ox, e.clientY - drag.oy, 0);
+        });
+        const endDrag = () => {
+          if (!drag) return;
+          const wasDrag = drag.moved;
+          drag = null;
+          if (wasDrag) {
+            savePos();
+            setState("talking");
+            setSprite("happy");
+            say(pick(DRAG_LINES), [], () => later(goIdle, 2200));
+          } else {
+            reactToClick();
+          }
+        };
+        mascotArt.addEventListener("pointerup", endDrag);
+        mascotArt.addEventListener("pointercancel", endDrag);
+        mascotArt.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            reactToClick();
+          } else if (e.key === "Escape") close();
+        });
+      }
+      function reactToClick() {
+        mascotArt.classList.remove("is-clicked");
+        void mascotArt.offsetWidth;
+        mascotArt.classList.add("is-clicked");
+        setTimeout(() => mascotArt.classList.remove("is-clicked"), 650);
+        if (state === "idle") {
+          // Clicking an idle Doode starts a fresh chat
+          startChat();
+        } else if (state === "talking" || state === "suggesting") {
+          clearFlow();
+          setState("talking");
+          setSprite("happy");
+          say(pick(CLICK_LINES), [], () => later(goIdle, 2500));
+        }
+      }
+
+      // ---- Inactivity detection ------------------------------------------
+      let idleTimer = null;
+      function armInactivity() {
+        clearTimeout(idleTimer);
+        const wait = state === "hidden" ? (closedByUser ? REAPPEAR_IDLE : FIRST_APPEAR_IDLE) : CHAT_AGAIN_IDLE;
+        idleTimer = setTimeout(() => {
+          if (document.hidden) return armInactivity();
+          if (state === "hidden") appear();
+          else if (state === "idle") startChat();
+          else armInactivity();
+        }, wait);
+      }
+      let lastPing = 0;
+      function onActivity(e) {
+        if (e && e.target instanceof Node && mascot.contains(e.target)) return;
+        const now = Date.now();
+        if (now - lastPing < 200) return;
+        lastPing = now;
+        armInactivity(); // activity only restarts the countdown — it never hides Doode
+      }
+      ["mousemove", "mousedown", "keydown", "touchstart", "scroll", "wheel"].forEach((evt) =>
+        window.addEventListener(evt, onActivity, { passive: true }),
+      );
       document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-          clearCycleTimers();
-        } else {
-          onUserInteraction();
-        }
+        if (!document.hidden) armInactivity();
       });
+      window.addEventListener("resize", () => setPos(pos.x, pos.y, 0));
 
-      // Keep right-aligned turtle properly bounded on resize
-      window.addEventListener("resize", () => {
-        if (isAtRight && !isMoving) {
-          mascot.style.left = getRightPosition() + "px";
-        }
-      });
+      armInactivity();
 
-      // Initial start: User is active on load -> start 5-second countdown
-      inactivityTimer = setTimeout(onInactiveTriggered, 5000);
+      // Handy for testing in the console: Doode.appear(), Doode.close(), Doode.state()
+      window.Doode = { appear, close, chat: () => startChat(), tour: () => startGuide(true), show: () => startGuide(false), state: () => state };
     }
   } catch (e) {
     // Mascot is non-critical; log but don't break the page
