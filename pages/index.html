@@ -15,8 +15,12 @@
     rel="stylesheet" />
   <link rel="stylesheet" href="../assets/css/styles.css" />
   <link rel="stylesheet" href="../assets/css/site.css" />
+  <link rel="stylesheet" href="../assets/css/index.css" />
   <script src="../assets/js/data.js" defer></script>
-  <script src="../assets/js/app.js" defer></script>
+  <script src="../assets/js/booking-state.js" defer></script>
+    <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/booking-flow.js" defer></script>
+    <link rel="stylesheet" href="../assets/css/booking-flow.css" />
 </head>
 
 <body data-page="index">
@@ -150,7 +154,7 @@
               <!-- Dates: Departure + Return -->
               <div class="dates-input-group">
                 <!-- Departure -->
-                <div class="hero-sub-glass cursor-pointer select-none" data-date="2026-10-30" tabindex="0" role="button"
+                <div class="hero-sub-glass cursor-pointer select-none" data-date="" tabindex="0" role="button"
                   aria-label="Departure date" title="Change departure date">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -162,12 +166,12 @@
                   </svg>
                   <div class="input-content">
                     <span class="input-label">Departure</span>
-                    <span class="input-val-text">Wed, Oct 30</span>
+                    <span class="input-val-text">Today</span>
                   </div>
                 </div>
 
                 <!-- Return -->
-                <div class="hero-sub-glass cursor-pointer select-none" data-date="2026-11-04" tabindex="0" role="button"
+                <div class="hero-sub-glass cursor-pointer select-none" data-date="" tabindex="0" role="button"
                   aria-label="Return date" title="Change return date">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -179,7 +183,7 @@
                   </svg>
                   <div class="input-content">
                     <span class="input-label">Return</span>
-                    <span class="input-val-text">Mon, Nov 4</span>
+                    <span class="input-val-text">Tomorrow</span>
                   </div>
                 </div>
               </div>
@@ -191,7 +195,7 @@
                   <div class="pax-stepper" data-counter-type="passengers" role="group" aria-labelledby="passengers-label">
                     <button type="button" class="pax-step-btn" data-action="counter:passengers:-1"
                       aria-label="Decrease passengers">&minus;</button>
-                    <span class="pax-count" aria-live="polite">2</span>
+                    <span class="pax-count" aria-live="polite">0</span>
                     <button type="button" class="pax-step-btn" data-action="counter:passengers:1"
                       aria-label="Increase passengers">+</button>
                   </div>
@@ -201,7 +205,7 @@
                   <div class="pax-stepper" data-counter-type="vehicles" role="group" aria-labelledby="vehicles-label">
                     <button type="button" class="pax-step-btn" data-action="counter:vehicles:-1"
                       aria-label="Decrease vehicles">&minus;</button>
-                    <span class="pax-count" aria-live="polite">1</span>
+                    <span class="pax-count" aria-live="polite">0</span>
                     <button type="button" class="pax-step-btn" data-action="counter:vehicles:1"
                       aria-label="Increase vehicles">+</button>
                   </div>
@@ -211,7 +215,7 @@
                   <div class="pax-stepper" data-counter-type="pets" role="group" aria-labelledby="pets-label">
                     <button type="button" class="pax-step-btn" data-action="counter:pets:-1"
                       aria-label="Decrease pets">&minus;</button>
-                    <span class="pax-count" aria-live="polite">1</span>
+                    <span class="pax-count" aria-live="polite">0</span>
                     <button type="button" class="pax-step-btn" data-action="counter:pets:1"
                       aria-label="Increase pets">+</button>
                   </div>
@@ -244,6 +248,14 @@
                     </svg>
                   </button>
                   <ul class="custom-dropdown-menu" role="listbox" aria-label="Shipping Line">
+                    <li class="dropdown-option" role="option" data-value="Lite Shipping" aria-selected="false">
+                      <span class="option-text">Lite Shipping</span>
+                      <span class="option-check" aria-hidden="true">✓</span>
+                    </li>
+                    <li class="dropdown-option" role="option" data-value="2Go Travel" aria-selected="false">
+                      <span class="option-text">2Go Travel</span>
+                      <span class="option-check" aria-hidden="true">✓</span>
+                    </li>
                     <li class="dropdown-option is-active" role="option" data-value="Supercat" aria-selected="true">
                       <span class="option-text">Supercat</span>
                       <svg class="option-check" xmlns="http://www.w3.org/2000/svg" width="12" height="12"
@@ -271,6 +283,8 @@
                   </ul>
                   <!-- Hidden native select for form and script compatibility -->
                   <select class="hidden" aria-label="Shipping Line">
+                    <option>Lite Shipping</option>
+                    <option>2Go Travel</option>
                     <option selected>Supercat</option>
                     <option>OceanJet</option>
                     <option>FastCat</option>
@@ -353,11 +367,11 @@
                 <span class="font-normal">Have an account? </span>
                 <a href="login.html"
                   class="cursor-pointer font-['Poppins',sans-serif] font-normal text-slate-800 hover:text-[#007f70] underline transition-colors"
-                  data-action="go:login">Log-in</a>
+                  data-action="go:login">Log in</a>
                 <span class="font-normal"> or </span>
                 <a href="signup.html"
                   class="cursor-pointer font-['Poppins',sans-serif] font-normal text-slate-800 hover:text-[#007f70] underline transition-colors"
-                  data-action="go:signup">Sign-up</a>
+                  data-action="go:signup">Sign up</a>
               </div>
             </div>
           </div>

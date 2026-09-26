@@ -36,6 +36,7 @@
   function markSaved() {
     isSaved = true;
   }
+  document.addEventListener("entree:booking-saved", markSaved);
 
   function attachModalAttention(el) {
     let currentShakeAnim = null;
@@ -503,10 +504,18 @@
         navigateTo("index");
       } else if (page === "verify-booking") {
         const fields = $$("input", form);
+        const reference = fields[0].value.trim().toUpperCase();
+        const surname = fields[1].value.trim();
+        const match = data.MOCK_BOOKINGS.find(b => b.reference.toUpperCase() === reference &&
+          b.passengerDetails.some(person => person.name.trim().toLowerCase().endsWith(" " + surname.toLowerCase())));
+        if (!match) {
+          formError(form, "No booking matches that reference and passenger surname on this device.");
+          return;
+        }
         markSaved();
         store.set("verification", {
-          reference: fields[0].value.toUpperCase(),
-          surname: fields[1].value,
+          reference,
+          surname,
         });
         navigateTo("pasalubong");
       }
@@ -517,7 +526,7 @@
       e.preventDefault();
       dialog(
         "Password recovery",
-        "<p>This is a frontend demo. Password recovery requires a connected account service.</p>",
+        "<p>Password resets are not available in this preview. Email <strong>support@entree.ph</strong> and our team will get you back into your account.</p>",
       );
     });
   if (page === "signup") {
@@ -528,7 +537,7 @@
         el.onclick = () =>
           dialog(
             title,
-            "<p>The original project does not include this document. Add your published policy before accepting registrations.</p>",
+            "<p>This document is being finalised with our legal team and will be published before launch. Email <strong>support@entree.ph</strong> if you need a copy in the meantime.</p>",
           );
         el.onkeydown = (e) => {
           if (e.key === "Enter") el.click();
@@ -587,9 +596,12 @@
     const travelTypeSelect = $('select[aria-label="Travel Type"]');
     const pills = $$(".travel-type-pill");
     function updateTravelTypeUI(val) {
+      closeDatePicker();
       const dates = $$(".dates-input-group [data-date], [data-date]");
       if (dates[1]) {
         dates[1].classList.toggle("date-field-disabled", val === "One Way");
+        dates[1].setAttribute("aria-disabled", String(val === "One Way"));
+        dates[1].tabIndex = val === "One Way" ? -1 : 0;
       }
       pills.forEach((p) => {
         const isActive = p.dataset.travelType === val;
@@ -626,6 +638,7 @@
       if (!trigger || !menu) return;
 
       function openMenu() {
+        closeDatePicker();
         dropdownWraps.forEach((w) => {
           if (w !== wrap) {
             w.querySelector(".custom-dropdown-trigger")?.classList.remove("is-open");
@@ -650,8 +663,31 @@
         if (isOpen) closeMenu();
         else openMenu();
       };
+      trigger.onkeydown = (event) => {
+        if (!["ArrowDown", "ArrowUp"].includes(event.key)) return;
+        event.preventDefault();
+        openMenu();
+        (event.key === "ArrowUp" ? options[options.length - 1] : options[0])?.focus();
+      };
+      wrap.addEventListener("focusout", event => {
+        if (!wrap.contains(event.relatedTarget)) closeMenu();
+      });
+      menu.addEventListener("keydown", event => {
+        const index = [...options].indexOf(document.activeElement);
+        if (event.key === "Escape") { event.preventDefault(); closeMenu(); trigger.focus(); }
+        else if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+          event.preventDefault();
+          const next = event.key === "Home" ? 0 : event.key === "End" ? options.length - 1 : (index + (event.key === "ArrowDown" ? 1 : -1) + options.length) % options.length;
+          options[next]?.focus();
+        } else if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          options[index]?.click();
+          trigger.focus();
+        }
+      });
 
       options.forEach((opt) => {
+        opt.tabIndex = -1;
         opt.onclick = (e) => {
           e.stopPropagation();
           const val = opt.dataset.value;
@@ -699,32 +735,139 @@
     });
 
     // Wire up date pickers
+    const today = new Date();
+    function setCardDate(card, value) {
+      card.dataset.date = value;
+      const textEl = card.querySelector(".input-val-text") || card;
+      textEl.textContent = new Date(value + "T12:00:00").toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      });
+    }
     const dateCards = $$(".dates-input-group [data-date]");
     const targetCards = dateCards.length ? dateCards : $$("[data-date]");
+    const calendar = document.createElement("div");
+    calendar.className = "booking-calendar";
+    calendar.id = "booking-calendar";
+    calendar.hidden = true;
+    calendar.setAttribute("role", "dialog");
+    calendar.setAttribute("aria-label", "Choose travel date");
+    $(".dates-input-group").append(calendar);
+    let activeDateCard = null;
+    let visibleMonth;
+
+    function localDateValue(date) {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+    }
+
+    function closeDatePicker(restoreFocus = false) {
+      if (!activeDateCard) return;
+      const trigger = activeDateCard;
+      trigger.classList.remove("is-open");
+      trigger.setAttribute("aria-expanded", "false");
+      calendar.hidden = true;
+      activeDateCard = null;
+      if (restoreFocus) trigger.focus();
+    }
+
+    function selectDate(value) {
+      setCardDate(activeDateCard, value);
+      hasManualDateChange = true;
+      closeDatePicker(true);
+    }
+
+    function renderCalendar(focusValue) {
+      const year = visibleMonth.getFullYear();
+      const month = visibleMonth.getMonth();
+      const firstDay = new Date(year, month, 1, 12).getDay();
+      const daysInMonth = new Date(year, month + 1, 0, 12).getDate();
+      const monthLabel = visibleMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+      const selected = activeDateCard.dataset.date;
+      const focusDay = focusValue || (selected.startsWith(localDateValue(visibleMonth).slice(0, 7)) ? selected : localDateValue(new Date(year, month, 1, 12)));
+      const days = Array.from({ length: daysInMonth }, (_, i) => {
+        const date = new Date(year, month, i + 1, 12);
+        const value = localDateValue(date);
+        const label = date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+        return `<button type="button" class="calendar-day${value === selected ? " is-selected" : ""}" data-calendar-date="${value}" aria-label="${label}" aria-pressed="${value === selected}"${value === localDateValue(new Date()) ? ' aria-current="date"' : ''} tabindex="${value === focusDay ? 0 : -1}">${i + 1}</button>`;
+      }).join("");
+      calendar.innerHTML = `<div class="calendar-heading"><button type="button" class="calendar-nav" data-month-step="-1" aria-label="Previous month">&#8249;</button><span aria-live="polite">${monthLabel}</span><button type="button" class="calendar-nav" data-month-step="1" aria-label="Next month">&#8250;</button></div><div class="calendar-weekdays" aria-hidden="true">${["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map(day => `<span>${day}</span>`).join("")}</div><div class="calendar-days">${'<span aria-hidden="true"></span>'.repeat(firstDay)}${days}</div><div class="calendar-footer"><button type="button" class="calendar-today">Today</button><button type="button" class="calendar-close">Close</button></div>`;
+    }
+
+    calendar.onclick = (event) => {
+      const day = event.target.closest("[data-calendar-date]");
+      const nav = event.target.closest("[data-month-step]");
+      if (day) selectDate(day.dataset.calendarDate);
+      else if (nav) {
+        const step = Number(nav.dataset.monthStep);
+        visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + step, 1, 12);
+        renderCalendar();
+        calendar.querySelector(`[data-month-step="${step}"]`).focus();
+      } else if (event.target.closest(".calendar-today")) selectDate(localDateValue(new Date()));
+      else if (event.target.closest(".calendar-close")) closeDatePicker(true);
+    };
+
+    calendar.onkeydown = (event) => {
+      const day = event.target.closest("[data-calendar-date]");
+      if (!day) return;
+      const offsets = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
+      if (!(event.key in offsets)) return;
+      event.preventDefault();
+      const date = new Date(day.dataset.calendarDate + "T12:00:00");
+      date.setDate(date.getDate() + offsets[event.key]);
+      const value = localDateValue(date);
+      visibleMonth = new Date(date.getFullYear(), date.getMonth(), 1, 12);
+      renderCalendar(value);
+      calendar.querySelector(`[data-calendar-date="${value}"]`).focus();
+    };
+
+    document.addEventListener("click", (event) => {
+      if (activeDateCard && !calendar.contains(event.target) && !activeDateCard.contains(event.target)) closeDatePicker();
+    });
+    document.addEventListener("focusin", (event) => {
+      if (activeDateCard && !calendar.contains(event.target) && !activeDateCard.contains(event.target)) closeDatePicker();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && activeDateCard) {
+        event.preventDefault();
+        closeDatePicker(true);
+      }
+    });
     targetCards.forEach((card, idx) => {
       const isDeparture = idx === 0 || (card.getAttribute("aria-label") && card.getAttribute("aria-label").toLowerCase().includes("departure"));
       const labelText = isDeparture ? "Departure date" : "Return date";
+      // Use local calendar dates so defaults stay current in the visitor's timezone.
+      const defaultDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (isDeparture ? 0 : 1), 12);
+      const dateValue = localDateValue(defaultDate);
+      setCardDate(card, dateValue);
       card.tabIndex = 0;
       card.setAttribute("role", "button");
       card.setAttribute("aria-label", labelText);
+      card.setAttribute("aria-haspopup", "dialog");
+      card.setAttribute("aria-expanded", "false");
+      card.setAttribute("aria-controls", calendar.id);
+      card.classList.add("date-picker-trigger");
+      card.insertAdjacentHTML("beforeend", '<svg class="date-picker-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>');
       card.onclick = () => {
-        const d = dialog(
-          labelText,
-          `<label>Choose date <input type="date" value="${card.dataset.date || '2026-10-30'}" required></label><button class="dialog-action">Apply</button>`,
-        );
-        $(".dialog-action", d).onclick = () => {
-          const input = $("input", d);
-          if (!input.reportValidity()) return;
-          card.dataset.date = input.value;
-          const textEl = card.querySelector(".input-val-text") || card;
-          textEl.textContent = new Date(input.value + "T12:00:00").toLocaleDateString("en-US", {
-            weekday: "short",
-            month: "short",
-            day: "numeric",
-          });
-          hasManualDateChange = true;
-          d.close();
-        };
+        if (card.classList.contains("date-field-disabled")) return;
+        const wasOpen = activeDateCard === card;
+        closeDatePicker();
+        if (wasOpen) return;
+        dropdownWraps.forEach((wrap) => {
+          wrap.querySelector(".custom-dropdown-trigger")?.classList.remove("is-open");
+          wrap.querySelector(".custom-dropdown-trigger")?.setAttribute("aria-expanded", "false");
+          wrap.querySelector(".custom-dropdown-menu")?.classList.remove("is-open");
+        });
+        activeDateCard = card;
+        const selected = new Date(card.dataset.date + "T12:00:00");
+        visibleMonth = new Date(selected.getFullYear(), selected.getMonth(), 1, 12);
+        calendar.classList.toggle("is-return", !isDeparture);
+        calendar.setAttribute("aria-label", labelText);
+        renderCalendar();
+        calendar.hidden = false;
+        card.classList.add("is-open");
+        card.setAttribute("aria-expanded", "true");
+        calendar.querySelector('[tabindex="0"]').focus();
       };
       card.onkeydown = (e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -750,7 +893,7 @@
     const info = $("main .bg-blue-50 p");
     if (info)
       info.textContent =
-        "Demo payment only. No money is charged and no payment details are collected.";
+        "Preview mode — no payment is processed and no card details are collected.";
     // Fresh session: no payment preselected on reload
   }
 
@@ -759,7 +902,7 @@
     if (!b) return;
     const d = dialog(
       share ? "Share Trip" : b.reference,
-      `<p><strong>${escape(b.route.origin)} → ${escape(b.route.destination)}</strong></p><p>${escape(b.ferry)} · ${escape(b.departureDate)} · ${escape(b.departureTime)}</p><p>${b.passengers} passengers · ₱${b.totalPrice.toFixed(2)}</p><p>${b.passengerDetails.map((p) => escape(p.name)).join("<br>")}</p><p>Sample booking for demonstration.</p><button class="dialog-action" data-action="print">Print</button>${share ? '<button class="dialog-action" data-action="copy-trip">Copy details</button>' : `<a class="dialog-action" href="rebook.html?id=${b.id}">Rebook</a><a class="dialog-action" href="refund.html?id=${b.id}">Refund</a>`}`,
+      `<p><strong>${escape(b.route.origin)} → ${escape(b.route.destination)}</strong></p><p>${escape(b.tripType || (b.returnDate ? "Round Trip" : "One Way"))} · ${escape(b.ferry)}${b.cabin ? ` · ${escape(b.cabin)}` : ""}</p><p>Departure: ${escape(b.departureDate)} · ${escape(b.departureTime)}</p>${b.returnDate ? `<p>Return: ${escape(b.returnDate)}${b.returnDepartureTime ? ` · ${escape(b.returnDepartureTime)}` : ""}</p>` : ""}<p>${b.passengers} passengers${b.vehicles !== undefined ? ` · ${b.vehicles} vehicles · ${b.pets} pets` : ""} · ₱${b.totalPrice.toFixed(2)}</p><p>${b.passengerDetails.map((p) => escape(p.name)).join("<br>")}</p><p>Saved to this device in preview mode.</p><button class="dialog-action" data-action="print">Print</button>${share ? '<button class="dialog-action" data-action="copy-trip">Copy details</button>' : `<a class="dialog-action" href="rebook.html?id=${b.id}">Rebook</a><a class="dialog-action" href="refund.html?id=${b.id}">Refund</a>`}`,
     );
     d.dataset.booking = id;
   }
@@ -860,6 +1003,154 @@
   }
 
   // ==========================================================================
+  // Date fields (sign-up birthdate): same look and calendar as the booking form
+  // ==========================================================================
+  function setupDateFields() {
+    const inputs = $$('input[type="date"][data-date-field]');
+    if (!inputs.length) return;
+    const localValue = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const CHEVRON = '<svg class="edf-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+    const CAL_ICON = '<svg class="edf-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>';
+
+    inputs.forEach((input) => {
+      const label = input.dataset.dateField || "Date";
+      if (input.hasAttribute("max") && !input.getAttribute("max")) {
+        const now = new Date();
+        input.max = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+      }
+      const minYear = Number(input.dataset.minYear) || new Date().getFullYear() - 100;
+      const maxDate = input.max ? new Date(input.max + "T12:00:00") : new Date();
+      const wrap = document.createElement("div");
+      wrap.className = "edf";
+      input.parentElement.insertBefore(wrap, input);
+      wrap.appendChild(input);
+      input.classList.add("edf-native");
+      input.tabIndex = -1;
+      input.setAttribute("aria-hidden", "true");
+      wrap.insertAdjacentHTML(
+        "beforeend",
+        `<button type="button" class="edf-trigger" aria-haspopup="dialog" aria-expanded="false">${CAL_ICON}<span class="edf-text"><span class="edf-label">${escape(label)}</span><span class="edf-value">Select a date</span></span>${CHEVRON}</button>
+         <div class="edf-calendar booking-calendar" hidden role="dialog" aria-label="Choose ${escape(label.toLowerCase())}"></div>`,
+      );
+      const trigger = $(".edf-trigger", wrap);
+      const valueEl = $(".edf-value", wrap);
+      const calendar = $(".edf-calendar", wrap);
+      let visible = input.value ? new Date(input.value + "T12:00:00") : new Date(maxDate.getFullYear() - 20, maxDate.getMonth(), 1, 12);
+
+      function showValue() {
+        if (!input.value) {
+          valueEl.textContent = "Select a date";
+          valueEl.classList.add("is-empty");
+          return;
+        }
+        valueEl.classList.remove("is-empty");
+        valueEl.textContent = new Date(input.value + "T12:00:00").toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+      }
+      function render(focusValue) {
+        const year = visible.getFullYear();
+        const month = visible.getMonth();
+        const first = new Date(year, month, 1, 12).getDay();
+        const days = new Date(year, month + 1, 0, 12).getDate();
+        const selected = input.value;
+        const years = [];
+        for (let y = maxDate.getFullYear(); y >= minYear; y -= 1) years.push(y);
+        const cells = Array.from({ length: days }, (_, i) => {
+          const d = new Date(year, month, i + 1, 12);
+          const value = localValue(d);
+          const disabled = d > maxDate;
+          return `<button type="button" class="calendar-day${value === selected ? " is-selected" : ""}" data-edf-date="${value}"${disabled ? " disabled" : ""} aria-pressed="${value === selected}" aria-label="${d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}" tabindex="${value === (focusValue || selected) ? 0 : -1}">${i + 1}</button>`;
+        }).join("");
+        calendar.innerHTML =
+          `<div class="calendar-heading edf-heading">
+             <button type="button" class="calendar-nav" data-edf-step="-1" aria-label="Previous month">&#8249;</button>
+             <span class="edf-selects">
+               <select class="edf-select" data-edf-month aria-label="Month">${MONTHS.map((m, i) => `<option value="${i}"${i === month ? " selected" : ""}>${m}</option>`).join("")}</select>
+               <select class="edf-select" data-edf-year aria-label="Year">${years.map((y) => `<option value="${y}"${y === year ? " selected" : ""}>${y}</option>`).join("")}</select>
+             </span>
+             <button type="button" class="calendar-nav" data-edf-step="1" aria-label="Next month">&#8250;</button>
+           </div>
+           <div class="calendar-weekdays" aria-hidden="true">${["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => `<span>${d}</span>`).join("")}</div>
+           <div class="calendar-days">${'<span aria-hidden="true"></span>'.repeat(first)}${cells}</div>
+           <div class="calendar-footer"><button type="button" class="edf-clear">Clear</button><button type="button" class="edf-close">Close</button></div>`;
+      }
+      function open() {
+        closeAll(wrap);
+        visible = input.value ? new Date(input.value + "T12:00:00") : visible;
+        render();
+        calendar.hidden = false;
+        trigger.setAttribute("aria-expanded", "true");
+        trigger.classList.add("is-open");
+        $(".calendar-day[tabindex='0']", calendar)?.focus({ preventScroll: true });
+      }
+      function close(focusTrigger) {
+        calendar.hidden = true;
+        trigger.setAttribute("aria-expanded", "false");
+        trigger.classList.remove("is-open");
+        if (focusTrigger) trigger.focus();
+      }
+      wrap._closeDateField = () => close(false);
+      trigger.onclick = () => (calendar.hidden ? open() : close(true));
+      calendar.addEventListener("change", (e) => {
+        const month = $("[data-edf-month]", calendar);
+        const year = $("[data-edf-year]", calendar);
+        if (e.target !== month && e.target !== year) return;
+        visible = new Date(Number(year.value), Number(month.value), 1, 12);
+        render();
+        $("[data-edf-" + (e.target === month ? "month" : "year") + "]", calendar).focus();
+      });
+      calendar.addEventListener("click", (e) => {
+        const day = e.target.closest("[data-edf-date]");
+        const step = e.target.closest("[data-edf-step]");
+        if (day) {
+          input.value = day.dataset.edfDate;
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+          showValue();
+          close(true);
+        } else if (step) {
+          visible = new Date(visible.getFullYear(), visible.getMonth() + Number(step.dataset.edfStep), 1, 12);
+          render();
+          $(`[data-edf-step="${step.dataset.edfStep}"]`, calendar)?.focus();
+        } else if (e.target.closest(".edf-clear")) {
+          input.value = "";
+          input.dispatchEvent(new Event("change", { bubbles: true }));
+          showValue();
+          render();
+        } else if (e.target.closest(".edf-close")) close(true);
+      });
+      calendar.addEventListener("keydown", (e) => {
+        const day = e.target.closest("[data-edf-date]");
+        if (e.key === "Escape") return close(true);
+        const offsets = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 };
+        if (!day || !(e.key in offsets)) return;
+        e.preventDefault();
+        const d = new Date(day.dataset.edfDate + "T12:00:00");
+        d.setDate(d.getDate() + offsets[e.key]);
+        if (d > maxDate) return;
+        visible = new Date(d.getFullYear(), d.getMonth(), 1, 12);
+        render(localValue(d));
+        $(`[data-edf-date="${localValue(d)}"]`, calendar)?.focus();
+      });
+      showValue();
+      input.addEventListener("invalid", () => {
+        trigger.classList.add("is-invalid");
+        trigger.focus();
+      });
+      input.addEventListener("change", () => trigger.classList.remove("is-invalid"));
+    });
+
+    function closeAll(except) {
+      $$(".edf").forEach((wrap) => {
+        if (wrap !== except) wrap._closeDateField?.();
+      });
+    }
+    document.addEventListener("click", (e) => {
+      if (!e.target.closest(".edf")) closeAll(null);
+    });
+  }
+  setupDateFields();
+
+  // ==========================================================================
   // Pasalubong shop
   // Product grid (pick an option right on the card) + sticky cart with
   // GCash / Online Bank checkout. Prices are in Philippine pesos.
@@ -900,8 +1191,10 @@
 
     // Which trip the order is for (from the Verify Booking step)
     const verification = store.get("verification");
+    const draftTrip = window.ENTREE_BOOKING?.get();
     const trip =
       (verification && data.MOCK_BOOKINGS.find((b) => b.reference.toUpperCase() === String(verification.reference).toUpperCase())) ||
+      (draftTrip && { ...draftTrip, reference: "Your upcoming trip", route: { origin: draftTrip.origin, destination: draftTrip.destination } }) ||
       booking();
     const tripDate = new Date(trip.departureDate + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
     const tripBox = $("#pz-trip");
@@ -1137,7 +1430,7 @@
         <button type="button" class="pz-pay-btn" data-cart="checkout" ${method && !shop.processing ? "" : "disabled"} aria-busy="${shop.processing}">
           ${shop.processing ? '<span class="pz-spinner" aria-hidden="true"></span>Processing payment…' : method ? `Pay ${peso(total())} with ${PAY_METHODS[method].label}` : "Choose a payment method"}
         </button>
-        <p class="pz-secure"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Demo checkout. No real payment is taken.</p>`;
+        <p class="pz-secure"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Preview mode — no payment is processed.</p>`;
     }
     cartBody.addEventListener("click", (e) => {
       const b = e.target.closest("[data-cart]");
@@ -1216,7 +1509,7 @@
         )
         .join("") +
       (!ferries.length
-        ? '<p class="py-4">No sample schedules available in this date range. Try October 30, 2026.</p>'
+        ? '<p class="py-4">No departures in this date range. Try a date closer to your original trip.</p>'
         : "");
   }
   if (page === "rebook") {
@@ -1294,7 +1587,7 @@
       input.addEventListener("change", () => {
         preferences[i] = input.type === "checkbox" ? input.checked : input.value;
         store.set("preferences", preferences);
-        notice("Preferences saved on this device.");
+        notice("Your preferences have been updated.");
         if (input.type === "checkbox") {
           initialFieldValues.set(input, input.checked);
         } else {
@@ -1311,6 +1604,11 @@
 
   // Snapshot initial values for change detection
   snapshotInitialState();
+  document.addEventListener("entree:draft-restored", () => {
+    hasManualDateChange = false;
+    hasManualCounterChange = false;
+    snapshotInitialState();
+  });
 
   // Intercept standard link navigation if unsaved changes exist
   document.addEventListener("click", (e) => {
@@ -1365,7 +1663,7 @@
       go(parents[page] || "index");
     } else if (name === "counter") {
       const value = $("span", el.parentElement),
-        minimum = arg === "passengers" ? 1 : 0;
+        minimum = arg === "passengers" && page !== "index" ? 1 : 0;
       value.textContent = Math.max(minimum, Number(value.textContent) + Number(amount));
       if (page === "index") {
         hasManualCounterChange = true;
@@ -1394,6 +1692,10 @@
       enable($('[data-action="complete-payment"]'));
     } else if (name === "complete-payment") {
       if (selectedPayment) {
+        if (window.ENTREE_BOOKING && !window.ENTREE_BOOKING.complete(selectedPayment)) {
+          notice(window.ENTREE_BOOKING.detailsError());
+          return;
+        }
         markSaved();
         store.set("demoPayment", selectedPayment);
         navigateTo("confirmation");
@@ -1402,7 +1704,7 @@
     else if (name === "addons")
       dialog(
         "Buy Add-ons",
-        `<a class="dialog-action" href="verify-booking.html">Buy Pasalubong</a><p>Pet and vehicle add-ons require the booking service, which is not connected in this demo.</p>`,
+        `<a class="dialog-action" href="verify-booking.html">Shop pasalubong</a><p>Pasalubong can be pre-ordered online and delivered to your seat. Vehicle and pet slots are arranged at the terminal counter before boarding.</p>`,
       );
     else if (name === "print") window.print();
     else if (name === "copy-trip") {
@@ -1449,8 +1751,8 @@
       }
       markSaved();
       dialog(
-        "Demo reschedule complete",
-        '<p>This sample booking has been rescheduled for this demonstration. No live reservation was changed.</p><a class="dialog-action" href="bookings.html">Back to bookings</a>',
+        "Reschedule confirmed",
+        '<p>Your new schedule is saved to this device and your booking reference stays the same. Preview mode — no live reservation was changed.</p><a class="dialog-action" href="bookings.html">Back to my bookings</a>',
       );
     } else if (name === "refund") {
       const reason = $("textarea");
@@ -1461,19 +1763,19 @@
       }
       markSaved();
       dialog(
-        "Demo refund request",
-        '<p>Your sample refund request is complete. No live reservation or payment was changed.</p><a class="dialog-action" href="bookings.html">Back to bookings</a>',
+        "Refund request received",
+        '<p>We have logged your refund request. Refunds are reviewed within 7–14 business days and paid back to your original payment method. Preview mode — no payment was reversed.</p><a class="dialog-action" href="bookings.html">Back to my bookings</a>',
       );
     } else if (name === "payment-info")
       dialog(
         "Payment methods",
-        "<p>Saving payment methods requires a connected payment provider. This demo does not collect card details.</p>",
+        "<p>Saved payment methods are not available in this preview. You can still pay with GCash or online banking at checkout.</p>",
       );
-    else if (name === "profile") notice("Profile updates require a connected account service.");
+    else if (name === "profile") notice("Profile changes are not saved in this preview.");
     else if (name === "password-info")
       dialog(
         "Change password",
-        "<p>Password changes require a connected account service. This demo does not save passwords.</p>",
+        "<p>Password changes are not available in this preview. For help securing your account, email <strong>support@entree.ph</strong>.</p>",
       );
   });
 
@@ -1525,7 +1827,7 @@
 
       // ---- Timing (ms) -----------------------------------------------------
       const FIRST_APPEAR_IDLE = 6000; // inactivity before Doode first shows up
-      const CHAT_AGAIN_IDLE = 18000; // inactivity (while visible) before a new chat
+      const CHAT_AGAIN_IDLE = 30000; // inactivity (while visible) before a new chat
       const REAPPEAR_IDLE = 25000; // inactivity (after closing) before he comes back
       const APPEAR_MS = 700;
       const CLOSE_MS = 650;
@@ -1815,7 +2117,7 @@
       setState("hidden");
 
       // ---- Position -------------------------------------------------------
-      const SIZE = () => (window.innerWidth <= 768 ? 96 : 130);
+      const SIZE = () => (window.innerWidth <= 768 ? 112 : 130);
       let pos = { x: 0, y: 0 };
       function bounds() {
         const s = SIZE();
@@ -1960,7 +2262,7 @@
           { find: bySel('[data-action="profile"]'), say: "Save profile changes with this button." },
           { find: bySel('[data-action="password-info"]'), say: "Change your password here. Make it a good one." },
           { find: bySel('[data-action="payment-info"]'), say: "Save a payment method for faster checkout." },
-          { find: bySel("select"), say: "Pick your language here. Tagalog? English? Turtle? (Turtle coming soon.)" },
+          { find: bySel("select"), say: "Set your language and currency here. English or Filipino, pesos or dollars." },
         ],
         "verify-booking": [
           { find: bySel("#bookingRef"), done: filled, say: "Type your booking reference. It's in your confirmation email." },
@@ -2136,7 +2438,7 @@
         clearFlow();
         hideBubble();
         setState("idle");
-        startWander(4000);
+        startWander(2500);
         armInactivity();
       }
 
@@ -2202,7 +2504,7 @@
             if (state === "idle") setSprite("idle");
             savePos();
           }, ms);
-          wanderTimer = setTimeout(wander, ms + 7000 + Math.random() * 8000);
+          wanderTimer = setTimeout(wander, ms + 4000 + Math.random() * 6000);
         }, delay);
       }
 
@@ -2303,4 +2605,3 @@
     console.warn("Mascot controller error:", e);
   }
 })();
-

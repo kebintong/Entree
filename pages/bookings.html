@@ -8,7 +8,11 @@
   <link rel="stylesheet" href="../assets/css/styles.css" />
   <link rel="stylesheet" href="../assets/css/site.css" />
   <script src="../assets/js/data.js" defer></script>
-  <script src="../assets/js/app.js" defer></script>
+  <script src="../assets/js/booking-state.js" defer></script>
+    <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/booking-flow.js" defer></script>
+    <link rel="stylesheet" href="../assets/css/booking-flow.css" />
+  <link rel="icon" type="image/png" href="../assets/images/entree-logo.png" />
 </head>
 
 <body data-page="bookings">
@@ -81,7 +85,7 @@
                 </h2>
                 <div class="space-y-4">
                   <div
-                    class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all cursor-pointer"
+                    class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 hover:shadow-md transition-all cursor-pointer"
                     data-booking="1" data-action="booking">
                     <div class="flex items-start justify-between mb-4">
                       <div>
@@ -207,7 +211,7 @@
                     </div>
                   </div>
                   <div
-                    class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all cursor-pointer"
+                    class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 hover:shadow-md transition-all cursor-pointer"
                     data-booking="2" data-action="booking">
                     <div class="flex items-start justify-between mb-4">
                       <div>
@@ -331,7 +335,7 @@
                   </svg>Past Trips
                 </h2>
                 <div class="space-y-4">
-                  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 opacity-75">
+                  <div class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 opacity-75">
                     <div class="flex items-start justify-between">
                       <div>
                         <div class="flex items-center gap-2 mb-2">
@@ -349,14 +353,14 @@
               </div>
             </div>
             <div class="w-[280px] flex-shrink-0">
-              <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sticky top-24">
+              <div class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-4 sticky top-24">
                 <!-- Date Header -->
                 <div class="mb-4 pb-3 border-b border-gray-100 flex items-center justify-between">
                   <div>
                     <span class="text-[11px] font-medium tracking-wider uppercase text-gray-400 block font-['Poppins:Medium',sans-serif]">Today</span>
                     <p id="pht-date-str" class="text-[16px] font-semibold text-[#1f2937] font-['Poppins:SemiBold',sans-serif] tracking-tight mt-0.5">Mon, Sep 21, 2026</p>
                   </div>
-                  <button data-action="month:today" class="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-gray-50 hover:bg-gray-100 text-gray-600 hover:text-gray-900 border border-gray-200 transition-colors" title="Jump to today">
+                  <button data-action="month:today" class="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-gray-50 hover:bg-gray-100 text-gray-600 hover:text-gray-900 border border-[#dbdcd9] transition-colors" title="Jump to today">
                     Today
                   </button>
                 </div>

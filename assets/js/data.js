@@ -1,4 +1,12 @@
 window.ENTREE_DATA = {
+  // Illustrative departures for the local booking demo, not live operator inventory.
+  SHIPPING_COMPANIES: [
+    { id: "lite", name: "Lite Shipping", logo: "lite-ferries-logo.png", departure: "13:00", arrival: "17:00", duration: "4 hr", price: 497.94, returnDeparture: "22:00", returnArrival: "02:00", returnPrice: 370, overnightReturn: true },
+    { id: "supercat", name: "Supercat", logo: "supercat-logo.png", departure: "05:40", arrival: "09:40", duration: "4 hr", price: 834.90, returnDeparture: "14:00", returnArrival: "18:00" },
+    { id: "oceanjet", name: "OceanJet", logo: "oceanjet-logo.png", departure: "06:00", arrival: "08:00", duration: "2 hr", price: 913.20, returnDeparture: "16:00", returnArrival: "18:00" },
+    { id: "2go", name: "2Go Travel", logo: "2go-logo.png", departure: "06:00", arrival: "09:30", duration: "3.5 hr", price: 871.69, returnDeparture: "18:00", returnArrival: "21:30" },
+    { id: "fastcat", name: "FastCat", logo: null, departure: "08:00", arrival: "10:30", duration: "2.5 hr", price: 1300, returnDeparture: "15:00", returnArrival: "17:30" },
+  ],
   AVAILABLE_FERRIES: [
     {
       id: "1",

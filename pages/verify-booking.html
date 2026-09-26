@@ -7,8 +7,12 @@
     <link rel="stylesheet" href="../assets/css/styles.css" />
     <link rel="stylesheet" href="../assets/css/site.css" />
     <script src="../assets/js/data.js" defer></script>
+    <script src="../assets/js/booking-state.js" defer></script>
     <script src="../assets/js/app.js" defer></script>
-  </head>
+    <script src="../assets/js/booking-flow.js" defer></script>
+    <link rel="stylesheet" href="../assets/css/booking-flow.css" />
+    <link rel="icon" type="image/png" href="../assets/images/entree-logo.png" />
+</head>
   <body data-page="verify-booking">
     <div
       class="flex flex-col min-h-screen font-sans text-slate-900 bg-white selection:bg-[#CCFF00] selection:text-black overflow-x-hidden"
@@ -64,7 +68,7 @@
             <div class="bg-white rounded-lg border border-[#dbdcd9] p-8 shadow-sm">
               <div class="text-center mb-8">
                 <div
-                  class="w-16 h-16 bg-[#CCFF00]/20 rounded-full flex items-center justify-center mx-auto mb-4"
+                  class="w-16 h-16 bg-[#CCFF00] rounded-full flex items-center justify-center mx-auto mb-4"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +80,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-calendar w-8 h-8 text-[#007f70]"
+                    class="lucide lucide-calendar w-8 h-8 text-black stroke-[2.5]"
                   >
                     <path d="M8 2v4"></path>
                     <path d="M16 2v4"></path>
@@ -85,11 +89,11 @@
                   </svg>
                 </div>
                 <h1
-                  class="font-['Poppins'] font-semibold text-[24px] text-[#363636] mb-2"
+                  class="font-['Poppins:SemiBold',sans-serif] text-[28px] text-[#363636] mb-2"
                 >
                   Verify Your Booking
                 </h1>
-                <p class="font-['Poppins'] text-[14px] text-[#666] leading-relaxed">
+                <p class="text-[15px] text-[#999] font-['Poppins:Regular',sans-serif]">
                   Enter your booking details to shop for Pasalubong
                 </p>
               </div>
@@ -106,12 +110,12 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-circle-check w-5 h-5 text-[#007f70] shrink-0 mt-0.5"
+                  class="lucide lucide-circle-check w-5 h-5 text-black shrink-0 mt-0.5"
                 >
                   <circle cx="12" cy="12" r="10"></circle>
                   <path d="m9 12 2 2 4-4"></path>
                 </svg>
-                <p class="font-['Poppins'] text-[12px] text-[#363636] leading-relaxed">
+                <p class="font-['Poppins:Regular',sans-serif] text-[13px] text-[#363636] leading-relaxed">
                   Pasalubong shopping is available for bookings with 14+ hours before departure
                 </p>
               </div>
@@ -119,14 +123,14 @@
                 <div>
                   <label
                     for="bookingRef"
-                    class="font-['Poppins'] font-medium text-[12px] text-[#363636] mb-2 block"
+                    class="block text-[14px] font-['Poppins:Medium',sans-serif] text-[#363636] mb-2"
                     >Booking Reference Number</label
                   >
                   <input
                     id="bookingRef"
                     type="text"
-                    placeholder="e.g., SC2024-ABC123"
-                    class="w-full border border-[#dbdcd9] rounded-full px-5 py-3 font-['Poppins'] text-[14px] text-[#363636] focus:outline-none focus:border-[#007f70] focus:ring-2 focus:ring-[#007f70]/20 transition-all"
+                    placeholder="e.g. ENT-2026-001234"
+                    class="w-full px-4 py-3 border border-[#dbdcd9] rounded-lg font-['Poppins:Regular',sans-serif] text-[15px] text-[#363636] focus:outline-none focus:border-[#CCFF00] focus:ring-2 focus:ring-[#CCFF00]/20 transition-all"
                     maxlength="20"
                     value=""
                   />
@@ -134,20 +138,20 @@
                 <div>
                   <label
                     for="surname"
-                    class="font-['Poppins'] font-medium text-[12px] text-[#363636] mb-2 block"
+                    class="block text-[14px] font-['Poppins:Medium',sans-serif] text-[#363636] mb-2"
                     >Surname</label
                   >
                   <input
                     id="surname"
                     type="text"
                     placeholder="Enter your surname"
-                    class="w-full border border-[#dbdcd9] rounded-full px-5 py-3 font-['Poppins'] text-[14px] text-[#363636] focus:outline-none focus:border-[#007f70] focus:ring-2 focus:ring-[#007f70]/20 transition-all"
+                    class="w-full px-4 py-3 border border-[#dbdcd9] rounded-lg font-['Poppins:Regular',sans-serif] text-[15px] text-[#363636] focus:outline-none focus:border-[#CCFF00] focus:ring-2 focus:ring-[#CCFF00]/20 transition-all"
                     value=""
                   />
                 </div>
                 <button
                   type="submit"
-                  class="w-full bg-[#CCFF00] hover:bg-[#B8E600] active:bg-[#99CC00] disabled:bg-[#e6e9e0] disabled:text-[#979797] text-black font-['Poppins'] font-bold text-[14px] rounded-full px-6 py-3.5 transition-all shadow-sm disabled:cursor-not-allowed"
+                  class="w-full bg-[#CCFF00] hover:bg-[#B8E600] active:bg-[#99CC00] disabled:bg-gray-200 disabled:text-gray-400 text-black font-bold text-[15px] rounded-full py-3.5 px-6 flex justify-center items-center gap-2 transition-all shadow-sm disabled:cursor-not-allowed"
                 >
                   Continue to Shop
                 </button>

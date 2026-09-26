@@ -7,8 +7,12 @@
     <link rel="stylesheet" href="../assets/css/styles.css" />
     <link rel="stylesheet" href="../assets/css/site.css" />
     <script src="../assets/js/data.js" defer></script>
+    <script src="../assets/js/booking-state.js" defer></script>
     <script src="../assets/js/app.js" defer></script>
-  </head>
+    <script src="../assets/js/booking-flow.js" defer></script>
+    <link rel="stylesheet" href="../assets/css/booking-flow.css" />
+    <link rel="icon" type="image/png" href="../assets/images/entree-logo.png" />
+</head>
   <body data-page="payment">
     <div
       class="flex flex-col min-h-screen font-sans text-slate-900 bg-white selection:bg-[#CCFF00] selection:text-black overflow-x-hidden"
@@ -338,7 +342,7 @@
             </div>
           </div>
           <div class="w-full max-w-[1200px] mx-auto px-[120px] py-12">
-            <div class="bg-white rounded-3xl border border-gray-200 shadow-sm p-8">
+            <div class="bg-white rounded-lg border border-[#dbdcd9] shadow-sm p-8">
               <div class="mb-8">
                 <h1 class="font-['Poppins'] font-bold text-[28px] text-gray-900 mb-2">
                   Payment
@@ -347,12 +351,12 @@
                   Select your preferred payment method
                 </p>
               </div>
-              <div class="bg-gray-50 rounded-2xl p-6 mb-8">
+              <div class="bg-gray-50 rounded-lg border border-[#dbdcd9] p-6 mb-8">
                 <div class="flex justify-between items-center">
                   <span class="font-['Poppins'] font-semibold text-[16px] text-gray-700"
                     >Total Amount</span
                   >
-                  <span class="font-['Poppins'] font-bold text-[24px] text-gray-900"
+                  <span data-booking-total class="font-['Poppins'] font-bold text-[24px] text-gray-900"
                     >₱ 4,359.80</span
                   >
                 </div>
@@ -362,11 +366,11 @@
                   Select Payment Method
                 </h3>
                 <button
-                  class="w-full border-2 rounded-2xl p-5 transition-all flex items-center gap-4 border-gray-200 hover:border-gray-300"
+                  class="w-full border border-[#dbdcd9] rounded-lg p-5 transition-all flex items-center gap-4 hover:border-[#CCFF00] hover:ring-2 hover:ring-[#CCFF00]/20"
                   data-action="payment:gcash"
                 >
                   <div
-                    class="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center shrink-0"
+                    class="w-14 h-14 bg-blue-600 rounded-lg flex items-center justify-center shrink-0"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -394,11 +398,11 @@
                   </div>
                 </button>
                 <button
-                  class="w-full border-2 rounded-2xl p-5 transition-all flex items-center gap-4 border-gray-200 hover:border-gray-300"
+                  class="w-full border border-[#dbdcd9] rounded-lg p-5 transition-all flex items-center gap-4 hover:border-[#CCFF00] hover:ring-2 hover:ring-[#CCFF00]/20"
                   data-action="payment:bank"
                 >
                   <div
-                    class="w-14 h-14 bg-green-600 rounded-xl flex items-center justify-center shrink-0"
+                    class="w-14 h-14 bg-green-600 rounded-lg flex items-center justify-center shrink-0"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -453,7 +457,7 @@
                   <path d="m12 5 7 7-7 7"></path>
                 </svg>
               </button>
-              <div class="mt-6 flex items-start gap-3 bg-blue-50 rounded-xl p-4">
+              <div class="mt-6 flex items-start gap-3 bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <div class="w-5 h-5 shrink-0 mt-0.5">
                   <svg class="w-full h-full text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                     <path

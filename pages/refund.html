@@ -7,8 +7,12 @@
     <link rel="stylesheet" href="../assets/css/styles.css" />
     <link rel="stylesheet" href="../assets/css/site.css" />
     <script src="../assets/js/data.js" defer></script>
+    <script src="../assets/js/booking-state.js" defer></script>
     <script src="../assets/js/app.js" defer></script>
-  </head>
+    <script src="../assets/js/booking-flow.js" defer></script>
+    <link rel="stylesheet" href="../assets/css/booking-flow.css" />
+    <link rel="icon" type="image/png" href="../assets/images/entree-logo.png" />
+</head>
   <body data-page="refund">
     <div
       class="flex flex-col min-h-screen font-sans text-slate-900 bg-white selection:bg-[#CCFF00] selection:text-black overflow-x-hidden"
@@ -90,7 +94,7 @@
                 Booking Reference: <span class="font-semibold text-[#363636]">ENT-2026-001234</span>
               </p>
             </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
+            <div class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 mb-6">
               <h2
                 class="font-['Poppins:Bold',sans-serif] text-[18px] text-[#363636] mb-4"
               >
@@ -233,7 +237,7 @@
                 </div>
               </div>
             </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+            <div class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6">
               <div class="flex items-center gap-3 mb-6">
                 <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
                   <svg
@@ -257,7 +261,7 @@
                 </h2>
               </div>
               <div
-                class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-start gap-3"
+                class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-start gap-3"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -292,7 +296,7 @@
                 </div>
               </div>
               <div class="mb-6">
-                <div class="bg-gray-50 rounded-xl p-4 mb-4">
+                <div class="bg-gray-50 rounded-lg border border-[#dbdcd9] p-4 mb-4">
                   <div class="flex justify-between items-center mb-2">
                     <span
                       class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif]"
@@ -320,9 +324,9 @@
                     >Reason for Cancellation <span class="text-red-500">*</span>
                   </label>
                   <textarea
-                    placeholder="Please provide a reason for your refund request..."
+                    placeholder="Tell us why you are cancelling — a short note helps us process your refund faster."
                     rows="4"
-                    class="w-full px-4 py-3 border border-gray-200 rounded-xl font-['Poppins:Regular',sans-serif] text-[15px] focus:outline-none focus:border-[#CCFF00] focus:ring-2 focus:ring-[#CCFF00]/20 resize-none"
+                    class="w-full px-4 py-3 border border-[#dbdcd9] rounded-lg font-['Poppins:Regular',sans-serif] text-[15px] focus:outline-none focus:border-[#CCFF00] focus:ring-2 focus:ring-[#CCFF00]/20 resize-none transition-all"
                   ></textarea>
                 </div>
               </div>
