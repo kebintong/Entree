@@ -950,61 +950,108 @@
   }
 
   // ==========================================================================
-  // Phones / tablets (anything that isn't the desktop view): the home page shows
-  // a compact trip bar; tapping it opens the booking card as a bottom sheet.
+  // Phones / tablets (anything that isn't the desktop view): the booking card is
+  // a bottom sheet. Collapsed ("peek") it shows trip type, From and To; "More",
+  // a tap on the header, a swipe up, or focusing a field expands the whole form.
   // Keep MOBILE_QUERY in sync with the media query in index.css.
   // ==========================================================================
   const MOBILE_QUERY = "(max-width: 1024px), (hover: none) and (pointer: coarse)";
   const tripSheet = (() => {
     const card = $(".hero-glass-card");
-    const pill = $("#m-trip-pill");
+    const head = $(".m-sheet-head");
+    const toggle = $(".m-sheet-toggle");
     const backdrop = $(".m-sheet-backdrop");
-    if (page !== "index" || !card || !pill || !backdrop) return null;
+    if (page !== "index" || !card || !head || !toggle || !backdrop) return null;
     const mq = window.matchMedia ? window.matchMedia(MOBILE_QUERY) : { matches: false };
     const isMobile = () => Boolean(mq.matches);
+    const root = document.documentElement;
     let open = false;
     let returnFocus = null;
     const shortDate = (value) =>
       value ? new Date(value + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) : "";
+    // One-line summary under the sheet title (dates + passengers).
     function summarize() {
-      const from = $("#origin")?.value.trim() || "From";
-      const to = $("#destination")?.value.trim() || "To";
       const oneWay = $('select[aria-label="Travel Type"]')?.value === "One Way";
       const cards = $$(".dates-input-group [data-date]");
       const dep = cards[0]?.dataset.date;
       const ret = cards[1]?.dataset.date;
       const pax = Number($('[data-counter-type="passengers"] .pax-count')?.textContent || 0);
       const dates = dep ? (oneWay || !ret ? shortDate(dep) : `${shortDate(dep)} – ${shortDate(ret)}`) : "Choose dates";
-      $(".m-trip-pill-route", pill).textContent = `${from} → ${to}`;
-      $(".m-trip-pill-meta", pill).textContent = `${dates} · ${pax ? `${pax} passenger${pax === 1 ? "" : "s"}` : "Add passengers"}`;
+      const sub = $(".m-sheet-sub", card);
+      if (sub) sub.textContent = `${dates} · ${pax ? `${pax} passenger${pax === 1 ? "" : "s"}` : "Add passengers"}`;
     }
-    function setOpen(next, restoreFocus = true) {
+    // Collapsed height = header + trip type + From + To (just From on very short screens).
+    function measurePeek() {
+      if (!isMobile()) return;
+      const to = $(window.innerHeight < 640 ? "#origin" : "#destination")?.closest(".hero-sub-glass");
+      if (!to) return;
+      const wasOpen = card.classList.contains("is-sheet-open");
+      if (wasOpen) card.classList.remove("is-sheet-open");
+      const prevTransition = card.style.transition;
+      card.style.transition = "none";
+      card.style.maxHeight = "none";
+      const scroll = card.scrollTop;
+      card.scrollTop = 0;
+      const height = Math.ceil(to.getBoundingClientRect().bottom - card.getBoundingClientRect().top + 22);
+      card.style.maxHeight = "";
+      card.scrollTop = scroll;
+      if (wasOpen) card.classList.add("is-sheet-open");
+      void card.offsetHeight;
+      card.style.transition = prevTransition;
+      // Never let the collapsed sheet take more than ~55% of the screen.
+      const cap = Math.round(window.innerHeight * 0.55);
+      root.style.setProperty("--m-peek-h", `${Math.max(180, Math.min(height, cap))}px`);
+    }
+    function setOpen(next, { restoreFocus = true, focusSheet = true } = {}) {
       if (next === open) return;
       open = next;
       card.classList.toggle("is-sheet-open", open);
       backdrop.hidden = !open;
       backdrop.classList.toggle("is-open", open);
       document.body.classList.toggle("m-sheet-lock", open);
-      pill.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Collapse trip planner" : "Show all trip options");
+      $(".m-sheet-toggle-label", toggle).textContent = open ? "Less" : "More";
       if (open) {
         card.setAttribute("role", "dialog");
         card.setAttribute("aria-modal", "true");
         card.setAttribute("aria-labelledby", "booking-sheet-title");
         returnFocus = document.activeElement;
-        card.scrollTop = 0;
-        $(".m-sheet-close", card)?.focus({ preventScroll: true });
+        if (focusSheet) toggle.focus({ preventScroll: true });
       } else {
         card.removeAttribute("role");
         card.removeAttribute("aria-modal");
         card.removeAttribute("aria-labelledby");
+        card.scrollTop = 0;
         summarize();
-        if (restoreFocus) (returnFocus?.isConnected && returnFocus !== document.body ? returnFocus : pill).focus({ preventScroll: true });
+        if (restoreFocus && card.contains(document.activeElement)) document.activeElement.blur();
+        if (restoreFocus && returnFocus?.isConnected && !card.contains(returnFocus) && returnFocus !== document.body) returnFocus.focus({ preventScroll: true });
       }
       document.dispatchEvent(new CustomEvent("entree:trip-sheet", { detail: { open } }));
     }
-    pill.addEventListener("click", () => setOpen(true));
+    toggle.addEventListener("click", (event) => {
+      event.stopPropagation();
+      setOpen(!open);
+    });
+    // Tapping the header (not a control inside it) expands the collapsed sheet.
+    head.addEventListener("click", () => {
+      if (!open && isMobile()) setOpen(true);
+    });
+    // Swipe up on the header to expand, down to collapse.
+    let startY = null;
+    head.addEventListener("touchstart", (e) => { startY = e.touches[0].clientY; }, { passive: true });
+    head.addEventListener("touchend", (e) => {
+      if (startY === null) return;
+      const dy = e.changedTouches[0].clientY - startY;
+      startY = null;
+      if (dy < -30 && !open) setOpen(true);
+      else if (dy > 30 && open) setOpen(false);
+    }, { passive: true });
+    // Typing into a field (e.g. From/To while collapsed) expands the sheet so the keyboard has room.
+    card.addEventListener("focusin", (event) => {
+      if (!open && isMobile() && event.target.matches("input, select, textarea")) setOpen(true, { focusSheet: false });
+    });
     backdrop.addEventListener("click", () => setOpen(false));
-    $(".m-sheet-close", card)?.addEventListener("click", () => setOpen(false));
     document.addEventListener("keydown", (event) => {
       // The date picker and dropdowns handle Escape first (they call preventDefault).
       if (event.key === "Escape" && open && !event.defaultPrevented && !$("dialog[open]")) setOpen(false);
@@ -1013,25 +1060,21 @@
     card.addEventListener("change", summarize);
     card.addEventListener("click", () => requestAnimationFrame(summarize));
     const onViewportChange = () => {
-      if (!isMobile()) setOpen(false, false);
+      if (!isMobile()) setOpen(false, { restoreFocus: false });
+      measurePeek();
     };
     if (mq.addEventListener) mq.addEventListener("change", onViewportChange);
     else mq.addListener?.(onViewportChange);
-    // Keep the trip bar above anything covering the bottom of the layout viewport
-    // (on-screen keyboard, overlaid browser toolbars).
-    const vv = window.visualViewport;
-    if (vv) {
-      const syncInset = () => {
-        const covered = Math.max(0, window.innerHeight - (vv.height + vv.offsetTop));
-        document.documentElement.style.setProperty("--m-vv-inset", `${Math.round(covered)}px`);
-      };
-      vv.addEventListener("resize", syncInset);
-      vv.addEventListener("scroll", syncInset);
-      syncInset();
-    }
+    window.addEventListener("resize", () => requestAnimationFrame(measurePeek));
+    window.addEventListener("load", measurePeek);
+    document.fonts?.ready?.then(measurePeek);
     // The saved search is restored by booking-flow.js, which runs after this file.
-    document.addEventListener("DOMContentLoaded", summarize);
+    document.addEventListener("DOMContentLoaded", () => {
+      summarize();
+      measurePeek();
+    });
     summarize();
+    measurePeek();
     return { isMobile, isOpen: () => open, open: () => setOpen(true), close: () => setOpen(false) };
   })();
 
@@ -2559,9 +2602,9 @@
       const filled = (el) => !!(el && typeof el.value === "string" && el.value.trim());
       const GUIDES = {
         index: [
-          // Phones/tablets only: the planner lives in a bottom sheet behind the trip bar.
+          // Phones/tablets only: the planner is a bottom sheet that must be expanded first.
           // "gate" steps block the tour until the user does the thing themselves.
-          { find: bySel("#m-trip-pill"), gate: true, done: () => Boolean(tripSheet?.isOpen()), say: "Tap this trip bar to open the trip planner. Everything's inside!" },
+          { find: bySel(".m-sheet-toggle"), gate: true, done: () => Boolean(tripSheet?.isOpen()), say: "Tap More to open the full trip planner. Dates, passengers and more are inside!" },
           { find: bySel("#origin"), inSheet: true, done: filled, say: "Start here! Where are you sailing from?" },
           { find: bySel("#destination"), inSheet: true, done: filled, say: "Now pick where you're going. Somewhere with good mangoes, ideally." },
           { find: bySel('[aria-label="Departure date"]'), inSheet: true, say: "Tap here to pick your travel date. Weekends go fast!" },
@@ -2698,6 +2741,7 @@
         const step = guide.steps[guide.i];
         // A gate the user already passed (e.g. the planner is open) is skipped.
         if (step.gate && step.done?.()) return nextStep();
+        if (step.inSheet && tripSheet?.isMobile() && !tripSheet.isOpen()) return needGate();
         const visible = (node) => node && node.isConnected && node.getClientRects().length;
         const el = (visible(step.el) && step.el) || step.find();
         if (!el) {
@@ -2755,10 +2799,10 @@
       }
       // The user pressed "Next" without doing the gated action: Doode won't move on.
       const GATE_NUDGES = [
-        "Nope! Tap the trip bar first. I can't show you the planner while it's closed.",
-        "Hold on, sailor! Open the trip bar, then we keep going.",
-        "I'll wait... the trip bar won't tap itself. Go on!",
-        "Can't skip this one! Tap the white trip bar to open the planner.",
+        "Nope! Tap More first. I can't show you the planner while it's folded up.",
+        "Hold on, sailor! Open the planner with the green More button, then we keep going.",
+        "I'll wait... the More button won't tap itself. Go on!",
+        "Can't skip this one! Tap More to open the planner.",
       ];
       function tryPassGate() {
         if (!guide) return;
@@ -2779,15 +2823,28 @@
         const gateIndex = guide.steps.findIndex((s) => s.gate);
         if (gateIndex < 0) return nextStep();
         guide.i = gateIndex;
-        guide.override = message || "The planner is closed! Tap the trip bar to open it so we can keep going.";
+        guide.override = message || "The planner is folded up! Tap More to open it so we can keep going.";
         showStep();
       }
       document.addEventListener("entree:trip-sheet", (event) => {
-        if (!guide || event.detail?.open) return;
+        if (!guide) return;
         const step = guide.steps[guide.i];
+        if (event.detail?.open) {
+          // Opened some other way than the pointed-at button (header tap, swipe, field focus): gate passed.
+          if (step?.gate && guide.el) {
+            unwatchTarget();
+            guide.el = null;
+            spotlight(null);
+            clearFlow();
+            setState("talking");
+            setSprite("happy");
+            say(pick(PRAISE), [], () => later(nextStep, 600));
+          }
+          return;
+        }
         if (step?.inSheet && tripSheet?.isMobile()) {
           setSprite("questioning");
-          needGate(pick(["Whoa, you closed the planner! Tap the trip bar again so we can keep going.", "Hey, we weren't done! Open the trip bar again."]));
+          needGate(pick(["Whoa, you folded the planner! Tap More again so we can keep going.", "Hey, we weren't done! Tap More to open the planner again."]));
         }
       });
       function nextStep() {

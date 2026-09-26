@@ -76,17 +76,22 @@
           </div>
 
           <!-- Modern Professional Booking Card (Right Column).
-               On phones/tablets it becomes a bottom sheet opened from the trip bar below. -->
+               On phones/tablets it is a bottom sheet: collapsed it shows trip type, From and To;
+               expanded it shows the whole form. -->
           <div class="hero-glass-card" id="booking-sheet">
             <!-- Bottom-sheet header (phones and tablets only) -->
             <div class="m-sheet-head">
               <span class="m-sheet-grabber" aria-hidden="true"></span>
-              <h2 class="m-sheet-title" id="booking-sheet-title">Plan your trip</h2>
-              <button type="button" class="m-sheet-close" aria-label="Close trip planner">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              <div class="m-sheet-heading">
+                <h2 class="m-sheet-title" id="booking-sheet-title">Plan your trip</h2>
+                <p class="m-sheet-sub">Choose dates · Add passengers</p>
+              </div>
+              <button type="button" class="m-sheet-toggle" aria-controls="booking-sheet" aria-expanded="false"
+                aria-label="Show all trip options">
+                <span class="m-sheet-toggle-label">More</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
+                  <path d="m18 15-6-6-6 6" />
                 </svg>
               </button>
             </div>
@@ -389,15 +394,6 @@
             </div>
           </div>
         </div>
-        <!-- Compact trip bar (phones and tablets only): tap to open the booking sheet -->
-        <button type="button" class="m-trip-pill" id="m-trip-pill" aria-controls="booking-sheet" aria-expanded="false"
-          aria-haspopup="dialog">
-          <span class="m-trip-pill-text">
-            <span class="m-trip-pill-route">Cebu → Tagbilaran, Bohol</span>
-            <span class="m-trip-pill-meta">Choose dates · Add passengers</span>
-          </span>
-          <span class="m-trip-pill-cta">Search</span>
-        </button>
         <div class="m-sheet-backdrop" hidden></div>
   </div>
   </section>

@@ -365,24 +365,14 @@
 
 /* ==========================================================================
    Phones, tablets and iPads (anything that isn't the desktop view):
-   full-screen hero + a compact trip bar. Tapping the bar opens the booking
-   card as a bottom sheet. Keep this media query in sync with MOBILE_QUERY
-   in app.js.
+   full-screen hero + the booking card as a bottom sheet. Collapsed ("peek") it
+   shows the trip type, From and To; tapping "More" (or a field) expands it to
+   the whole form. The peek height is measured by app.js (--m-peek-h).
+   Keep this media query in sync with MOBILE_QUERY in app.js.
    ========================================================================== */
-.m-trip-pill,
 .m-sheet-head,
 .m-sheet-backdrop {
   display: none;
-}
-
-@keyframes m-sheet-up {
-  from {
-    transform: translateY(100%);
-  }
-
-  to {
-    transform: translateY(0);
-  }
 }
 
 @keyframes m-fade-in {
@@ -395,7 +385,31 @@
   }
 }
 
+@keyframes m-sheet-in {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 @media (max-width: 1024px), (hover: none) and (pointer: coarse) {
+  :root {
+    --m-peek-h: 300px;
+  }
+
+  /* No white strip when mobile browsers collapse their toolbars or bounce:
+     the page behind the hero is ocean-coloured and the hero fills the large viewport. */
+  html:has(body[data-page="index"]),
+  body[data-page="index"],
+  body[data-page="index"] > div.min-h-screen {
+    background-color: #0b6f6a;
+  }
+
   .entree-hero-header {
     height: 64px;
     padding: 0 16px;
@@ -403,23 +417,16 @@
 
   .entree-hero-section {
     min-height: 100vh;
-    min-height: 100svh;
+    min-height: 100lvh;
     align-items: flex-start;
-    padding: 84px 20px calc(var(--m-pill-bottom) + 110px);
-  }
-
-  /* Distance of the trip bar from the bottom of the visible screen: 16px plus the
-     iPhone home-indicator safe area. --m-vv-inset (set by app.js from visualViewport)
-     lifts it further when a browser toolbar or the keyboard covers the page. */
-  :root {
-    --m-pill-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+    padding: 84px 20px calc(var(--m-peek-h) + 24px);
   }
 
   .entree-hero-container {
     flex-direction: column;
     max-width: 640px;
     gap: 0;
-    /* No stacking context here, so the open sheet can sit above the header and backdrop */
+    /* No stacking context, so the sheet can sit above the header and backdrop */
     z-index: auto;
   }
 
@@ -445,7 +452,7 @@
     font-size: clamp(2.1rem, 9vw, 3rem);
   }
 
-  .entree-hero-title {
+  body[data-page="index"] .entree-hero-title {
     font-size: clamp(2.2rem, 9.5vw, 3.6rem);
     line-height: 1.12;
   }
@@ -457,30 +464,46 @@
     line-height: 1.55;
   }
 
-  /* Booking card is hidden until the trip bar is tapped */
+  /* ---- The sheet: always docked to the bottom of the visible screen ---- */
   .hero-glass-card {
-    display: none;
-  }
-
-  .hero-glass-card.is-sheet-open {
-    display: block;
     position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: 900;
+    flex: none;
     width: 100%;
     max-width: 640px;
-    max-height: 92vh;
-    max-height: 92svh;
+    max-height: var(--m-peek-h);
     margin: 0 auto;
     padding: 0 18px calc(22px + env(safe-area-inset-bottom, 0px));
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    overflow: hidden;
     border: 0;
     border-radius: 24px 24px 0 0;
-    box-shadow: 0 -18px 48px -12px rgba(5, 24, 33, 0.4);
-    animation: m-sheet-up 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    background: #ffffff;
+    box-shadow: 0 -12px 40px -10px rgba(5, 24, 33, 0.45);
+    transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: m-sheet-in 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Collapsed: fade the cut-off edge so it reads as "there's more below" */
+  .hero-glass-card:not(.is-sheet-open)::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 40px;
+    background: linear-gradient(rgba(255, 255, 255, 0), #ffffff 80%);
+    pointer-events: none;
+  }
+
+  .hero-glass-card.is-sheet-open {
+    max-height: 92vh;
+    max-height: 92svh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    box-shadow: 0 -18px 48px -12px rgba(5, 24, 33, 0.5);
   }
 
   .m-sheet-head {
@@ -491,10 +514,12 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    margin: 0 -18px 14px;
-    padding: 20px 18px 12px;
+    margin: 0 -18px 12px;
+    padding: 18px 18px 10px;
     background: #ffffff;
     border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .m-sheet-grabber {
@@ -508,28 +533,77 @@
     background: #d9dee5;
   }
 
-  .m-sheet-title {
+  .m-sheet-heading {
+    min-width: 0;
+  }
+
+  body[data-page="index"] .m-sheet-title {
     margin: 0;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 600;
     color: #0f172a;
   }
 
-  .m-sheet-close {
-    width: 40px;
-    height: 40px;
+  .m-sheet-sub {
+    margin: 2px 0 0;
+    overflow: hidden;
+    font-size: 12px;
+    color: #64748b;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .m-sheet-toggle {
     flex-shrink: 0;
-    display: grid;
-    place-items: center;
-    border: 1px solid #e2e8f0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 40px;
+    padding: 0 14px 0 16px;
+    border: 0;
     border-radius: 999px;
-    background: #ffffff;
-    color: #334155;
+    background: #ccff00;
+    color: #051821;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
   }
 
-  .m-sheet-close:hover {
-    background: #f8fafc;
+  .m-sheet-toggle svg {
+    transition: transform 0.25s ease;
+  }
+
+  .m-sheet-toggle[aria-expanded="true"] {
+    background: #f1f5f9;
+    color: #334155;
+  }
+
+  .m-sheet-toggle[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+  }
+
+  .m-sheet-toggle:focus-visible {
+    outline: 3px solid #007f70;
+    outline-offset: 2px;
+  }
+
+  /* Slightly more compact form so the collapsed sheet stays short */
+  .hero-glass-card .booking-widget-top {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+  }
+
+  .hero-glass-card .travel-type-container {
+    height: 52px;
+  }
+
+  .hero-glass-card .booking-inputs-bar {
+    gap: 12px;
+  }
+
+  .hero-glass-card .hero-sub-glass,
+  .hero-glass-card .custom-dropdown-trigger.hero-sub-glass {
+    height: 58px;
   }
 
   .m-sheet-backdrop.is-open {
@@ -546,87 +620,15 @@
   body.m-sheet-lock {
     overflow: hidden;
   }
-
-  /* The trip bar */
-  .m-trip-pill {
-    display: flex;
-    /* Fixed to the visible screen so scrolling or collapsing toolbars never hide it */
-    position: fixed;
-    left: max(16px, env(safe-area-inset-left, 0px));
-    right: max(16px, env(safe-area-inset-right, 0px));
-    bottom: calc(var(--m-pill-bottom) + var(--m-vv-inset, 0px));
-    z-index: 40;
-    max-width: 600px;
-    margin: 0 auto;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 10px 10px 18px;
-    border: 0;
-    border-radius: 18px;
-    background: #ffffff;
-    box-shadow: 0 18px 40px -12px rgba(5, 24, 33, 0.55), 0 2px 8px rgba(5, 24, 33, 0.12);
-    text-align: left;
-    font-family: Poppins, sans-serif;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    animation: m-fade-in 0.4s ease;
-  }
-
-  .m-trip-pill:active {
-    transform: scale(0.99);
-  }
-
-  .m-trip-pill:focus-visible {
-    outline: 3px solid #ccff00;
-    outline-offset: 3px;
-  }
-
-  .m-trip-pill-text {
-    flex: 1;
-    min-width: 0;
-    display: grid;
-    gap: 2px;
-  }
-
-  .m-trip-pill-route,
-  .m-trip-pill-meta {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  .m-trip-pill-route {
-    font-size: 15px;
-    font-weight: 600;
-    color: #0f172a;
-  }
-
-  .m-trip-pill-meta {
-    font-size: 12px;
-    color: #64748b;
-  }
-
-  .m-trip-pill-cta {
-    flex-shrink: 0;
-    padding: 12px 20px;
-    border-radius: 999px;
-    background: #ccff00;
-    color: #051821;
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  .m-trip-pill[aria-expanded="true"] {
-    visibility: hidden;
-  }
 }
 
-/* Short or narrow phones (iPhone SE, small Androids): tighter hero so the trip bar never covers the text */
-@media (max-width: 1024px) and (max-height: 720px),
-  (hover: none) and (pointer: coarse) and (max-height: 720px),
+/* Phones with less visible height (most iPhones in Safari, smaller Androids):
+   tighter hero text so the collapsed sheet never covers it */
+@media (max-width: 1024px) and (max-height: 800px),
+  (hover: none) and (pointer: coarse) and (max-height: 800px),
   (max-width: 360px) {
   .entree-hero-section {
-    padding-top: 74px;
+    padding-top: 70px;
   }
 
   .entree-hero-copy {
@@ -646,7 +648,7 @@
     font-size: 1.9rem;
   }
 
-  .entree-hero-title {
+  body[data-page="index"] .entree-hero-title {
     font-size: clamp(1.8rem, 8.2vw, 2.6rem);
   }
 
@@ -657,9 +659,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-glass-card.is-sheet-open,
-  .m-sheet-backdrop.is-open,
-  .m-trip-pill {
-    animation: none;
+  .hero-glass-card,
+  .m-sheet-backdrop.is-open {
+    animation: none !important;
+    transition: none !important;
   }
 }
