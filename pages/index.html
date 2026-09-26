@@ -75,8 +75,21 @@
             </p>
           </div>
 
-          <!-- Modern Professional Booking Card (Right Column) -->
-          <div class="hero-glass-card">
+          <!-- Modern Professional Booking Card (Right Column).
+               On phones/tablets it becomes a bottom sheet opened from the trip bar below. -->
+          <div class="hero-glass-card" id="booking-sheet">
+            <!-- Bottom-sheet header (phones and tablets only) -->
+            <div class="m-sheet-head">
+              <span class="m-sheet-grabber" aria-hidden="true"></span>
+              <h2 class="m-sheet-title" id="booking-sheet-title">Plan your trip</h2>
+              <button type="button" class="m-sheet-close" aria-label="Close trip planner">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+                </svg>
+              </button>
+            </div>
             <!-- Top Segmented Control -->
             <div class="booking-widget-top">
               <div class="travel-type-container" role="tablist" aria-label="Travel Type">
@@ -376,6 +389,16 @@
             </div>
           </div>
         </div>
+        <!-- Compact trip bar (phones and tablets only): tap to open the booking sheet -->
+        <button type="button" class="m-trip-pill" id="m-trip-pill" aria-controls="booking-sheet" aria-expanded="false"
+          aria-haspopup="dialog">
+          <span class="m-trip-pill-text">
+            <span class="m-trip-pill-route">Cebu → Tagbilaran, Bohol</span>
+            <span class="m-trip-pill-meta">Choose dates · Add passengers</span>
+          </span>
+          <span class="m-trip-pill-cta">Search</span>
+        </button>
+        <div class="m-sheet-backdrop" hidden></div>
   </div>
   </section>
   </main>

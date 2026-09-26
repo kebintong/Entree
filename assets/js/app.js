@@ -38,6 +38,42 @@
   }
   document.addEventListener("entree:booking-saved", markSaved);
 
+  // Open/close <dialog> safely. Some browsers (older iOS Safari, some device
+  // simulators) lack or block showModal(), so fall back to a fixed overlay.
+  function openModal(el) {
+    try {
+      if (typeof el.showModal === "function") {
+        el.showModal();
+        if (el.open) return;
+      }
+    } catch (error) {
+      console.warn("showModal unavailable, using fallback modal:", error);
+    }
+    el.setAttribute("open", "");
+    el.classList.add("dialog-fallback");
+    const backdrop = document.createElement("div");
+    backdrop.className = "dialog-fallback-backdrop";
+    el.before(backdrop);
+    el._fallbackBackdrop = backdrop;
+    const onKey = (event) => {
+      if (event.key === "Escape" && el.isConnected) el.dispatchEvent(new Event("cancel", { cancelable: true }));
+    };
+    document.addEventListener("keydown", onKey);
+    el._fallbackKey = onKey;
+    el.setAttribute("tabindex", "-1");
+    el.focus?.();
+  }
+  function closeModal(el) {
+    if (!el) return;
+    try {
+      if (typeof el.close === "function" && el.open) el.close();
+    } catch {
+      /* fall through */
+    }
+    el.removeAttribute("open");
+    el._fallbackBackdrop?.remove();
+    if (el._fallbackKey) document.removeEventListener("keydown", el._fallbackKey);
+  }
   function attachModalAttention(el) {
     let currentShakeAnim = null;
     let outsideClickCount = 0;
@@ -126,7 +162,9 @@
   }
 
   function confirmUnsavedChanges(onConfirm) {
-    $("dialog.unsaved-dialog")?.remove();
+    const previousUnsaved = $("dialog.unsaved-dialog");
+    closeModal(previousUnsaved);
+    previousUnsaved?.remove();
     const el = document.createElement("dialog");
     el.className = "unsaved-dialog unsaved-dialog-enter";
     el.innerHTML = `
@@ -144,7 +182,7 @@
     attachModalAttention(el);
 
     const close = () => {
-      el.close();
+      closeModal(el);
       el.remove();
     };
     $(".btn-stay", el).onclick = () => {
@@ -162,7 +200,7 @@
       e.preventDefault();
       close();
     });
-    el.showModal();
+    openModal(el);
     return el;
   }
 
@@ -191,7 +229,9 @@
     setTimeout(() => node.remove(), 5000);
   }
   function dialog(title, content) {
-    $("dialog")?.remove();
+    const previous = $("dialog");
+    closeModal(previous);
+    previous?.remove();
     const el = document.createElement("dialog");
     el.className = "dialog-enter";
     el.innerHTML = `<button class="dialog-close" aria-label="Close dialog">×</button><h2>${escape(title)}</h2>${content}`;
@@ -201,7 +241,7 @@
 
     const close = () => {
       store.remove("active_product_id");
-      el.close();
+      closeModal(el);
       el.remove();
     };
 
@@ -214,7 +254,7 @@
       close();
     });
 
-    el.showModal();
+    openModal(el);
     return el;
   }
   function enable(el) {
@@ -503,13 +543,24 @@
         });
         navigateTo("index");
       } else if (page === "verify-booking") {
-        const fields = $$("input", form);
-        const reference = fields[0].value.trim().toUpperCase();
-        const surname = fields[1].value.trim();
+        const chosen = $('input[name="vb-booking"]:checked', form);
+        if (!chosen) {
+          formError(form, "Choose the booking you want to shop for.");
+          $('input[name="vb-booking"]:not(:disabled)', form)?.focus();
+          return;
+        }
+        const reference = chosen.value.trim().toUpperCase();
+        const surnameInput = $("#surname", form);
+        const surname = surnameInput.value.trim();
+        const surnameMatches = (name) => {
+          const full = String(name || "").trim().toLowerCase(), last = surname.toLowerCase();
+          return Boolean(last) && (full === last || full.endsWith(" " + last));
+        };
         const match = data.MOCK_BOOKINGS.find(b => b.reference.toUpperCase() === reference &&
-          b.passengerDetails.some(person => person.name.trim().toLowerCase().endsWith(" " + surname.toLowerCase())));
+          b.passengerDetails.some(person => surnameMatches(person.name)));
         if (!match) {
-          formError(form, "No booking matches that reference and passenger surname on this device.");
+          formError(form, surname ? "That surname doesn't match any passenger on the selected booking." : "Enter the surname of a passenger on this booking.");
+          surnameInput.focus();
           return;
         }
         markSaved();
@@ -771,8 +822,19 @@
       if (restoreFocus) trigger.focus();
     }
 
+    // Earliest selectable day: today for departure, the departure day for return.
+    function minDate(card = activeDateCard) {
+      const todayValue = localDateValue(new Date());
+      const departure = targetCards[0]?.dataset.date;
+      return card !== targetCards[0] && departure > todayValue ? departure : todayValue;
+    }
+
     function selectDate(value) {
-      setCardDate(activeDateCard, value);
+      if (value < minDate()) return;
+      const card = activeDateCard;
+      setCardDate(card, value);
+      // Keep the return date on or after a newly chosen departure date.
+      if (card === targetCards[0] && targetCards[1] && targetCards[1].dataset.date < value) setCardDate(targetCards[1], value);
       hasManualDateChange = true;
       closeDatePicker(true);
     }
@@ -784,14 +846,19 @@
       const daysInMonth = new Date(year, month + 1, 0, 12).getDate();
       const monthLabel = visibleMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" });
       const selected = activeDateCard.dataset.date;
-      const focusDay = focusValue || (selected.startsWith(localDateValue(visibleMonth).slice(0, 7)) ? selected : localDateValue(new Date(year, month, 1, 12)));
+      const min = minDate();
+      const monthStart = localDateValue(new Date(year, month, 1, 12));
+      let focusDay = focusValue || (selected.startsWith(monthStart.slice(0, 7)) ? selected : monthStart);
+      if (focusDay < min) focusDay = min.slice(0, 7) === monthStart.slice(0, 7) ? min : monthStart;
+      const atEarliestMonth = monthStart.slice(0, 7) <= min.slice(0, 7);
       const days = Array.from({ length: daysInMonth }, (_, i) => {
         const date = new Date(year, month, i + 1, 12);
         const value = localDateValue(date);
         const label = date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
-        return `<button type="button" class="calendar-day${value === selected ? " is-selected" : ""}" data-calendar-date="${value}" aria-label="${label}" aria-pressed="${value === selected}"${value === localDateValue(new Date()) ? ' aria-current="date"' : ''} tabindex="${value === focusDay ? 0 : -1}">${i + 1}</button>`;
+        const past = value < min;
+        return `<button type="button" class="calendar-day${value === selected ? " is-selected" : ""}" data-calendar-date="${value}" aria-label="${label}" aria-pressed="${value === selected}"${value === localDateValue(new Date()) ? ' aria-current="date"' : ''}${past ? " disabled" : ""} tabindex="${value === focusDay && !past ? 0 : -1}">${i + 1}</button>`;
       }).join("");
-      calendar.innerHTML = `<div class="calendar-heading"><button type="button" class="calendar-nav" data-month-step="-1" aria-label="Previous month">&#8249;</button><span aria-live="polite">${monthLabel}</span><button type="button" class="calendar-nav" data-month-step="1" aria-label="Next month">&#8250;</button></div><div class="calendar-weekdays" aria-hidden="true">${["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map(day => `<span>${day}</span>`).join("")}</div><div class="calendar-days">${'<span aria-hidden="true"></span>'.repeat(firstDay)}${days}</div><div class="calendar-footer"><button type="button" class="calendar-today">Today</button><button type="button" class="calendar-close">Close</button></div>`;
+      calendar.innerHTML = `<div class="calendar-heading"><button type="button" class="calendar-nav" data-month-step="-1" aria-label="Previous month"${atEarliestMonth ? " disabled" : ""}>&#8249;</button><span aria-live="polite">${monthLabel}</span><button type="button" class="calendar-nav" data-month-step="1" aria-label="Next month">&#8250;</button></div><div class="calendar-weekdays" aria-hidden="true">${["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map(day => `<span>${day}</span>`).join("")}</div><div class="calendar-days">${'<span aria-hidden="true"></span>'.repeat(firstDay)}${days}</div><div class="calendar-footer"><button type="button" class="calendar-today">Today</button><button type="button" class="calendar-close">Close</button></div>`;
     }
 
     calendar.onclick = (event) => {
@@ -802,8 +869,9 @@
         const step = Number(nav.dataset.monthStep);
         visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + step, 1, 12);
         renderCalendar();
-        calendar.querySelector(`[data-month-step="${step}"]`).focus();
-      } else if (event.target.closest(".calendar-today")) selectDate(localDateValue(new Date()));
+        const navButton = calendar.querySelector(`[data-month-step="${step}"]`);
+        (navButton.disabled ? calendar.querySelector('[data-month-step="1"]') : navButton).focus();
+      } else if (event.target.closest(".calendar-today")) selectDate(minDate());
       else if (event.target.closest(".calendar-close")) closeDatePicker(true);
     };
 
@@ -815,6 +883,7 @@
       event.preventDefault();
       const date = new Date(day.dataset.calendarDate + "T12:00:00");
       date.setDate(date.getDate() + offsets[event.key]);
+      if (localDateValue(date) < minDate()) return;
       const value = localDateValue(date);
       visibleMonth = new Date(date.getFullYear(), date.getMonth(), 1, 12);
       renderCalendar(value);
@@ -822,7 +891,9 @@
     };
 
     document.addEventListener("click", (event) => {
-      if (activeDateCard && !calendar.contains(event.target) && !activeDateCard.contains(event.target)) closeDatePicker();
+      // Use the click's original path: re-rendering the month removes the clicked arrow from the DOM.
+      const path = event.composedPath();
+      if (activeDateCard && !path.includes(calendar) && !path.includes(activeDateCard)) closeDatePicker();
     });
     document.addEventListener("focusin", (event) => {
       if (activeDateCard && !calendar.contains(event.target) && !activeDateCard.contains(event.target)) closeDatePicker();
@@ -867,7 +938,7 @@
         calendar.hidden = false;
         card.classList.add("is-open");
         card.setAttribute("aria-expanded", "true");
-        calendar.querySelector('[tabindex="0"]').focus();
+        (calendar.querySelector('[tabindex="0"]') || calendar.querySelector(".calendar-day:not(:disabled)"))?.focus();
       };
       card.onkeydown = (e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -877,6 +948,92 @@
       };
     });
   }
+
+  // ==========================================================================
+  // Phones / tablets (anything that isn't the desktop view): the home page shows
+  // a compact trip bar; tapping it opens the booking card as a bottom sheet.
+  // Keep MOBILE_QUERY in sync with the media query in index.css.
+  // ==========================================================================
+  const MOBILE_QUERY = "(max-width: 1024px), (hover: none) and (pointer: coarse)";
+  const tripSheet = (() => {
+    const card = $(".hero-glass-card");
+    const pill = $("#m-trip-pill");
+    const backdrop = $(".m-sheet-backdrop");
+    if (page !== "index" || !card || !pill || !backdrop) return null;
+    const mq = window.matchMedia ? window.matchMedia(MOBILE_QUERY) : { matches: false };
+    const isMobile = () => Boolean(mq.matches);
+    let open = false;
+    let returnFocus = null;
+    const shortDate = (value) =>
+      value ? new Date(value + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) : "";
+    function summarize() {
+      const from = $("#origin")?.value.trim() || "From";
+      const to = $("#destination")?.value.trim() || "To";
+      const oneWay = $('select[aria-label="Travel Type"]')?.value === "One Way";
+      const cards = $$(".dates-input-group [data-date]");
+      const dep = cards[0]?.dataset.date;
+      const ret = cards[1]?.dataset.date;
+      const pax = Number($('[data-counter-type="passengers"] .pax-count')?.textContent || 0);
+      const dates = dep ? (oneWay || !ret ? shortDate(dep) : `${shortDate(dep)} – ${shortDate(ret)}`) : "Choose dates";
+      $(".m-trip-pill-route", pill).textContent = `${from} → ${to}`;
+      $(".m-trip-pill-meta", pill).textContent = `${dates} · ${pax ? `${pax} passenger${pax === 1 ? "" : "s"}` : "Add passengers"}`;
+    }
+    function setOpen(next, restoreFocus = true) {
+      if (next === open) return;
+      open = next;
+      card.classList.toggle("is-sheet-open", open);
+      backdrop.hidden = !open;
+      backdrop.classList.toggle("is-open", open);
+      document.body.classList.toggle("m-sheet-lock", open);
+      pill.setAttribute("aria-expanded", String(open));
+      if (open) {
+        card.setAttribute("role", "dialog");
+        card.setAttribute("aria-modal", "true");
+        card.setAttribute("aria-labelledby", "booking-sheet-title");
+        returnFocus = document.activeElement;
+        card.scrollTop = 0;
+        $(".m-sheet-close", card)?.focus({ preventScroll: true });
+      } else {
+        card.removeAttribute("role");
+        card.removeAttribute("aria-modal");
+        card.removeAttribute("aria-labelledby");
+        summarize();
+        if (restoreFocus) (returnFocus?.isConnected && returnFocus !== document.body ? returnFocus : pill).focus({ preventScroll: true });
+      }
+      document.dispatchEvent(new CustomEvent("entree:trip-sheet", { detail: { open } }));
+    }
+    pill.addEventListener("click", () => setOpen(true));
+    backdrop.addEventListener("click", () => setOpen(false));
+    $(".m-sheet-close", card)?.addEventListener("click", () => setOpen(false));
+    document.addEventListener("keydown", (event) => {
+      // The date picker and dropdowns handle Escape first (they call preventDefault).
+      if (event.key === "Escape" && open && !event.defaultPrevented && !$("dialog[open]")) setOpen(false);
+    });
+    card.addEventListener("input", summarize);
+    card.addEventListener("change", summarize);
+    card.addEventListener("click", () => requestAnimationFrame(summarize));
+    const onViewportChange = () => {
+      if (!isMobile()) setOpen(false, false);
+    };
+    if (mq.addEventListener) mq.addEventListener("change", onViewportChange);
+    else mq.addListener?.(onViewportChange);
+    // Keep the trip bar above anything covering the bottom of the layout viewport
+    // (on-screen keyboard, overlaid browser toolbars).
+    const vv = window.visualViewport;
+    if (vv) {
+      const syncInset = () => {
+        const covered = Math.max(0, window.innerHeight - (vv.height + vv.offsetTop));
+        document.documentElement.style.setProperty("--m-vv-inset", `${Math.round(covered)}px`);
+      };
+      vv.addEventListener("resize", syncInset);
+      vv.addEventListener("scroll", syncInset);
+      syncInset();
+    }
+    // The saved search is restored by booking-flow.js, which runs after this file.
+    document.addEventListener("DOMContentLoaded", summarize);
+    summarize();
+    return { isMobile, isOpen: () => open, open: () => setOpen(true), close: () => setOpen(false) };
+  })();
 
   // Figma-exported booking screens contain text-shaped controls.
   if (page === "trips") {
@@ -900,10 +1057,131 @@
   function showBooking(id, share = false) {
     const b = data.MOCK_BOOKINGS.find((item) => item.id === id);
     if (!b) return;
+    const peso = (value) => `₱${Number(value || 0).toLocaleString("en-PH", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+    const longDate = (value) =>
+      value ? new Date(value + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" }) : "";
+    // Accept "13:00" or "09:00 AM" and always show "1:00 PM" style times.
+    const clock = (value) => {
+      const match = /^(\d{1,2}):(\d{2})(?:\s*(AM|PM))?$/i.exec(String(value || "").trim());
+      if (!match) return value || "";
+      let hour = Number(match[1]);
+      const suffix = match[3] ? match[3].toUpperCase() : hour >= 12 ? "PM" : "AM";
+      if (!match[3]) hour = hour % 12 || 12;
+      return `${hour}:${match[2]} ${suffix}`;
+    };
+    const today = new Date();
+    const todayValue = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    const status = b.refund
+      ? ["refunded", "Refunded"]
+      : b.status === "completed" || (b.returnDate || b.departureDate) < todayValue
+        ? ["completed", "Completed"]
+        : b.departureDate <= todayValue
+          ? ["today", "Today"]
+          : ["upcoming", "Upcoming"];
+    const company = data.SHIPPING_COMPANIES?.find((c) => c.name === b.ferry);
+    const logo = company?.logo
+      ? `<img src="../assets/images/${company.logo}" alt="" />`
+      : `<span aria-hidden="true">${escape((b.ferry || "?").slice(0, 2).toUpperCase())}</span>`;
+    const leg = (label, date, from, to, depart, arrive, nextDay, ferry) => `
+      <div class="bm-leg">
+        <div class="bm-leg-head"><span class="bm-leg-label">${label}</span><span class="bm-leg-date">${escape(longDate(date))}</span></div>
+        <div class="bm-leg-route">
+          <div><strong>${escape(clock(depart) || "Time TBA")}</strong><span>${escape(from)}</span></div>
+          <div class="bm-leg-line" aria-hidden="true"><span></span>${ferry ? `<em>${escape(ferry)}</em>` : ""}<span></span></div>
+          <div class="bm-leg-end"><strong>${escape(clock(arrive) || "Time TBA")}${nextDay ? "<small>+1</small>" : ""}</strong><span>${escape(to)}</span></div>
+        </div>
+      </div>`;
+    const outbound = b.outboundTrip || {};
+    const inbound = b.returnTrip || {};
+    const legs =
+      leg("Departure", b.departureDate, b.route.origin, b.route.destination, b.departureTime, b.arrivalTime, outbound.arrivalNextDay, b.ferry) +
+      (b.returnDate
+        ? leg("Return", b.returnDate, b.route.destination, b.route.origin, b.returnDepartureTime, b.returnArrivalTime, inbound.arrivalNextDay, b.returnFerry || b.ferry)
+        : "");
+    const people = (b.passengerDetails || [])
+      .map((person) => {
+        const meta = [person.age !== undefined && person.age !== "" ? `${person.age} yrs` : "", person.gender, person.seatNumber && person.seatNumber !== "—" ? `Seat ${person.seatNumber}` : ""]
+          .filter(Boolean)
+          .map(escape)
+          .join(" · ");
+        return `<li><span class="bm-avatar" aria-hidden="true">${escape((person.name || "?").trim().charAt(0).toUpperCase())}</span><div><strong>${escape(person.name || "Passenger")}</strong>${meta ? `<span>${meta}</span>` : ""}</div></li>`;
+      })
+      .join("");
+    const extras = [
+      ...(b.vehicleDetails || []).map((v) => `${escape(v.type || "Vehicle")}${v.plate ? ` · ${escape(v.plate)}` : ""}`),
+      ...(b.petDetails || []).map((pet) => `${escape(pet.name || "Pet")}${pet.type ? ` · ${escape(pet.type)}` : ""}`),
+    ];
+    const lines = [];
+    if (b.fareBreakdown) {
+      lines.push(["Tickets", b.fareBreakdown.tickets]);
+      if (b.fareBreakdown.vehicles) lines.push(["Vehicle fees", b.fareBreakdown.vehicles]);
+      if (b.fareBreakdown.pets) lines.push(["Pet fees", b.fareBreakdown.pets]);
+      if (b.fareBreakdown.fee) lines.push(["Booking fee", b.fareBreakdown.fee]);
+    } else {
+      const addOns = (b.addOns || []).map((item) => [`${item.name}${item.quantity > 1 ? ` × ${item.quantity}` : ""}`, item.price * item.quantity]);
+      const tickets = b.totalPrice - addOns.reduce((sum, [, value]) => sum + value, 0);
+      if (tickets > 0) lines.push([`Tickets (${plural(b.passengers, "passenger")})`, tickets]);
+      lines.push(...addOns);
+    }
+    const payment = b.payment === "gcash" ? "GCash" : b.payment === "bank" ? "Online Banking" : "";
+    const refund = b.refund
+      ? `<div class="bm-refund" role="status"><strong>${escape(b.refund.status)}</strong><span>${peso(b.refund.amount)} (${b.refund.percent}%) requested ${escape(new Date(b.refund.requestedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }))} · paid back in 7–14 business days</span></div>`
+      : "";
+    const canChange = !share && !b.refund && status[0] !== "completed";
+    const actions = share
+      ? `<button class="dialog-action" data-action="copy-trip">Copy details</button><button class="dialog-action bm-secondary" data-action="print">Print</button>`
+      : `${canChange ? `<a class="dialog-action" href="rebook.html?id=${encodeURIComponent(b.id)}">Rebook</a>` : ""}<a class="dialog-action bm-secondary" href="travel-instructions.html?id=${encodeURIComponent(b.id)}">Travel instructions</a><button class="dialog-action bm-secondary" data-action="print">Print</button>${canChange ? `<a class="dialog-action bm-danger" href="refund.html?id=${encodeURIComponent(b.id)}">Refund</a>` : ""}`;
     const d = dialog(
-      share ? "Share Trip" : b.reference,
-      `<p><strong>${escape(b.route.origin)} → ${escape(b.route.destination)}</strong></p><p>${escape(b.tripType || (b.returnDate ? "Round Trip" : "One Way"))} · ${escape(b.ferry)}${b.cabin ? ` · ${escape(b.cabin)}` : ""}</p><p>Departure: ${escape(b.departureDate)} · ${escape(b.departureTime)}</p>${b.returnDate ? `<p>Return: ${escape(b.returnDate)}${b.returnDepartureTime ? ` · ${escape(b.returnDepartureTime)}` : ""}</p>` : ""}<p>${b.passengers} passengers${b.vehicles !== undefined ? ` · ${b.vehicles} vehicles · ${b.pets} pets` : ""} · ₱${b.totalPrice.toFixed(2)}</p><p>${b.passengerDetails.map((p) => escape(p.name)).join("<br>")}</p><p>Saved to this device in preview mode.</p><button class="dialog-action" data-action="print">Print</button>${share ? '<button class="dialog-action" data-action="copy-trip">Copy details</button>' : `<a class="dialog-action" href="rebook.html?id=${b.id}">Rebook</a><a class="dialog-action" href="refund.html?id=${b.id}">Refund</a>`}`,
+      share ? "Share Trip" : "Booking details",
+      `<div class="bm-head">
+        <div class="bm-logo">${logo}</div>
+        <div class="bm-title"><span>Booking reference</span><strong>${escape(b.reference)}</strong><p>${[b.ferry, b.tripType || (b.returnDate ? "Round Trip" : "One Way"), b.cabin].filter(Boolean).map(escape).join(" · ")}</p></div>
+        <span class="bm-status is-${status[0]}">${status[1]}</span>
+      </div>
+      ${refund}
+      <section class="bm-section" aria-label="Journey">${legs}</section>
+      <section class="bm-section"><h3>Travellers <span>${plural(b.passengers, "passenger")}${b.vehicles ? ` · ${plural(b.vehicles, "vehicle")}` : ""}${b.pets ? ` · ${plural(b.pets, "pet")}` : ""}</span></h3>
+        <ul class="bm-people">${people}</ul>
+        ${extras.length ? `<ul class="bm-chips">${extras.map((x) => `<li>${x}</li>`).join("")}</ul>` : ""}
+      </section>
+      <section class="bm-section"><h3>Payment${payment ? ` <span>${payment}</span>` : ""}</h3>
+        <dl class="bm-costs">${lines.map(([label, value]) => `<div><dt>${escape(label)}</dt><dd>${peso(value)}</dd></div>`).join("")}<div class="bm-total"><dt>Total paid</dt><dd>${peso(b.totalPrice)}</dd></div></dl>
+      </section>
+      <div class="bm-actions">${actions}</div>
+      <p class="bm-note">Preview mode — this booking is saved on this device only.</p>`,
     );
+    d.classList.add("booking-modal");
+    d.dataset.booking = id;
+  }
+  function showAddOns(id) {
+    const b = data.MOCK_BOOKINGS.find((item) => item.id === id);
+    if (!b) return;
+    const today = new Date();
+    const todayValue = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    const active = !b.refund && b.status !== "completed" && b.departureDate >= todayValue;
+    const company = data.SHIPPING_COMPANIES?.find((c) => c.name === b.ferry);
+    const logo = company?.logo
+      ? `<img src="../assets/images/${company.logo}" alt="" />`
+      : `<span aria-hidden="true">${escape((b.ferry || "?").slice(0, 2).toUpperCase())}</span>`;
+    const tripDate = new Date(b.departureDate + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+    const gift = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>';
+    const d = dialog(
+      "Buy Add-ons",
+      `<div class="bm-head ao-trip">
+        <div class="bm-logo">${logo}</div>
+        <div class="bm-title"><span>Adding to</span><strong>${escape(b.reference)}</strong><p>${escape(b.route.origin)} → ${escape(b.route.destination)} · ${escape(tripDate)}</p></div>
+      </div>
+      <ul class="ao-list">
+        <li class="ao-option is-featured"><span class="ao-icon">${gift}</span><div class="ao-text"><strong>Pasalubong</strong><span>Local treats and souvenirs, pre-ordered now and delivered to your seat on board.</span></div><div class="ao-side">${
+          active
+            ? `<a class="dialog-action ao-cta" href="verify-booking.html?id=${encodeURIComponent(b.id)}">Shop now</a>`
+            : '<span class="ao-tag is-muted">Not available</span>'
+        }</div></li>
+      </ul>
+      ${active ? "" : '<p class="ao-note">Pasalubong can only be ordered for upcoming trips.</p>'}`,
+    );
+    d.classList.add("addons-modal");
     d.dataset.booking = id;
   }
   function renderCalendar() {
@@ -969,6 +1247,7 @@
       const isToday = year === phtYear && month === phtMonth && day === phtDay;
       const matchedBooking = data.MOCK_BOOKINGS.find(
         (b) =>
+          b.status !== "refunded" &&
           date >= new Date(b.departureDate + "T00:00:00") &&
           date <= new Date((b.returnDate || b.departureDate) + "T23:59:59"),
       );
@@ -1551,11 +1830,43 @@
   }
   if (page === "verify-booking") {
     const v = store.get("verification");
-    const fields = $$("form input");
-    if (v && fields.length >= 2) {
-      if (v.reference && !fields[0].value) fields[0].value = v.reference;
-      if (v.surname && !fields[1].value) fields[1].value = v.surname;
+    const list = $("#vb-bookings");
+    const requested = new URLSearchParams(location.search).get("id");
+    // Hours until departure; pasalubong orders close 14 hours before sailing.
+    const hoursLeft = (b) => {
+      const quote = window.ENTREE_BOOKING?.refundQuote?.(b);
+      if (quote) return quote.hours;
+      return (new Date(b.departureDate + "T00:00:00") - new Date()) / 36e5;
+    };
+    const upcoming = data.MOCK_BOOKINGS.filter((b) => b && b.route && b.reference && !b.refund && b.status !== "completed" && hoursLeft(b) > 0).sort((a, b) =>
+      a.departureDate.localeCompare(b.departureDate),
+    );
+    if (list) {
+      if (!upcoming.length) {
+        list.innerHTML = '<p class="vb-empty">No upcoming bookings on this device. <a href="index.html">Book a trip</a> to start shopping for pasalubong.</p>';
+        $$('form button[type="submit"], #surname').forEach((el) => (el.disabled = true));
+      } else {
+        const preferred = requested ? upcoming.find((b) => b.id === requested) : v?.reference ? upcoming.find((b) => b.reference === v.reference) : null;
+        const firstEligible = upcoming.find((b) => hoursLeft(b) >= 14);
+        const selected = preferred && hoursLeft(preferred) >= 14 ? preferred : upcoming.length === 1 ? firstEligible : null;
+        list.innerHTML = upcoming
+          .map((b) => {
+            const eligible = hoursLeft(b) >= 14;
+            const company = data.SHIPPING_COMPANIES?.find((c) => c.name === b.ferry);
+            const logo = company?.logo ? `<img src="../assets/images/${company.logo}" alt="" />` : `<span aria-hidden="true">${escape((b.ferry || "?").slice(0, 2).toUpperCase())}</span>`;
+            const day = new Date(b.departureDate + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+            return `<label class="vb-option${eligible ? "" : " is-disabled"}">
+              <input type="radio" name="vb-booking" value="${escape(b.reference)}"${b === selected ? " checked" : ""}${eligible ? "" : " disabled"} />
+              <span class="vb-logo">${logo}</span>
+              <span class="vb-info"><strong>${escape(b.route.origin)} → ${escape(b.route.destination)}</strong><span>${escape(b.reference)}</span><span>${escape(day)} · ${escape(b.ferry)} · ${b.passengers} pax</span>${eligible ? "" : '<em>Departs in under 14 hours — ordering closed</em>'}</span>
+              <span class="vb-radio" aria-hidden="true"></span>
+            </label>`;
+          })
+          .join("");
+      }
     }
+    const surnameInput = $("#surname");
+    if (surnameInput && v?.surname && !surnameInput.value && v.reference === $('input[name="vb-booking"]:checked')?.value) surnameInput.value = v.surname;
   }
   if (page === "rebook" || page === "refund") {
     const b = booking();
@@ -1576,6 +1887,37 @@
     };
     for (const [old, value] of Object.entries(fields))
       allText(old, $("main")).forEach((el) => (el.textContent = value));
+    if (page === "refund" && window.ENTREE_BOOKING) {
+      const quote = window.ENTREE_BOOKING.refundQuote(b);
+      const existing = window.ENTREE_BOOKING.refundOf(b.id);
+      const label = allText("Refund Amount (100%)", $("main"))[0];
+      const amountEl = label?.nextElementSibling;
+      if (label) label.textContent = `Refund Amount (${existing ? existing.percent : quote.percent}%)`;
+      if (amountEl) {
+        amountEl.textContent = `₱${(existing ? existing.amount : quote.amount).toFixed(2)}`;
+        if (!existing && !quote.percent) amountEl.classList.replace("text-green-600", "text-red-600");
+      }
+      const submit = $('[data-action="refund"]');
+      const textarea = $("textarea");
+      const message = existing
+        ? `Refund already requested on ${new Date(existing.requestedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} — ₱${existing.amount.toFixed(2)} is being processed (7–14 business days).`
+        : quote.reason;
+      if (message && submit) {
+        submit.disabled = true;
+        submit.textContent = existing ? "Refund requested" : "Not eligible for refund";
+        if (textarea) {
+          textarea.disabled = true;
+          if (existing?.reason) textarea.value = existing.reason;
+        }
+        const note = document.createElement("p");
+        note.setAttribute("role", "status");
+        note.className = existing
+          ? "mb-4 rounded-lg border border-green-200 bg-green-100 p-4 text-[14px] text-green-700"
+          : "mb-4 rounded-lg border border-red-200 bg-red-50 p-4 text-[14px] text-red-700";
+        note.textContent = message;
+        submit.parentElement.before(note);
+      }
+    }
   }
   if (page === "settings") {
     const preferences = store.get("preferences", {});
@@ -1701,11 +2043,7 @@
         navigateTo("confirmation");
       }
     } else if (name === "booking" || name === "share") showBooking(id, name === "share");
-    else if (name === "addons")
-      dialog(
-        "Buy Add-ons",
-        `<a class="dialog-action" href="verify-booking.html">Shop pasalubong</a><p>Pasalubong can be pre-ordered online and delivered to your seat. Vehicle and pet slots are arranged at the terminal counter before boarding.</p>`,
-      );
+    else if (name === "addons") showAddOns(id);
     else if (name === "print") window.print();
     else if (name === "copy-trip") {
       try {
@@ -1726,7 +2064,7 @@
       const d = $("dialog");
       if (d) {
         store.remove("active_product_id");
-        d.close();
+        closeModal(d);
         d.remove();
       }
     } else if (name === "select-passengers") {
@@ -1741,6 +2079,10 @@
       selectedFerry = data.AVAILABLE_FERRIES.find((f) => String(f.id) === arg);
       $$(".schedule").forEach((b) => b.classList.toggle("selected-option", b === el));
     } else if (name === "reschedule") {
+      if (booking().refund) {
+        notice("This booking has been refunded and can no longer be rebooked.");
+        return;
+      }
       if (!selectedFerry) {
         notice("Please select a ferry schedule.");
         return;
@@ -1761,10 +2103,18 @@
         reason.reportValidity();
         return;
       }
+      const result = window.ENTREE_BOOKING?.requestRefund(booking().id, reason.value.trim());
+      if (!result || result.error) {
+        notice(result?.error || "Refunds are unavailable right now.");
+        return;
+      }
       markSaved();
+      el.disabled = true;
+      el.textContent = "Refund requested";
+      reason.disabled = true;
       dialog(
         "Refund request received",
-        '<p>We have logged your refund request. Refunds are reviewed within 7–14 business days and paid back to your original payment method. Preview mode — no payment was reversed.</p><a class="dialog-action" href="bookings.html">Back to my bookings</a>',
+        `<p>We have logged your refund request for <strong>${escape(booking().reference)}</strong>. <strong>₱${result.refund.amount.toFixed(2)}</strong> (${result.refund.percent}%) will be reviewed within 7–14 business days and paid back to your original payment method. Preview mode — no payment was reversed.</p><a class="dialog-action" href="bookings.html">Back to my bookings</a>`,
       );
     } else if (name === "payment-info")
       dialog(
@@ -1979,7 +2329,7 @@
         ],
         "verify-booking": [
           () => "Verifying your booking? Trust issues. I like it.",
-          () => "Type in that reference code. I'd do it myself but I'd type 'ksjdhfk'.",
+          () => "Pick your trip. I'd do it myself but my flippers keep missing.",
         ],
       };
       const LEFT_OFF_GENERIC = [
@@ -1998,7 +2348,7 @@
         pasalubong: ["Add something to the cart? The dried mangoes are begging.", "Shall we shop a little more?"],
         refund: ["Sure you want to leave? ...Continue anyway?", "Shall we finish this refund?"],
         rebook: ["Pick a new time and carry on?", "Continue rebooking?"],
-        "verify-booking": ["Enter the reference and let's check?", "Shall we verify it now?"],
+        "verify-booking": ["Pick your trip and let's go shopping?", "Shall we verify it now?"],
       };
       const TEASE_GENERIC = ["Shall we continue where you left off?", "Pick up where you stopped? I'll wait. I'm very slow anyway."];
 
@@ -2123,10 +2473,20 @@
         const s = SIZE();
         return { minX: 8, minY: 70, maxX: window.innerWidth - s - 8, maxY: window.innerHeight - s - 8 };
       }
+      // Element Doode is pointing at; the speech bubble is placed so it doesn't cover it.
+      let bubbleAvoid = null;
       function placeBubble() {
         const vw = window.innerWidth;
         mascot.classList.toggle("bubble-align-right", pos.x + SIZE() / 2 > vw / 2);
-        mascot.classList.toggle("bubble-below", pos.y < 230);
+        let below = pos.y < 230;
+        const r = bubbleAvoid?.isConnected ? bubbleAvoid.getBoundingClientRect() : null;
+        if (r) {
+          const s = SIZE();
+          const room = 190; // roughly the bubble's height
+          if (r.bottom <= pos.y + s / 2 && pos.y + s + room <= window.innerHeight) below = true; // target is above Doode
+          else if (r.top >= pos.y + s / 2 && pos.y - room >= 0) below = false; // target is below Doode
+        }
+        mascot.classList.toggle("bubble-below", below);
       }
       function setPos(x, y, travelMs) {
         const b = bounds();
@@ -2199,12 +2559,15 @@
       const filled = (el) => !!(el && typeof el.value === "string" && el.value.trim());
       const GUIDES = {
         index: [
-          { find: bySel("#origin"), done: filled, say: "Start here! Where are you sailing from?" },
-          { find: bySel("#destination"), done: filled, say: "Now pick where you're going. Somewhere with good mangoes, ideally." },
-          { find: bySel('[aria-label="Departure date"]'), say: "Tap here to pick your travel date. Weekends go fast!" },
-          { find: bySel(".pax-counters"), say: "Tell me who's coming: passengers, vehicles, even pets. No judging." },
-          { find: bySel(".booking-quick-filters"), say: "Choose your ferry line and cabin here." },
-          { find: bySel(".hero-search-cta"), say: "Then hit Search Ferries. The big green button. You can't miss it. Please don't miss it." },
+          // Phones/tablets only: the planner lives in a bottom sheet behind the trip bar.
+          // "gate" steps block the tour until the user does the thing themselves.
+          { find: bySel("#m-trip-pill"), gate: true, done: () => Boolean(tripSheet?.isOpen()), say: "Tap this trip bar to open the trip planner. Everything's inside!" },
+          { find: bySel("#origin"), inSheet: true, done: filled, say: "Start here! Where are you sailing from?" },
+          { find: bySel("#destination"), inSheet: true, done: filled, say: "Now pick where you're going. Somewhere with good mangoes, ideally." },
+          { find: bySel('[aria-label="Departure date"]'), inSheet: true, say: "Tap here to pick your travel date. Weekends go fast!" },
+          { find: bySel(".pax-counters"), inSheet: true, say: "Tell me who's coming: passengers, vehicles, even pets. No judging." },
+          { find: bySel(".booking-quick-filters"), inSheet: true, say: "Choose your ferry line and cabin here." },
+          { find: bySel(".hero-search-cta"), inSheet: true, say: "Then hit Search Ferries. The big green button. You can't miss it. Please don't miss it." },
         ],
         login: [
           { find: bySel('input[type="email"]'), done: filled, say: "Pop your email in here first." },
@@ -2265,7 +2628,7 @@
           { find: bySel("select"), say: "Set your language and currency here. English or Filipino, pesos or dollars." },
         ],
         "verify-booking": [
-          { find: bySel("#bookingRef"), done: filled, say: "Type your booking reference. It's in your confirmation email." },
+          { find: bySel("#vb-bookings"), done: () => Boolean(document.querySelector('input[name="vb-booking"]:checked')), say: "Pick the trip you're shopping for." },
           { find: bySel("#surname"), done: filled, say: "Now the surname on the booking." },
           { find: byText("Continue to Shop"), say: "Then tap Continue to Shop. Snacks await!" },
         ],
@@ -2278,7 +2641,9 @@
         if (el) el.classList.add("doode-spotlight");
       }
       function guideSteps() {
-        return (GUIDES[page] || []).map((s) => ({ ...s, el: s.find() })).filter((s) => s.el);
+        const sheetClosed = Boolean(tripSheet?.isMobile() && !tripSheet.isOpen());
+        // Steps inside a closed bottom sheet are hidden now but become reachable once it opens.
+        return (GUIDES[page] || []).map((s) => ({ ...s, el: s.find() })).filter((s) => s.el || (s.inSheet && sheetClosed));
       }
       const hasGuide = () => guideSteps().length > 0;
       function unwatchTarget() {
@@ -2288,6 +2653,7 @@
       function endGuide() {
         unwatchTarget();
         guide = null;
+        bubbleAvoid = null;
         spotlight(null);
         mascot.classList.remove("is-guiding");
       }
@@ -2330,8 +2696,15 @@
         unwatchTarget();
         spotlight(null);
         const step = guide.steps[guide.i];
-        const el = (step.el.isConnected && step.el) || step.find();
-        if (!el) return nextStep();
+        // A gate the user already passed (e.g. the planner is open) is skipped.
+        if (step.gate && step.done?.()) return nextStep();
+        const visible = (node) => node && node.isConnected && node.getClientRects().length;
+        const el = (visible(step.el) && step.el) || step.find();
+        if (!el) {
+          if (step.inSheet && tripSheet?.isMobile() && !tripSheet.isOpen()) return needGate();
+          return nextStep();
+        }
+        step.el = el;
         guide.el = el;
         setState("guiding"); // swimming pose
         el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
@@ -2344,14 +2717,19 @@
             mascot.classList.remove("is-traveling");
             mascot.classList.toggle("is-inverted", p.faceRight);
             spotlight(el);
+            bubbleAvoid = el;
             setState("pointing"); // lightbulb / pointing pose
             const n = guide.steps.length;
             const last = guide.i >= n - 1;
             const counter = guide.tour && n > 1 ? `(${guide.i + 1}/${n}) ` : "";
-            const actions = guide.tour
-              ? [last ? { label: "Done", primary: true, run: finishGuide } : { label: "Next", primary: true, run: nextStep }, { label: "Stop", run: finishGuide }]
-              : [{ label: "Got it", primary: true, run: finishGuide }];
-            say(counter + step.say, actions);
+            const actions = step.gate
+              ? [{ label: "Next", primary: true, run: tryPassGate }, { label: "Stop", run: finishGuide }]
+              : guide.tour
+                ? [last ? { label: "Done", primary: true, run: finishGuide } : { label: "Next", primary: true, run: nextStep }, { label: "Stop", run: finishGuide }]
+                : [{ label: "Got it", primary: true, run: finishGuide }];
+            const text = guide.override || step.say;
+            guide.override = null;
+            say(counter + text, actions);
             watchTarget(el);
           }, ms + 60);
         }, reduceMotion ? 50 : 450);
@@ -2367,11 +2745,51 @@
           clearFlow();
           setState("talking");
           setSprite("happy");
-          say(pick(PRAISE), [], () => later(() => (guide?.tour && guide.i < guide.steps.length - 1 ? nextStep() : finishGuide(true)), 900));
+          const passedGate = Boolean(guide.steps[guide.i]?.gate);
+          say(pick(PRAISE), [], () =>
+            later(() => ((guide?.tour || passedGate) && guide.i < guide.steps.length - 1 ? nextStep() : finishGuide(true)), passedGate ? 600 : 900),
+          );
         };
         el.addEventListener(evt, handler, true);
         guide.off = () => el.removeEventListener(evt, handler, true);
       }
+      // The user pressed "Next" without doing the gated action: Doode won't move on.
+      const GATE_NUDGES = [
+        "Nope! Tap the trip bar first. I can't show you the planner while it's closed.",
+        "Hold on, sailor! Open the trip bar, then we keep going.",
+        "I'll wait... the trip bar won't tap itself. Go on!",
+        "Can't skip this one! Tap the white trip bar to open the planner.",
+      ];
+      function tryPassGate() {
+        if (!guide) return;
+        const step = guide.steps[guide.i];
+        if (!step?.gate || step.done?.()) return nextStep();
+        clearFlow();
+        setSprite("questioning");
+        mascot.classList.remove("is-nudging");
+        void mascot.offsetWidth;
+        mascot.classList.add("is-nudging");
+        later(() => mascot.classList.remove("is-nudging"), 700);
+        spotlight(guide.el);
+        say(pickFresh(GATE_NUDGES), [{ label: "Next", primary: true, run: tryPassGate }, { label: "Stop", run: finishGuide }]);
+      }
+      // Send the tour back to the gate (e.g. the planner was closed mid-tour).
+      function needGate(message) {
+        if (!guide) return;
+        const gateIndex = guide.steps.findIndex((s) => s.gate);
+        if (gateIndex < 0) return nextStep();
+        guide.i = gateIndex;
+        guide.override = message || "The planner is closed! Tap the trip bar to open it so we can keep going.";
+        showStep();
+      }
+      document.addEventListener("entree:trip-sheet", (event) => {
+        if (!guide || event.detail?.open) return;
+        const step = guide.steps[guide.i];
+        if (step?.inSheet && tripSheet?.isMobile()) {
+          setSprite("questioning");
+          needGate(pick(["Whoa, you closed the planner! Tap the trip bar again so we can keep going.", "Hey, we weren't done! Open the trip bar again."]));
+        }
+      });
       function nextStep() {
         if (!guide) return;
         guide.i += 1;
@@ -2397,7 +2815,7 @@
           mascot.classList.toggle("is-inverted", p.faceRight);
         });
       }
-      window.addEventListener("scroll", followTarget, { passive: true });
+      document.addEventListener("scroll", followTarget, { passive: true, capture: true });
       window.addEventListener("resize", followTarget);
 
       // ---- Conversation flow: Quote1 -> Quote2 -> Quote3 -> Idle ----------

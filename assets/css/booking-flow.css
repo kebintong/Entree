@@ -120,3 +120,54 @@
   .bf-card { padding: 20px 16px; }
   .bf-fields { grid-template-columns: minmax(0, 1fr); }
 }
+/* Booking confirmation */
+.bc-back { display: inline-block; font-size: 13px; margin-bottom: 18px; }
+.bc-hero { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 20px; padding: 24px 28px; margin-bottom: 24px; border: 1px solid #dfe8db; border-radius: 20px; background: linear-gradient(135deg, #f7ffe0 0%, #ffffff 60%); }
+.bc-check { width: 60px; height: 60px; display: grid; place-items: center; border-radius: 999px; background: #ccff00; color: #051821; box-shadow: 0 0 0 8px #ccff0033; }
+.bc-eyebrow { margin: 0; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #007f70; }
+.bc-hero h1 { margin: 4px 0 6px; font-size: clamp(24px, 3.4vw, 32px); font-weight: 600; color: #0f172a; line-height: 1.2; }
+.bc-hero-text p:last-child { margin: 0; font-size: 13px; color: #64748b; }
+.bc-hero-text strong { color: #0f172a; font-weight: 500; }
+.bc-ref { display: grid; justify-items: end; gap: 2px; padding: 14px 18px; border: 1px dashed #b8c4b0; border-radius: 14px; background: #fff; }
+.bc-ref span { font-size: 11px; color: #64748b; }
+.bc-ref strong { font-size: 20px; font-weight: 600; letter-spacing: .02em; color: #0f172a; font-variant-numeric: tabular-nums; }
+.bc-copy { margin-top: 4px; padding: 4px 12px; border: 1px solid #dbdcd9; border-radius: 999px; background: #fff; font: 500 12px Poppins, sans-serif; color: #007f70; cursor: pointer; }
+.bc-copy:hover { background: #f0fdf9; }
+.bc-card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+.bc-card-head h2 { margin: 0 !important; }
+.bc-card-head > span { font-size: 12px; color: #64748b; }
+.bc-route { margin: 0 0 14px; font-size: 20px; font-weight: 600; color: #0f172a; overflow-wrap: anywhere; }
+.bc-route span { color: #007f70; margin: 0 4px; }
+.bc-leg-body { display: flex; align-items: center; gap: 16px; }
+.bc-leg-body .bm-leg-route { flex: 1; min-width: 0; }
+.bc-leg-logo { width: 64px !important; height: 44px !important; flex-shrink: 0; }
+.bc-leg-meta { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid #f1f5f9; font-size: 12px; color: #64748b; }
+.bc-chips li { display: inline-flex; align-items: center; gap: 6px; }
+.bc-chip-kind { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: #007f70; }
+.bc-contact { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 16px 0 0; padding-top: 16px; border-top: 1px solid #f1f5f9; }
+.bc-contact dt { font-size: 11px; color: #64748b; }
+.bc-contact dd { margin: 2px 0 0; font-size: 13px; color: #0f172a; overflow-wrap: anywhere; }
+.bc-steps { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; counter-reset: step; }
+.bc-steps li { position: relative; display: grid; gap: 2px; padding-left: 40px; counter-increment: step; font-size: 13px; }
+.bc-steps li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 999px; background: #f5f8ef; color: #007f70; font-weight: 600; font-size: 12px; }
+.bc-steps strong { font-weight: 500; color: #0f172a; }
+.bc-steps span { color: #64748b; }
+.bc-pay { border-radius: 20px; }
+.bc-paid { padding: 3px 10px; border-radius: 999px; background: #dcfce7; color: #15803d !important; font-weight: 500; }
+.bc-actions { display: grid; gap: 10px; margin-top: 18px; }
+.bc-actions .bf-primary { border-radius: 999px; font-weight: 600; }
+.bc-secondary { display: flex; align-items: center; justify-content: center; min-height: 44px; border: 1px solid #dbdcd9; border-radius: 999px; background: #fff; color: #0f172a; font: 500 14px Poppins, sans-serif; text-decoration: none; cursor: pointer; }
+.bc-secondary:hover { background: #f8fafc; }
+@media (max-width: 850px) {
+  .bc-hero { grid-template-columns: auto minmax(0, 1fr); }
+  .bc-ref { grid-column: 1 / -1; justify-items: start; }
+}
+@media (max-width: 540px) {
+  .bc-hero { grid-template-columns: minmax(0, 1fr); padding: 20px; }
+  .bc-contact { grid-template-columns: minmax(0, 1fr); }
+  .bc-leg-logo { display: none; }
+}
+@media print {
+  .bc-back, .bc-copy, .bc-actions { display: none !important; }
+  .bf-layout { grid-template-columns: minmax(0, 1fr) !important; }
+}

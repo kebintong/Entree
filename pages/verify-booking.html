@@ -94,7 +94,7 @@
                   Verify Your Booking
                 </h1>
                 <p class="text-[15px] text-[#999] font-['Poppins:Regular',sans-serif]">
-                  Enter your booking details to shop for Pasalubong
+                  Choose an upcoming trip to shop for Pasalubong
                 </p>
               </div>
               <div
@@ -120,21 +120,13 @@
                 </p>
               </div>
               <form class="space-y-5">
-                <div>
-                  <label
-                    for="bookingRef"
+                <fieldset class="vb-picker">
+                  <legend
                     class="block text-[14px] font-['Poppins:Medium',sans-serif] text-[#363636] mb-2"
-                    >Booking Reference Number</label
+                    >Your upcoming bookings</legend
                   >
-                  <input
-                    id="bookingRef"
-                    type="text"
-                    placeholder="e.g. ENT-2026-001234"
-                    class="w-full px-4 py-3 border border-[#dbdcd9] rounded-lg font-['Poppins:Regular',sans-serif] text-[15px] text-[#363636] focus:outline-none focus:border-[#CCFF00] focus:ring-2 focus:ring-[#CCFF00]/20 transition-all"
-                    maxlength="20"
-                    value=""
-                  />
-                </div>
+                  <div id="vb-bookings" class="vb-bookings"></div>
+                </fieldset>
                 <div>
                   <label
                     for="surname"
@@ -160,7 +152,7 @@
                 <p
                   class="font-['Poppins'] text-[11px] text-[#999] text-center leading-relaxed"
                 >
-                  Your booking reference can be found in your confirmation email or SMS
+                  Only bookings saved on this device are listed. Your booking reference is also in your confirmation email or SMS.
                 </p>
               </div>
             </div>
