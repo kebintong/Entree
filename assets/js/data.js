@@ -1,4 +1,12 @@
 window.ENTREE_DATA = {
+  // Illustrative departures for the local booking demo, not live operator inventory.
+  SHIPPING_COMPANIES: [
+    { id: "lite", name: "Lite Shipping", logo: "lite-ferries-logo.png", departure: "13:00", arrival: "17:00", duration: "4 hr", price: 497.94, returnDeparture: "22:00", returnArrival: "02:00", returnPrice: 370, overnightReturn: true },
+    { id: "supercat", name: "Supercat", logo: "supercat-logo.png", departure: "05:40", arrival: "09:40", duration: "4 hr", price: 834.90, returnDeparture: "14:00", returnArrival: "18:00" },
+    { id: "oceanjet", name: "OceanJet", logo: "oceanjet-logo.png", departure: "06:00", arrival: "08:00", duration: "2 hr", price: 913.20, returnDeparture: "16:00", returnArrival: "18:00" },
+    { id: "2go", name: "2Go Travel", logo: "2go-logo.png", departure: "06:00", arrival: "09:30", duration: "3.5 hr", price: 871.69, returnDeparture: "18:00", returnArrival: "21:30" },
+    { id: "fastcat", name: "FastCat", logo: null, departure: "08:00", arrival: "10:30", duration: "2.5 hr", price: 1300, returnDeparture: "15:00", returnArrival: "17:30" },
+  ],
   AVAILABLE_FERRIES: [
     {
       id: "1",
@@ -305,13 +313,22 @@ window.ENTREE_DATA = {
       hasPasalubong: false,
     },
   ],
+  PRODUCT_CATEGORIES: [
+    { id: "all", label: "All" },
+    { id: "snacks", label: "Snacks" },
+    { id: "pastries", label: "Pastries" },
+    { id: "crafts", label: "Crafts" },
+    { id: "souvenirs", label: "Souvenirs" },
+  ],
   PRODUCTS: [
     {
       id: 1,
       name: "Premium Dried Mangoes",
       merchant: "Cebu Best Sweets",
       description: "Locally sourced, naturally sweet dried mangoes. The perfect travel snack.",
-      price: 15,
+      price: 180,
+      category: "snacks",
+      currency: "PHP",
       images: [
         "https://images.unsplash.com/photo-1605879883262-0cd26b362f54?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkcmllZCUyMG1hbmdvZXMlMjBzbmFja3xlbnwxfHx8fDE3NzMzNzU5MjN8MA&ixlib=rb-4.1.0&q=80&w=1080",
         "https://images.unsplash.com/photo-1686544304650-36640704097a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkcmllZCUyMG1hbmdvZXMlMjBzbmFja3N8ZW58MXx8fHwxNzczMzg4NDEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
@@ -321,22 +338,22 @@ window.ENTREE_DATA = {
         {
           id: 100,
           name: "Original Dried Mangoes",
-          price: 15,
+          price: 180,
         },
         {
           id: 101,
           name: "Spicy Dried Mangoes",
-          price: 16,
+          price: 195,
         },
         {
           id: 102,
           name: "Dried Pineapples",
-          price: 14.5,
+          price: 170,
         },
         {
           id: 103,
           name: "Mango Tamarind Balls",
-          price: 12,
+          price: 120,
         },
       ],
     },
@@ -346,7 +363,9 @@ window.ENTREE_DATA = {
       merchant: "Isla Crafts & Co.",
       description:
         "Handcrafted locally with traditional weaving techniques. Great for beach trips.",
-      price: 45,
+      price: 650,
+      category: "crafts",
+      currency: "PHP",
       images: [
         "https://images.unsplash.com/photo-1770782912845-2b456ac83628?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b3ZlbiUyMGJhZyUyMGNyYWZ0fGVufDF8fHx8MTc3MzM3NTkyM3ww&ixlib=rb-4.1.0&q=80&w=1080",
         "https://images.unsplash.com/photo-1768734836548-5be5fd6ef617?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b3ZlbiUyMGJhc2tldCUyMGNyYWZ0fGVufDF8fHx8MTc3MzM4NjQwOHww&ixlib=rb-4.1.0&q=80&w=1080",
@@ -355,22 +374,22 @@ window.ENTREE_DATA = {
         {
           id: 200,
           name: "Classic Tote Bag",
-          price: 45,
+          price: 650,
         },
         {
           id: 201,
           name: "Woven Coin Purse",
-          price: 8.5,
+          price: 120,
         },
         {
           id: 202,
           name: "Abaca Slippers",
-          price: 22,
+          price: 320,
         },
         {
           id: 203,
           name: "Handwoven Hat",
-          price: 28,
+          price: 380,
         },
       ],
     },
@@ -379,7 +398,9 @@ window.ENTREE_DATA = {
       name: "Fresh Local Pastries Box",
       merchant: "Delicias Bakery",
       description: "An assortment of traditional baked delicacies. Baked fresh on travel day.",
-      price: 24.5,
+      price: 350,
+      category: "pastries",
+      currency: "PHP",
       images: [
         "https://images.unsplash.com/photo-1763141180228-78f21f192a3c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsb2NhbCUyMHBhc3RyaWVzJTIwYnJlYWR8ZW58MXx8fHwxNzczMzc1OTIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
         "https://images.unsplash.com/photo-1587536848939-c7e58de4b792?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYWtlcnklMjBwYXN0cmllcyUyMGJveHxlbnwxfHx8fDE3NzMzODg0MjZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
@@ -388,22 +409,22 @@ window.ENTREE_DATA = {
         {
           id: 300,
           name: "Assorted Pastry Box",
-          price: 24.5,
+          price: 350,
         },
         {
           id: 301,
           name: "Cheese Ensaymada",
-          price: 18,
+          price: 260,
         },
         {
           id: 302,
           name: "Ube Hopia Box",
-          price: 15,
+          price: 180,
         },
         {
           id: 303,
           name: "Caramel Tarts",
-          price: 20,
+          price: 240,
         },
       ],
     },
@@ -412,7 +433,9 @@ window.ENTREE_DATA = {
       name: "Puka Shell Keepsake Necklace",
       merchant: "Ocean Trinkets",
       description: "Authentic coastal shells, beautifully strung into a memorable souvenir.",
-      price: 18,
+      price: 220,
+      category: "souvenirs",
+      currency: "PHP",
       images: [
         "https://images.unsplash.com/photo-1770845402911-b6cf32921d66?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZWFzaGVsbCUyMG5lY2tsYWNlJTIwc291dmVuaXJ8ZW58MXx8fHwxNzczMzc1OTIzfDA&ixlib=rb-4.1.0&q=80&w=1080",
         "https://images.unsplash.com/photo-1759503407154-0f5925af069c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwZWFybCUyMHNoZWxsJTIwbmVja2xhY2V8ZW58MXx8fHwxNzczMzg4NDM0fDA&ixlib=rb-4.1.0&q=80&w=1080",
@@ -421,22 +444,22 @@ window.ENTREE_DATA = {
         {
           id: 400,
           name: "Classic Puka Necklace",
-          price: 18,
+          price: 220,
         },
         {
           id: 401,
           name: "Pearl Bracelet",
-          price: 25,
+          price: 350,
         },
         {
           id: 402,
           name: "Cowrie Shell Anklet",
-          price: 14,
+          price: 150,
         },
         {
           id: 403,
           name: "Capiz Shell Earrings",
-          price: 16.5,
+          price: 190,
         },
       ],
     },

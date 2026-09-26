@@ -1,650 +1,389 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Your Ticket to the Seas | Entree</title>
-    <link rel="stylesheet" href="../assets/css/styles.css" />
-    <link rel="stylesheet" href="../assets/css/site.css" />
-    <script src="../assets/js/data.js" defer></script>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Entree | Your Ticket to the Seas</title>
+  <meta name="description"
+    content="Book ferry trips across the Philippines with trusted shipping lines—Supercat, OceanJet, FastCat, and more." />
+  <link rel="icon" type="image/png" href="../assets/images/entree-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/site.css" />
+  <link rel="stylesheet" href="../assets/css/index.css" />
+  <script src="../assets/js/data.js" defer></script>
+  <script src="../assets/js/booking-state.js" defer></script>
     <script src="../assets/js/app.js" defer></script>
-  </head>
-  <body data-page="index">
-    <div
-      class="flex flex-col min-h-screen font-sans text-slate-900 bg-white selection:bg-[#CCFF00] selection:text-black overflow-x-hidden"
-    >
-      <header
-        class="fixed top-0 left-0 w-full z-50 px-6 md:px-10 py-4 flex justify-between items-center h-20 transition-all duration-300 bg-transparent"
-      >
-        <div class="flex-1 flex items-center"></div>
-        <div class="flex items-center space-x-4 md:space-x-5 shrink-0 justify-end">
-          <div class="flex flex-col gap-2 items-end">
-            <a
-              class="border-2 border-[#FFCC00] text-[#FFCC00] text-[12px] md:text-[13px] font-bold rounded-full px-6 py-2 flex items-center justify-center shadow-sm"
-              href="verify-booking.html"
-              data-discover="true"
-              >Buy Pasalubong</a
-            >
-          </div>
-          <button
-            class="border-2 border-[#CCFF00] text-[#CCFF00] text-[12px] md:text-[13px] font-bold rounded-full px-6 py-2 flex items-center space-x-2 shadow-sm"
-            data-action="go:login"
-          >
-            <span>Log-in</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-log-in w-4 h-4 stroke-[2.5]"
-            >
-              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-              <polyline points="10 17 15 12 10 7"></polyline>
-              <line x1="15" x2="3" y1="12" y2="12"></line>
-            </svg>
-          </button>
-        </div>
-      </header>
-      <main class="flex-1 flex flex-col relative w-full h-full">
-        <section
-          class="relative w-full flex flex-col justify-center bg-[#f0f0f0] overflow-hidden min-h-screen pt-20"
-        >
-          <div class="absolute inset-0 w-full h-full pointer-events-none">
-            <img
-              src="../assets/images/ocean-background.png"
-              alt="Ocean"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div
-            class="relative z-10 w-full h-full flex-1 max-w-[1250px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-10 py-10"
-          >
-            <div class="flex-1 text-white flex flex-col justify-center drop-shadow-xl mt-[-40px]">
-              <div
-                class="font-['Poppins:SemiBold',sans-serif] leading-[64px] relative shrink-0 w-full"
-              >
-                <div class="flex items-start space-x-3">
-                  <svg width="0" height="0" class="absolute">
-                    <filter id="remove-white" color-interpolation-filters="sRGB">
-                      <feColorMatrix
-                        type="matrix"
-                        values="
-                    1 0 0 0 0
-                    0 1 0 0 0
-                    0 0 1 0 0
-                    -10 -10 -10 0 25
-                  "
-                      ></feColorMatrix>
-                    </filter>
-                  </svg>
-                  <div class="w-[90px] h-[90px] shrink-0" style="clip-path: inset(4%)">
-                    <img
-                      src="../assets/images/entree-logo.png"
-                      alt="Entree Logo"
-                      class="w-full h-full object-contain"
-                      style="filter: url(#remove-white)"
-                    />
-                  </div>
-                  <div class="flex flex-col">
-                    <h1
-                      class="font-['Georgia',serif] italic text-[72px] leading-none font-bold tracking-wide"
-                    >
-                      entree
-                    </h1>
-                    <h2
-                      class="text-[28px] font-['Poppins:Regular',sans-serif] font-normal mt-1 leading-tight text-white/90 tracking-wide"
-                    >
-                      Your Ticket to the Seas
-                    </h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="w-[410px] shrink-0 relative mt-10 md:mt-0 flex flex-col">
-              <div
-                class="bg-white rounded-[20px] px-[30px] pt-[30px] pb-[40px] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)] w-full w-[410px] relative font-['Poppins:Regular',sans-serif]"
-              >
-                <div class="mb-[24px]">
-                  <label
-                    class="block font-['Poppins:Medium',sans-serif] leading-[21px] text-[#363636] text-[12px] whitespace-nowrap mb-2"
-                    >Travel Type</label
-                  >
-                  <div
-                    class="border border-[#dbdcd9] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)] rounded-[100px] px-[15px] py-[10px] flex justify-between items-center cursor-pointer bg-white"
-                  >
-                    <span
-                      class="font-['Poppins:Regular',sans-serif] leading-[24px] text-[#363636] text-[14px]"
-                      >Round Trip</span
-                    >
-                    <div class="-rotate-45 flex-none relative size-[6px]">
-                      <svg
-                        class="absolute block size-full"
-                        fill="none"
-                        preserveAspectRatio="none"
-                        viewBox="0 0 6 6"
-                      >
-                        <path
-                          d="M0.5 0C0.776142 0 1 0.223858 1 0.5V5H5.5C5.77614 5 6 5.22386 6 5.5C6 5.77614 5.77614 6 5.5 6H0.5C0.258287 6 0.056292 5.82855 0.00976562 5.60059L0 5.5V0.5C0 0.223858 0.223858 0 0.5 0Z"
-                          fill="var(--fill-0, #363636)"
-                        ></path>
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="mb-[24px] bg-white relative rounded-[20px] border border-[#dbdcd9] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)] p-[10px] px-[15px]"
-                >
-                  <div class="flex gap-[16px] items-start w-full relative">
-                    <div
-                      class="flex flex-col items-center justify-start relative w-[12px] shrink-0"
-                    >
-                      <div class="h-[32px] flex items-center justify-center">
-                        <div class="relative shrink-0 size-[11px]">
-                          <svg
-                            class="absolute block size-full"
-                            fill="none"
-                            preserveAspectRatio="none"
-                            viewBox="0 0 11 11"
-                          >
-                            <path
-                              d="M5.5 0C8.53757 0 11 2.46243 11 5.5C11 8.53757 8.53757 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0ZM5.5 1.83301C3.47496 1.83301 1.83301 3.47496 1.83301 5.5C1.83301 7.52504 3.47496 9.16699 5.5 9.16699C7.52504 9.16699 9.16699 7.52504 9.16699 5.5C9.16699 3.47496 7.52504 1.83301 5.5 1.83301Z"
-                              fill="var(--fill-0, #363636)"
-                            ></path>
-                          </svg>
-                        </div>
-                      </div>
-                      <div class="h-[9px] flex items-center justify-center w-full"></div>
-                      <div class="h-[32px] flex items-center justify-center">
-                        <div class="h-[16px] relative shrink-0 w-[11.894px]">
-                          <svg
-                            class="absolute block size-full"
-                            fill="none"
-                            preserveAspectRatio="none"
-                            viewBox="0 0 11.8944 16.0002"
-                          >
-                            <path
-                              d="M6.25588 0.00800969C7.72418 0.0843424 9.11258 0.701892 10.1524 1.74141C11.1168 2.70588 11.7207 3.97271 11.8623 5.3293C12.0039 6.68594 11.6742 8.05065 10.9297 9.19356L6.79591 15.5402C6.70392 15.6815 6.57787 15.7978 6.4297 15.8781C6.28165 15.9584 6.11568 16.0001 5.94728 16.0002C5.77872 16.0002 5.61207 15.9585 5.46388 15.8781C5.31581 15.7979 5.19062 15.6813 5.09865 15.5402L0.963884 9.19356C0.161505 7.96151 -0.156262 6.47508 0.0722819 5.02266C0.300892 3.57043 1.05937 2.25434 2.20119 1.32832C3.3431 0.402275 4.78765 -0.0682585 6.25588 0.00800969ZM5.94728 1.09395C5.31006 1.09395 4.67858 1.21927 4.08986 1.46309C3.50126 1.7069 2.96619 2.06441 2.51564 2.51485C0.903129 4.12743 0.636168 6.6851 1.88088 8.5959L5.94728 14.8381L10.0127 8.5959C11.2574 6.6851 10.9914 4.12743 9.37892 2.51485C8.92828 2.06419 8.39252 1.70698 7.80373 1.46309C7.21516 1.21934 6.58433 1.09401 5.94728 1.09395ZM5.94728 3.76192C6.52744 3.76262 7.08392 3.99328 7.49416 4.40352C7.90433 4.81378 8.1351 5.37025 8.13576 5.95039C8.13572 6.38318 8.00706 6.80636 7.76662 7.16621C7.52615 7.52603 7.18403 7.80626 6.7842 7.97188C6.3845 8.13738 5.94483 8.1812 5.52052 8.09688C5.096 8.01243 4.7055 7.80333 4.39943 7.49727C4.09354 7.19125 3.88521 6.80153 3.8008 6.37715C3.71635 5.95262 3.75918 5.5124 3.92482 5.1125C4.09047 4.71263 4.37158 4.37055 4.73146 4.13008C5.09128 3.88976 5.51459 3.76192 5.94728 3.76192ZM5.73341 4.87715C5.52124 4.9194 5.32682 5.02398 5.17384 5.17696C5.02087 5.32993 4.91629 5.52435 4.87404 5.73653C4.83182 5.94879 4.85372 6.16939 4.93654 6.36934C5.01932 6.56893 5.15927 6.73944 5.33888 6.85957C5.51883 6.97981 5.73086 7.04414 5.94728 7.04414C6.23733 7.04376 6.51562 6.92893 6.72072 6.72383C6.92582 6.51873 7.04065 6.24044 7.04103 5.95039C7.04103 5.73397 6.9767 5.52194 6.85646 5.34199C6.73633 5.16238 6.56582 5.02243 6.36623 4.93965C6.16628 4.85683 5.94568 4.83493 5.73341 4.87715Z"
-                              fill="var(--fill-0, #363636)"
-                            ></path>
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="flex-1 flex flex-col w-full relative">
-                      <div class="flex items-center justify-between w-full h-[32px]">
-                        <span
-                          class="font-['Poppins:Regular',sans-serif] leading-[24px] text-[#b6bdad] text-[14px]"
-                          >From</span
-                        >
-                      </div>
-                      <div class="bg-[#dbdcd9] h-px shrink-0 w-full my-1"></div>
-                      <div class="flex items-center justify-between w-full h-[32px]">
-                        <div class="flex-1 flex items-center">
-                          <input
-                            type="text"
-                            placeholder="To"
-                            class="flex-1 outline-none text-[#363636] font-['Poppins:Regular',sans-serif] text-[14px] bg-transparent"
-                            value="Tagbilaran, Bohol"
-                          />
-                        </div>
-                        <button class="text-gray-300 hover:text-gray-500 transition-colors ml-2">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="lucide lucide-x w-3.5 h-3.5"
-                          >
-                            <path d="M18 6 6 18"></path>
-                            <path d="m6 6 12 12"></path>
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                    <div
-                      class="absolute right-0 top-1/2 -translate-y-1/2 rounded-[100px] shrink-0 w-[15.848px] h-[35px] flex items-center justify-center cursor-pointer"
-                    >
-                      <div class="rotate-90">
-                        <div class="h-[11.46px] relative w-[15.848px]">
-                          <svg
-                            class="absolute block size-full"
-                            fill="none"
-                            preserveAspectRatio="none"
-                            viewBox="0 0 15.8477 11.4596"
-                          >
-                            <path
-                              d="M12.166 4.94906C12.3612 4.7545 12.678 4.75428 12.873 4.94906L15.7012 7.77816C15.7987 7.87573 15.8476 8.00384 15.8477 8.13168C15.8476 8.25943 15.7986 8.38768 15.7012 8.48519L12.873 11.3133C12.6779 11.5085 12.3613 11.5083 12.166 11.3133C11.971 11.118 11.9708 10.8015 12.166 10.6063L14.1162 8.65609H5.92383C5.64769 8.65609 5.42383 8.43223 5.42383 8.15609C5.42418 7.88025 5.6479 7.65609 5.92383 7.65609H14.165L12.166 5.65707C11.971 5.46179 11.9708 5.14426 12.166 4.94906ZM2.97461 0.146327C3.16979 -0.0488554 3.48636 -0.0486958 3.68164 0.146327C3.87682 0.341595 3.87688 0.658122 3.68164 0.853358L1.73145 2.80355H9.92383C10.2 2.80355 10.4238 3.02741 10.4238 3.30355C10.4236 3.57951 10.1998 3.80355 9.92383 3.80355H1.68262L3.68164 5.80258C3.87682 5.99785 3.87688 6.31535 3.68164 6.51058C3.48639 6.70531 3.16972 6.70553 2.97461 6.51058L0.146484 3.68148C0.0489168 3.58386 -7.09393e-06 3.45589 7.71517e-10 3.32797C9.58937e-05 3.20017 0.0490018 3.07198 0.146484 2.97445L2.97461 0.146327Z"
-                              fill="var(--fill-0, #363636)"
-                            ></path>
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="mb-[24px]">
-                  <div
-                    class="flex font-['Poppins:Medium',sans-serif] items-center leading-[21px] text-[#363636] text-[12px] w-full mb-2"
-                  >
-                    <p class="flex-1">Departure</p>
-                    <p class="flex-1">Return</p>
-                  </div>
-                  <div
-                    class="border border-[#dbdcd9] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)] rounded-[100px] px-[20px] py-[10px] flex items-center cursor-pointer bg-white w-full gap-[8px]"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="lucide lucide-calendar w-[14px] h-[14px] text-[#363636] shrink-0"
-                    >
-                      <path d="M8 2v4"></path>
-                      <path d="M16 2v4"></path>
-                      <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                      <path d="M3 10h18"></path>
-                    </svg>
-                    <div
-                      class="flex flex-1 items-center font-['Poppins:Regular',sans-serif] text-[14px]"
-                    >
-                      <div class="flex-1 text-[#363636]">Wed, Oct 30</div>
-                      <span class="mx-2 text-[#363636]">|</span>
-                      <div class="flex-1 text-[#363636]">Mon, Nov 4</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex gap-[8px] items-center w-full mb-[24px]">
-                  <div class="flex-1 flex flex-col gap-[8px]">
-                    <p
-                      class="font-['Poppins:Medium',sans-serif] leading-[21px] text-[#363636] text-[12px] whitespace-nowrap"
-                    >
-                      Passengers
-                    </p>
-                    <div
-                      class="border border-[#dbdcd9] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)] rounded-[100px] px-[20px] py-[10px] flex justify-between items-center"
-                    >
-                      <button
-                        class="text-[#363636] hover:text-black leading-none"
-                        data-action="counter:passengers:-1"
-                      >
-                        -
-                      </button>
-                      <span
-                        class="font-['Poppins:Regular',sans-serif] leading-[24px] text-[#363636] text-[14px]"
-                        >2</span
-                      >
-                      <button
-                        class="text-[#363636] hover:text-black leading-none"
-                        data-action="counter:passengers:1"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                  <div class="flex-1 flex flex-col gap-[8px]">
-                    <p
-                      class="font-['Poppins:Medium',sans-serif] leading-[21px] text-[#363636] text-[12px] whitespace-nowrap"
-                    >
-                      Vehicles
-                    </p>
-                    <div
-                      class="border border-[#dbdcd9] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)] rounded-[100px] px-[20px] py-[10px] flex justify-between items-center"
-                    >
-                      <button
-                        class="text-[#363636] hover:text-black leading-none"
-                        data-action="counter:vehicles:-1"
-                      >
-                        -
-                      </button>
-                      <span
-                        class="font-['Poppins:Regular',sans-serif] leading-[24px] text-[#363636] text-[14px]"
-                        >1</span
-                      >
-                      <button
-                        class="text-[#363636] hover:text-black leading-none"
-                        data-action="counter:vehicles:1"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                  <div class="flex-1 flex flex-col gap-[8px]">
-                    <p
-                      class="font-['Poppins:Medium',sans-serif] leading-[21px] text-[#363636] text-[12px] whitespace-nowrap"
-                    >
-                      Pets
-                    </p>
-                    <div
-                      class="border border-[#dbdcd9] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)] rounded-[100px] px-[20px] py-[10px] flex justify-between items-center"
-                    >
-                      <button
-                        class="text-[#363636] hover:text-black leading-none"
-                        data-action="counter:pets:-1"
-                      >
-                        -
-                      </button>
-                      <span
-                        class="font-['Poppins:Regular',sans-serif] leading-[24px] text-[#363636] text-[14px]"
-                        >1</span
-                      >
-                      <button
-                        class="text-[#363636] hover:text-black leading-none"
-                        data-action="counter:pets:1"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex gap-[8px] items-center w-full mb-[24px]">
-                  <div class="flex-1 flex flex-col gap-[8px]">
-                    <p
-                      class="font-['Poppins:Medium',sans-serif] leading-[21px] text-[#363636] text-[12px] whitespace-nowrap"
-                    >
-                      Shipping Line
-                    </p>
-                    <div
-                      class="border border-[#dbdcd9] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)] rounded-[100px] px-[20px] py-[10px] flex justify-between items-center cursor-pointer bg-white"
-                    >
-                      <span
-                        class="font-['Poppins:Regular',sans-serif] leading-[24px] text-[#363636] text-[14px] truncate"
-                        >Supercat</span
-                      >
-                      <div class="-rotate-45 flex-none relative size-[6px] shrink-0 ml-1">
-                        <svg
-                          class="absolute block size-full"
-                          fill="none"
-                          preserveAspectRatio="none"
-                          viewBox="0 0 6 6"
-                        >
-                          <path
-                            d="M0.5 0C0.776142 0 1 0.223858 1 0.5V5H5.5C5.77614 5 6 5.22386 6 5.5C6 5.77614 5.77614 6 5.5 6H0.5C0.258287 6 0.056292 5.82855 0.00976562 5.60059L0 5.5V0.5C0 0.223858 0.223858 0 0.5 0Z"
-                            fill="var(--fill-0, #363636)"
-                          ></path>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="flex-1 flex flex-col gap-[8px]">
-                    <p
-                      class="font-['Poppins:Medium',sans-serif] leading-[21px] text-[#363636] text-[12px] whitespace-nowrap"
-                    >
-                      Cabin Type
-                    </p>
-                    <div
-                      class="border border-[#dbdcd9] shadow-[0px_1px_4px_0px_rgba(12,12,13,0.05)] rounded-[100px] px-[20px] py-[10px] flex justify-between items-center cursor-pointer bg-white"
-                    >
-                      <span
-                        class="font-['Poppins:Regular',sans-serif] leading-[24px] text-[#363636] text-[14px] truncate"
-                        >Private Room</span
-                      >
-                      <div class="-rotate-45 flex-none relative size-[6px] shrink-0 ml-1">
-                        <svg
-                          class="absolute block size-full"
-                          fill="none"
-                          preserveAspectRatio="none"
-                          viewBox="0 0 6 6"
-                        >
-                          <path
-                            d="M0.5 0C0.776142 0 1 0.223858 1 0.5V5H5.5C5.77614 5 6 5.22386 6 5.5C6 5.77614 5.77614 6 5.5 6H0.5C0.258287 6 0.056292 5.82855 0.00976562 5.60059L0 5.5V0.5C0 0.223858 0.223858 0 0.5 0Z"
-                            fill="var(--fill-0, #363636)"
-                          ></path>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="relative mt-2">
-                  <button
-                    class="w-full bg-[#b2f510] text-black font-['Poppins:Medium',sans-serif] text-[12px] rounded-[100px] h-[41px] px-[20px] flex items-center justify-between transition-transform hover:scale-[1.02] active:scale-95 z-10 relative"
-                    data-action="go:trips"
-                  >
-                    <span class="flex-1 text-center pr-2">Explore options</span>
-                    <div class="h-[14px] relative shrink-0 w-[14.954px]">
-                      <svg
-                        class="absolute block size-full"
-                        fill="none"
-                        preserveAspectRatio="none"
-                        viewBox="0 0 14.9542 14.0002"
-                      >
-                        <path
-                          d="M6.1749 0.637742C7.19259 -0.379863 8.12551 0.0445752 8.46494 0.383835L14.9542 7.127L8.21103 13.6163C7.95657 13.9555 7.19275 14.3801 6.1749 13.3624C5.15743 12.3449 5.49627 11.4965 5.79306 11.1993L10.1192 7.127L5.92099 2.92876C5.58169 2.58946 5.157 1.65564 6.1749 0.637742ZM0.622166 1.10063C1.5473 0.175743 2.39567 0.560784 2.7042 0.869187L8.60361 7.00005L2.47275 12.8995C2.24139 13.2079 1.54743 13.5932 0.622166 12.668C-0.303174 11.7427 0.00461674 10.9711 0.274509 10.7012L4.2081 7.00005L0.39072 3.18266C0.0822863 2.87411 -0.303076 2.02587 0.622166 1.10063Z"
-                          fill="var(--fill-0, black)"
-                        ></path>
-                      </svg>
-                    </div>
-                  </button>
-                  <div
-                    aria-hidden="true"
-                    class="absolute border-2 border-solid border-white inset-[-2px] pointer-events-none rounded-[102px] z-20"
-                  ></div>
-                </div>
-                <div class="mt-[20px] text-center w-full">
-                  <p
-                    class="font-['Montserrat:Regular',sans-serif] text-[12px] text-[#363636]"
-                  >
-                    <span class="font-['Poppins:Regular',sans-serif] leading-[24px]"
-                      >Do you have an account?
-                    </span>
-                    <span
-                      class="cursor-pointer font-['Poppins:Medium',sans-serif] leading-[24px] underline hover:text-black transition-colors"
-                      data-action="go:login"
-                      >Log-in</span
-                    >
-                    <span class="font-['Poppins:SemiBold',sans-serif] leading-[24px]">
-                      or
-                    </span>
-                    <span
-                      class="cursor-pointer font-['Poppins:Medium',sans-serif] leading-[24px] underline hover:text-black transition-colors"
-                      data-action="go:signup"
-                      >Sign-up</span
-                    >
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-      <div class="mascot" aria-hidden="true">
-        <div class="mascot-bubble">Doode says: Speed it up! 🚀</div>
-        <div class="mascot-art">
-          <div class="relative size-full">
-            <div class="absolute contents left-0 top-[9.9px]" data-name="Mask group">
-              <div
-                class="absolute h-[121.854px] left-0 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[0px_11.426px] mask-size-[115px_109.668px] top-[-1.52px] w-[115.508px]"
-                style="mask-image:url('data:image/svg+xml,%3Csvg%20preserveAspectRatio%3D%22none%22%20width%3D%22100%25%22%20height%3D%22100%25%22%20overflow%3D%22visible%22%20style%3D%22display%3A%20block%3B%22%20viewBox%3D%220%200%20115%20109.669%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20id%3D%22Vector%203%22%20d%3D%22M0%200H58.6424L70.8278%2026.6556L89.8676%2040.3642H115V109.669H0V0Z%22%20fill%3D%22var(--fill-0%2C%20%23D9D9D9)%22%2F%3E%0A%3C%2Fsvg%3E%0A')"
-                data-name="dud-removebg-preview 1"
-              >
-                <img
-                  alt=""
-                  class="absolute inset-0 max-w-none object-cover pointer-events-none size-full"
-                  src="../assets/images/doode-turtle.png"
-                />
-              </div>
-            </div>
-            <div class="absolute left-[92.91px] size-[6.093px] top-[36.55px]" data-name="Subtract">
-              <svg
-                class="absolute block inset-0 size-full"
-                fill="none"
-                preserveAspectRatio="none"
-                viewBox="0 0 6.09277 6.09277"
-              >
-                <path
-                  d="M3.0459 0C4.7282 0 6.09253 1.36365 6.09277 3.0459C6.09277 4.72836 4.72836 6.09277 3.0459 6.09277C1.36365 6.09253 0 4.7282 0 3.0459C0.000248117 1.36381 1.36381 0.000248117 3.0459 0ZM3.04688 1.01562C1.92524 1.01562 1.01562 1.92524 1.01562 3.04688C1.01581 4.16835 1.92535 5.07715 3.04688 5.07715C4.16824 5.07696 5.07696 4.16824 5.07715 3.04688C5.07715 1.92535 4.16835 1.01581 3.04688 1.01562Z"
-                  fill="var(--fill-0, #191D4B)"
-                  id="Subtract"
-                ></path>
-              </svg>
-            </div>
-            <div class="absolute left-[97.48px] size-[3.046px] top-[22.85px]" data-name="Subtract">
-              <svg
-                class="absolute block inset-0 size-full"
-                fill="none"
-                preserveAspectRatio="none"
-                viewBox="0 0 3.0459 3.0459"
-              >
-                <path
-                  d="M1.52344 0C2.36455 0.000139786 3.0459 0.682295 3.0459 1.52344C3.04576 2.36446 2.36446 3.04576 1.52344 3.0459C0.682295 3.0459 0.000139786 2.36455 0 1.52344C0 0.682209 0.682209 0 1.52344 0ZM1.52344 0.507812C0.962619 0.507812 0.507812 0.962619 0.507812 1.52344C0.507906 2.08418 0.962676 2.53906 1.52344 2.53906C2.08412 2.53897 2.53897 2.08412 2.53906 1.52344C2.53906 0.962676 2.08418 0.507906 1.52344 0.507812Z"
-                  fill="var(--fill-0, #191D4B)"
-                  id="Subtract"
-                ></path>
-              </svg>
-            </div>
-            <div class="absolute left-[77.68px] size-[3.046px] top-0" data-name="Subtract">
-              <svg
-                class="absolute block inset-0 size-full"
-                fill="none"
-                preserveAspectRatio="none"
-                viewBox="0 0 3.0459 3.0459"
-              >
-                <path
-                  d="M1.52344 0C2.36455 0.000139786 3.0459 0.682295 3.0459 1.52344C3.04576 2.36446 2.36446 3.04576 1.52344 3.0459C0.682295 3.0459 0.000139786 2.36455 0 1.52344C0 0.682209 0.682209 0 1.52344 0ZM1.52344 0.507812C0.962619 0.507812 0.507812 0.962619 0.507812 1.52344C0.507906 2.08418 0.962676 2.53906 1.52344 2.53906C2.08412 2.53897 2.53897 2.08412 2.53906 1.52344C2.53906 0.962676 2.08418 0.507906 1.52344 0.507812Z"
-                  fill="var(--fill-0, #191D4B)"
-                  id="Subtract"
-                ></path>
-              </svg>
-            </div>
-            <div class="absolute left-[76.16px] size-[4.57px] top-[9.14px]" data-name="Subtract">
-              <svg
-                class="absolute block inset-0 size-full"
-                fill="none"
-                preserveAspectRatio="none"
-                viewBox="0 0 4.56934 4.56934"
-              >
-                <path
-                  d="M2.28516 0C3.54682 0.000209744 4.56934 1.02344 4.56934 2.28516C4.56913 3.54669 3.54669 4.56913 2.28516 4.56934C1.02344 4.56934 0.000209744 3.54682 0 2.28516C0 1.02331 1.02331 0 2.28516 0ZM2.28516 0.761719C1.44393 0.761719 0.761719 1.44393 0.761719 2.28516C0.761859 3.12627 1.44401 3.80762 2.28516 3.80762C3.12618 3.80748 3.80748 3.12618 3.80762 2.28516C3.80762 1.44401 3.12627 0.761859 2.28516 0.761719Z"
-                  fill="var(--fill-0, #191D4B)"
-                  id="Subtract"
-                ></path>
-              </svg>
-            </div>
-            <div class="absolute left-[82.25px] size-[9.139px] top-[25.89px]" data-name="Subtract">
-              <svg
-                class="absolute block inset-0 size-full"
-                fill="none"
-                preserveAspectRatio="none"
-                viewBox="0 0 9.13867 9.13867"
-              >
-                <path
-                  d="M4.56934 0C7.09295 0 9.13856 2.04574 9.13867 4.56934C9.13867 7.09302 7.09302 9.13867 4.56934 9.13867C2.04574 9.13856 0 7.09295 0 4.56934C0.000108229 2.04581 2.04581 0.000108229 4.56934 0ZM4.56934 1.52344C2.88724 1.52369 1.52369 2.88724 1.52344 4.56934C1.52344 6.25164 2.88709 7.61596 4.56934 7.61621C6.25179 7.61621 7.61621 6.25179 7.61621 4.56934C7.61596 2.88709 6.25164 1.52344 4.56934 1.52344Z"
-                  fill="var(--fill-0, #191D4B)"
-                  id="Subtract"
-                ></path>
-              </svg>
-            </div>
-            <div class="absolute left-[89.87px] size-[6.093px] top-[7.62px]" data-name="Subtract">
-              <svg
-                class="absolute block inset-0 size-full"
-                fill="none"
-                preserveAspectRatio="none"
-                viewBox="0 0 6.09277 6.09277"
-              >
-                <path
-                  d="M3.0459 0C4.7282 0 6.09253 1.36365 6.09277 3.0459C6.09277 4.72836 4.72836 6.09277 3.0459 6.09277C1.36365 6.09253 0 4.7282 0 3.0459C0.000248117 1.36381 1.36381 0.000248117 3.0459 0ZM3.04688 1.01562C1.92524 1.01562 1.01562 1.92524 1.01562 3.04688C1.01581 4.16835 1.92535 5.07715 3.04688 5.07715C4.16824 5.07696 5.07696 4.16824 5.07715 3.04688C5.07715 1.92535 4.16835 1.01581 3.04688 1.01562Z"
-                  fill="var(--fill-0, #191D4B)"
-                  id="Subtract"
-                ></path>
-              </svg>
-            </div>
-            <div
-              class="absolute flex items-center justify-center left-[92.91px] size-[2.285px] top-[15.99px]"
-            >
-              <div class="-scale-y-100 flex-none">
-                <div class="relative size-[2.285px]" data-name="Subtract">
-                  <svg
-                    class="absolute block inset-0 size-full"
-                    fill="none"
-                    preserveAspectRatio="none"
-                    viewBox="0 0 2.28516 2.28516"
-                  >
-                    <path
-                      d="M1.14258 0C1.77341 0.000104872 2.28516 0.511722 2.28516 1.14258C2.28505 1.77335 1.77335 2.28505 1.14258 2.28516C0.511722 2.28516 0.000104872 1.77341 0 1.14258C0 0.511657 0.511657 0 1.14258 0ZM1.14453 0.378906C0.723917 0.378906 0.382812 0.720011 0.382812 1.14062C0.382882 1.56118 0.72396 1.90234 1.14453 1.90234C1.56504 1.90227 1.90618 1.56114 1.90625 1.14062C1.90625 0.720054 1.56509 0.378976 1.14453 0.378906Z"
-                      fill="var(--fill-0, #191D4B)"
-                      id="Subtract"
-                    ></path>
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div
-              class="absolute flex items-center justify-center left-[86.82px] size-[1.523px] top-[20.56px]"
-            >
-              <div class="-scale-y-100 flex-none">
-                <div class="relative size-[1.523px]" data-name="Subtract">
-                  <svg
-                    class="absolute block inset-0 size-full"
-                    fill="none"
-                    preserveAspectRatio="none"
-                    viewBox="0 0 1.52344 1.52344"
-                  >
-                    <path
-                      d="M0.761719 0C1.18227 6.98931e-05 1.52344 0.341148 1.52344 0.761719C1.52337 1.18223 1.18223 1.52337 0.761719 1.52344C0.341148 1.52344 6.98931e-05 1.18227 0 0.761719C0 0.341105 0.341105 0 0.761719 0ZM0.761719 0.253906C0.481309 0.253906 0.253906 0.481309 0.253906 0.761719C0.253953 1.04209 0.481338 1.26953 0.761719 1.26953C1.04206 1.26948 1.26948 1.04206 1.26953 0.761719C1.26953 0.481338 1.04209 0.253953 0.761719 0.253906Z"
-                      fill="var(--fill-0, #191D4B)"
-                      id="Subtract"
-                    ></path>
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div
-              class="absolute flex items-center justify-center left-[92.91px] size-[1.523px] top-[47.22px]"
-            >
-              <div class="-scale-y-100 flex-none">
-                <div class="relative size-[1.523px]" data-name="Subtract">
-                  <svg
-                    class="absolute block inset-0 size-full"
-                    fill="none"
-                    preserveAspectRatio="none"
-                    viewBox="0 0 1.52344 1.52344"
-                  >
-                    <path
-                      d="M0.761719 0C1.18227 6.98931e-05 1.52344 0.341148 1.52344 0.761719C1.52337 1.18223 1.18223 1.52337 0.761719 1.52344C0.341148 1.52344 6.98931e-05 1.18227 0 0.761719C0 0.341105 0.341105 0 0.761719 0ZM0.761719 0.253906C0.481309 0.253906 0.253906 0.481309 0.253906 0.761719C0.253953 1.04209 0.481338 1.26953 0.761719 1.26953C1.04206 1.26948 1.26948 1.04206 1.26953 0.761719C1.26953 0.481338 1.04209 0.253953 0.761719 0.253906Z"
-                      fill="var(--fill-0, #191D4B)"
-                      id="Subtract"
-                    ></path>
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div
-              class="absolute flex items-center justify-center left-[100.53px] size-[1.523px] top-[30.46px]"
-            >
-              <div class="-scale-y-100 flex-none">
-                <div class="relative size-[1.523px]" data-name="Subtract">
-                  <svg
-                    class="absolute block inset-0 size-full"
-                    fill="none"
-                    preserveAspectRatio="none"
-                    viewBox="0 0 1.52344 1.52344"
-                  >
-                    <path
-                      d="M0.761719 0C1.18227 6.98931e-05 1.52344 0.341148 1.52344 0.761719C1.52337 1.18223 1.18223 1.52337 0.761719 1.52344C0.341148 1.52344 6.98931e-05 1.18227 0 0.761719C0 0.341105 0.341105 0 0.761719 0ZM0.761719 0.253906C0.481309 0.253906 0.253906 0.481309 0.253906 0.761719C0.254077 1.04198 0.481415 1.26953 0.761719 1.26953C1.04194 1.26944 1.26936 1.04192 1.26953 0.761719C1.26953 0.481368 1.04205 0.254001 0.761719 0.253906Z"
-                      fill="var(--fill-0, #191D4B)"
-                      id="Subtract"
-                    ></path>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <script src="../assets/js/booking-flow.js" defer></script>
+    <link rel="stylesheet" href="../assets/css/booking-flow.css" />
+</head>
+
+<body data-page="index">
+  <div
+    class="flex flex-col min-h-screen font-sans text-slate-900 bg-white selection:bg-[#CCFF00] selection:text-black overflow-x-hidden">
+    <header class="entree-hero-header">
+      <!-- Right Utilities & Account -->
+      <div class="entree-hero-actions">
+        <a href="pasalubong.html" class="entree-pasalubong-btn" data-action="go:pasalubong">
+          <span>Buy Pasalubong</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-shopping-bag" aria-hidden="true">
+            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+            <path d="M3 6h18" />
+            <path d="M16 10a4 4 0 0 1-8 0" />
+          </svg>
+        </a>
+        <a href="login.html" class="entree-login-btn" data-action="go:login">
+          <span>Log-in</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-log-in">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" x2="3" y1="12" y2="12"></line>
+          </svg>
+        </a>
       </div>
-    </div>
-  </body>
+    </header>
+    <main class="flex-1 flex flex-col relative w-full h-full">
+      <section class="entree-hero-section">
+        <!-- Hero Background Image & Gradient Overlay -->
+        <div class="entree-hero-bg">
+          <img src="../assets/images/ocean-background.png" alt="Ocean background" />
+          <div class="entree-hero-vignette"></div>
+        </div>
+
+        <!-- Two-Column Hero Layout Container -->
+        <div class="entree-hero-container">
+          <!-- Hero Headline & Supporting Text (Left Column) -->
+          <div class="entree-hero-copy">
+            <div class="entree-hero-logo-wrap">
+              <img src="../assets/images/entree-logo.png" alt="Entree Logo" class="entree-hero-logo" />
+              <span class="entree-hero-logo-text">entree</span>
+            </div>
+            <h1 class="entree-hero-title">
+              Your Journey Starts at Sea
+            </h1>
+            <p class="entree-hero-subtitle">
+              Book ferry trips across the Philippines with trusted shipping lines—all in one place.
+            </p>
+          </div>
+
+          <!-- Modern Professional Booking Card (Right Column) -->
+          <div class="hero-glass-card">
+            <!-- Top Segmented Control -->
+            <div class="booking-widget-top">
+              <div class="travel-type-container" role="tablist" aria-label="Travel Type">
+                <button type="button" class="travel-type-pill is-active" data-travel-type="Round Trip"
+                  aria-selected="true">
+                  Round Trip
+                </button>
+                <button type="button" class="travel-type-pill" data-travel-type="One Way" aria-selected="false">
+                  One Way
+                </button>
+                <!-- Native select for compatibility -->
+                <select class="hidden" aria-label="Travel Type">
+                  <option selected>Round Trip</option>
+                  <option>One Way</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Main Vertical Form Stack -->
+            <div class="booking-inputs-bar">
+              <!-- Route: From + Swap + To -->
+              <div class="route-input-group">
+                <!-- From -->
+                <div class="hero-sub-glass">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-map-pin text-[#007f70] shrink-0">
+                    <path
+                      d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  <div class="input-content">
+                    <label for="origin" class="input-label">From</label>
+                    <input type="text" id="origin" placeholder="Origin port / city" value="Cebu" />
+                  </div>
+                </div>
+
+                <!-- Circular Swap Button -->
+                <button type="button" data-action="swap" class="route-swap-btn" aria-label="Swap origin and destination"
+                  title="Swap locations">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-arrow-left-right">
+                    <path d="m16 3 4 4-4 4" />
+                    <path d="M20 7H4" />
+                    <path d="m8 21-4-4 4-4" />
+                    <path d="M4 17h16" />
+                  </svg>
+                </button>
+
+                <!-- To -->
+                <div class="hero-sub-glass">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-navigation text-[#007f70] shrink-0">
+                    <polygon points="3 11 22 2 13 21 11 13 3 11" />
+                  </svg>
+                  <div class="input-content">
+                    <label for="destination" class="input-label">To</label>
+                    <input type="text" id="destination" placeholder="Destination" value="Tagbilaran, Bohol" />
+                  </div>
+                  <button type="button"
+                    class="clear-btn text-slate-300 hover:text-slate-600 transition-colors shrink-0 p-1"
+                    aria-label="Clear destination" title="Clear">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                      class="lucide lucide-x">
+                      <path d="M18 6 6 18"></path>
+                      <path d="m6 6 12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Dates: Departure + Return -->
+              <div class="dates-input-group">
+                <!-- Departure -->
+                <div class="hero-sub-glass cursor-pointer select-none" data-date="" tabindex="0" role="button"
+                  aria-label="Departure date" title="Change departure date">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-calendar text-[#007f70] shrink-0">
+                    <path d="M8 2v4"></path>
+                    <path d="M16 2v4"></path>
+                    <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                    <path d="M3 10h18"></path>
+                  </svg>
+                  <div class="input-content">
+                    <span class="input-label">Departure</span>
+                    <span class="input-val-text">Today</span>
+                  </div>
+                </div>
+
+                <!-- Return -->
+                <div class="hero-sub-glass cursor-pointer select-none" data-date="" tabindex="0" role="button"
+                  aria-label="Return date" title="Change return date">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-calendar text-[#007f70] shrink-0">
+                    <path d="M8 2v4"></path>
+                    <path d="M16 2v4"></path>
+                    <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                    <path d="M3 10h18"></path>
+                  </svg>
+                  <div class="input-content">
+                    <span class="input-label">Return</span>
+                    <span class="input-val-text">Tomorrow</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Passengers / Vehicles / Pets Counters -->
+              <div class="passengers-input-group pax-counters">
+                <div class="pax-counter">
+                  <span class="input-label pax-counter-label" id="passengers-label">Passengers</span>
+                  <div class="pax-stepper" data-counter-type="passengers" role="group" aria-labelledby="passengers-label">
+                    <button type="button" class="pax-step-btn" data-action="counter:passengers:-1"
+                      aria-label="Decrease passengers">&minus;</button>
+                    <span class="pax-count" aria-live="polite">0</span>
+                    <button type="button" class="pax-step-btn" data-action="counter:passengers:1"
+                      aria-label="Increase passengers">+</button>
+                  </div>
+                </div>
+                <div class="pax-counter">
+                  <span class="input-label pax-counter-label" id="vehicles-label">Vehicles</span>
+                  <div class="pax-stepper" data-counter-type="vehicles" role="group" aria-labelledby="vehicles-label">
+                    <button type="button" class="pax-step-btn" data-action="counter:vehicles:-1"
+                      aria-label="Decrease vehicles">&minus;</button>
+                    <span class="pax-count" aria-live="polite">0</span>
+                    <button type="button" class="pax-step-btn" data-action="counter:vehicles:1"
+                      aria-label="Increase vehicles">+</button>
+                  </div>
+                </div>
+                <div class="pax-counter">
+                  <span class="input-label pax-counter-label" id="pets-label">Pets</span>
+                  <div class="pax-stepper" data-counter-type="pets" role="group" aria-labelledby="pets-label">
+                    <button type="button" class="pax-step-btn" data-action="counter:pets:-1"
+                      aria-label="Decrease pets">&minus;</button>
+                    <span class="pax-count" aria-live="polite">0</span>
+                    <button type="button" class="pax-step-btn" data-action="counter:pets:1"
+                      aria-label="Increase pets">+</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Shipping Line & Cabin Selectors (under Passengers & Cargo) -->
+              <div class="booking-quick-filters">
+                <!-- Shipping Line Custom Dropdown -->
+                <div class="custom-dropdown-wrap" data-dropdown="shipping-line">
+                  <button type="button" class="custom-dropdown-trigger hero-sub-glass" aria-haspopup="listbox" aria-expanded="false"
+                    aria-label="Select Shipping Line">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="lucide lucide-ship text-[#007f70] shrink-0">
+                      <path d="M12 10.189V14" />
+                      <path d="M12 2v3" />
+                      <path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6" />
+                      <path d="M19.38 20A11.6 11.6 0 0 0 21 14l-8.188-3.639a2 2 0 0 0-1.624 0L3 14a11.6 11.6 0 0 0 2.81 7.76" />
+                      <path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1s1.2 1 2.5 1c2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+                    </svg>
+                    <span class="input-content">
+                      <span class="input-label dropdown-label">Shipping Line</span>
+                      <span class="input-val-text dropdown-value">Supercat</span>
+                    </span>
+                    <svg class="dropdown-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </button>
+                  <ul class="custom-dropdown-menu" role="listbox" aria-label="Shipping Line">
+                    <li class="dropdown-option" role="option" data-value="Lite Shipping" aria-selected="false">
+                      <span class="option-text">Lite Shipping</span>
+                      <span class="option-check" aria-hidden="true">✓</span>
+                    </li>
+                    <li class="dropdown-option" role="option" data-value="2Go Travel" aria-selected="false">
+                      <span class="option-text">2Go Travel</span>
+                      <span class="option-check" aria-hidden="true">✓</span>
+                    </li>
+                    <li class="dropdown-option is-active" role="option" data-value="Supercat" aria-selected="true">
+                      <span class="option-text">Supercat</span>
+                      <svg class="option-check" xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </li>
+                    <li class="dropdown-option" role="option" data-value="OceanJet" aria-selected="false">
+                      <span class="option-text">OceanJet</span>
+                      <svg class="option-check" xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </li>
+                    <li class="dropdown-option" role="option" data-value="FastCat" aria-selected="false">
+                      <span class="option-text">FastCat</span>
+                      <svg class="option-check" xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </li>
+                  </ul>
+                  <!-- Hidden native select for form and script compatibility -->
+                  <select class="hidden" aria-label="Shipping Line">
+                    <option>Lite Shipping</option>
+                    <option>2Go Travel</option>
+                    <option selected>Supercat</option>
+                    <option>OceanJet</option>
+                    <option>FastCat</option>
+                  </select>
+                </div>
+
+                <!-- Cabin Type Custom Dropdown -->
+                <div class="custom-dropdown-wrap" data-dropdown="cabin-type">
+                  <button type="button" class="custom-dropdown-trigger hero-sub-glass" aria-haspopup="listbox" aria-expanded="false"
+                    aria-label="Select Cabin Type">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="lucide lucide-armchair text-[#007f70] shrink-0">
+                      <path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3" />
+                      <path d="M3 16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V11a2 2 0 0 0-4 0z" />
+                      <path d="M5 18v2" />
+                      <path d="M19 18v2" />
+                    </svg>
+                    <span class="input-content">
+                      <span class="input-label dropdown-label">Cabin</span>
+                      <span class="input-val-text dropdown-value">Economy</span>
+                    </span>
+                    <svg class="dropdown-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </button>
+                  <ul class="custom-dropdown-menu" role="listbox" aria-label="Cabin Type">
+                    <li class="dropdown-option is-active" role="option" data-value="Economy" aria-selected="true">
+                      <span class="option-text">Economy</span>
+                      <svg class="option-check" xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </li>
+                    <li class="dropdown-option" role="option" data-value="Business" aria-selected="false">
+                      <span class="option-text">Business</span>
+                      <svg class="option-check" xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </li>
+                    <li class="dropdown-option" role="option" data-value="Private" aria-selected="false">
+                      <span class="option-text">Private</span>
+                      <svg class="option-check" xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </li>
+                  </ul>
+                  <!-- Hidden native select for form and script compatibility -->
+                  <select class="hidden" aria-label="Cabin Type">
+                    <option selected>Economy</option>
+                    <option>Business</option>
+                    <option>Private</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Primary CTA: Search Ferries -->
+              <button type="button" data-action="go:trips" class="hero-search-cta"
+                aria-label="Search available ferries">
+                <span>Search Ferries</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"
+                  class="hero-search-cta-icon lucide lucide-chevrons-right" aria-hidden="true">
+                  <path d="m6 17 5-5-5-5" />
+                  <path d="m13 17 5-5-5-5" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Quick helper footer inside card -->
+            <div class="booking-widget-bottom">
+              <div>
+                <span class="font-normal">Have an account? </span>
+                <a href="login.html"
+                  class="cursor-pointer font-['Poppins',sans-serif] font-normal text-slate-800 hover:text-[#007f70] underline transition-colors"
+                  data-action="go:login">Log in</a>
+                <span class="font-normal"> or </span>
+                <a href="signup.html"
+                  class="cursor-pointer font-['Poppins',sans-serif] font-normal text-slate-800 hover:text-[#007f70] underline transition-colors"
+                  data-action="go:signup">Sign up</a>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+  </section>
+  </main>
+  <div class="mascot" aria-hidden="true">
+    <div class="mascot-bubble"></div>
+    <div class="mascot-art"></div>
+  </div>
+  </div>
+</body>
+
 </html>
