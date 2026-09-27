@@ -824,7 +824,8 @@
 
     // Earliest selectable day: today for departure, the departure day for return.
     function minDate(card = activeDateCard) {
-      const todayValue = localDateValue(new Date());
+      // Today, or tomorrow once every sailing for today has left.
+      const todayValue = window.ENTREE_BOOKING?.firstBookableDate?.() || localDateValue(new Date());
       const departure = targetCards[0]?.dataset.date;
       return card !== targetCards[0] && departure > todayValue ? departure : todayValue;
     }
@@ -858,7 +859,7 @@
         const past = value < min;
         return `<button type="button" class="calendar-day${value === selected ? " is-selected" : ""}" data-calendar-date="${value}" aria-label="${label}" aria-pressed="${value === selected}"${value === localDateValue(new Date()) ? ' aria-current="date"' : ''}${past ? " disabled" : ""} tabindex="${value === focusDay && !past ? 0 : -1}">${i + 1}</button>`;
       }).join("");
-      calendar.innerHTML = `<div class="calendar-heading"><button type="button" class="calendar-nav" data-month-step="-1" aria-label="Previous month"${atEarliestMonth ? " disabled" : ""}>&#8249;</button><span aria-live="polite">${monthLabel}</span><button type="button" class="calendar-nav" data-month-step="1" aria-label="Next month">&#8250;</button></div><div class="calendar-weekdays" aria-hidden="true">${["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map(day => `<span>${day}</span>`).join("")}</div><div class="calendar-days">${'<span aria-hidden="true"></span>'.repeat(firstDay)}${days}</div><div class="calendar-footer"><button type="button" class="calendar-today">Today</button><button type="button" class="calendar-close">Close</button></div>`;
+      calendar.innerHTML = `<div class="calendar-heading"><button type="button" class="calendar-nav" data-month-step="-1" aria-label="Previous month"${atEarliestMonth ? " disabled" : ""}>&#8249;</button><span aria-live="polite">${monthLabel}</span><button type="button" class="calendar-nav" data-month-step="1" aria-label="Next month">&#8250;</button></div><div class="calendar-weekdays" aria-hidden="true">${["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map(day => `<span>${day}</span>`).join("")}</div><div class="calendar-days">${'<span aria-hidden="true"></span>'.repeat(firstDay)}${days}</div><div class="calendar-footer"><button type="button" class="calendar-today">${min === localDateValue(new Date()) ? "Today" : "Earliest"}</button><button type="button" class="calendar-close">Close</button></div>`;
     }
 
     calendar.onclick = (event) => {
@@ -951,8 +952,8 @@
 
   // ==========================================================================
   // Phones / tablets (anything that isn't the desktop view): the booking card is
-  // a bottom sheet. Collapsed ("peek") it shows trip type, From and To; "More",
-  // a tap on the header, a swipe up, or focusing a field expands the whole form.
+  // a bottom sheet. Collapsed ("peek") it shows only the header and trip type;
+  // "More", a tap anywhere on the sheet, or a swipe up expands the whole form.
   // Keep MOBILE_QUERY in sync with the media query in index.css.
   // ==========================================================================
   const MOBILE_QUERY = "(max-width: 1024px), (hover: none) and (pointer: coarse)";
@@ -980,10 +981,10 @@
       const sub = $(".m-sheet-sub", card);
       if (sub) sub.textContent = `${dates} · ${pax ? `${pax} passenger${pax === 1 ? "" : "s"}` : "Add passengers"}`;
     }
-    // Collapsed height = header + trip type + From + To (just From on very short screens).
+    // Collapsed height = header + the Round Trip / One Way switch.
     function measurePeek() {
       if (!isMobile()) return;
-      const to = $(window.innerHeight < 640 ? "#origin" : "#destination")?.closest(".hero-sub-glass");
+      const to = $(".travel-type-container", card);
       if (!to) return;
       const wasOpen = card.classList.contains("is-sheet-open");
       if (wasOpen) card.classList.remove("is-sheet-open");
@@ -992,7 +993,7 @@
       card.style.maxHeight = "none";
       const scroll = card.scrollTop;
       card.scrollTop = 0;
-      const height = Math.ceil(to.getBoundingClientRect().bottom - card.getBoundingClientRect().top + 22);
+      const height = Math.ceil(to.getBoundingClientRect().bottom - card.getBoundingClientRect().top + 14);
       card.style.maxHeight = "";
       card.scrollTop = scroll;
       if (wasOpen) card.classList.add("is-sheet-open");
@@ -1000,8 +1001,43 @@
       card.style.transition = prevTransition;
       // Never let the collapsed sheet take more than ~55% of the screen.
       const cap = Math.round(window.innerHeight * 0.55);
-      root.style.setProperty("--m-peek-h", `${Math.max(180, Math.min(height, cap))}px`);
+      root.style.setProperty("--m-peek-h", `${Math.max(120, Math.min(height, cap))}px`);
     }
+    // Some Android browsers, device frames and phone simulators report a
+    // viewport taller than what's actually on screen, so a sheet docked at
+    // bottom: 0 gets its lower part cut off. A full-height invisible probe +
+    // IntersectionObserver (which honours clipping by parent frames) tells us
+    // where the screen visibly ends; the sheet docks there instead.
+    const probe = document.createElement("div");
+    probe.setAttribute("aria-hidden", "true");
+    probe.style.cssText = "position:fixed;top:0;bottom:0;left:50%;width:1px;pointer-events:none;visibility:hidden;z-index:-1;";
+    document.body.appendChild(probe);
+    let hiddenBottom = 0;
+    function applyHiddenBottom(px) {
+      const cap = Math.round(window.innerHeight * 0.25);
+      const next = isMobile() ? Math.max(0, Math.min(Math.round(px), cap)) : 0;
+      if (next === hiddenBottom) return;
+      hiddenBottom = next;
+      root.style.setProperty("--m-sheet-bottom", `${next}px`);
+    }
+    const thresholds = Array.from({ length: 201 }, (_, i) => i / 200);
+    const probeIO = "IntersectionObserver" in window
+      ? new IntersectionObserver((entries) => {
+          const e = entries[entries.length - 1];
+          if (!e) return;
+          const box = e.boundingClientRect;
+          const seen = e.intersectionRect;
+          // Only a clip at the bottom counts (the probe's top stays on screen).
+          if (!e.isIntersecting || seen.height <= 0) return applyHiddenBottom(0);
+          applyHiddenBottom(box.bottom - seen.bottom);
+        }, { threshold: thresholds })
+      : null;
+    function remeasureVisibleBottom() {
+      if (!probeIO) return;
+      probeIO.unobserve(probe);
+      probeIO.observe(probe); // observe() always reports the current state once
+    }
+    remeasureVisibleBottom();
     function setOpen(next, { restoreFocus = true, focusSheet = true } = {}) {
       if (next === open) return;
       open = next;
@@ -1033,19 +1069,25 @@
       event.stopPropagation();
       setOpen(!open);
     });
-    // Tapping the header (not a control inside it) expands the collapsed sheet.
-    head.addEventListener("click", () => {
-      if (!open && isMobile()) setOpen(true);
+    // Tapping anywhere on the collapsed sheet (header, trip type, the white
+    // space) opens the planner. A tap on Round Trip / One Way still picks it.
+    card.addEventListener("click", (event) => {
+      if (open || !isMobile() || toggle.contains(event.target)) return;
+      setOpen(true);
     });
-    // Swipe up on the header to expand, down to collapse.
+    // Swipe up on the collapsed sheet to expand; swipe down on the header to collapse.
     let startY = null;
-    head.addEventListener("touchstart", (e) => { startY = e.touches[0].clientY; }, { passive: true });
-    head.addEventListener("touchend", (e) => {
+    let startedOnHead = false;
+    card.addEventListener("touchstart", (e) => {
+      startY = e.touches[0].clientY;
+      startedOnHead = head.contains(e.target);
+    }, { passive: true });
+    card.addEventListener("touchend", (e) => {
       if (startY === null) return;
       const dy = e.changedTouches[0].clientY - startY;
       startY = null;
       if (dy < -30 && !open) setOpen(true);
-      else if (dy > 30 && open) setOpen(false);
+      else if (dy > 30 && open && startedOnHead) setOpen(false);
     }, { passive: true });
     // Typing into a field (e.g. From/To while collapsed) expands the sheet so the keyboard has room.
     card.addEventListener("focusin", (event) => {
@@ -1065,7 +1107,11 @@
     };
     if (mq.addEventListener) mq.addEventListener("change", onViewportChange);
     else mq.addListener?.(onViewportChange);
-    window.addEventListener("resize", () => requestAnimationFrame(measurePeek));
+    window.addEventListener("resize", () => requestAnimationFrame(() => {
+      measurePeek();
+      remeasureVisibleBottom();
+    }));
+    window.visualViewport?.addEventListener("resize", remeasureVisibleBottom);
     window.addEventListener("load", measurePeek);
     document.fonts?.ready?.then(measurePeek);
     // The saved search is restored by booking-flow.js, which runs after this file.
@@ -1571,8 +1617,8 @@
              Add to trip
            </button>`;
       return `<article class="pz-card">
-        <div class="pz-media">
-          <img src="${escape(p.images[photo])}" alt="${escape(p.name)}" loading="lazy" />
+        <div class="pz-media" data-media="${p.id}">
+          <img class="pz-photo" src="${escape(p.images[photo])}" alt="${escape(p.name)}" loading="lazy" draggable="false" />
           <span class="pz-tag">${escape(catLabel(p.category))}</span>
           ${
             many
@@ -1606,19 +1652,106 @@
       </article>`;
     }
     function renderGrid(focusKey) {
+      [...slides.keys()].forEach(settleSlide);
       const list = visibleProducts();
       grid.innerHTML = list.map(cardHTML).join("");
       $("#pz-noresults").hidden = list.length > 0;
       if (focusKey) $(`[data-focus="${focusKey}"]`, grid)?.focus({ preventScroll: true });
     }
+    // ---- Photo carousel: the next photo slides in from the side you pressed ----
+    // Only the one card's photo is animated (no grid re-render), using the Web
+    // Animations API on transform, so it's smooth on desktop, Android, iPhone
+    // and iPad alike. Rapid taps finish the current slide and start the next.
+    const photoMotionOff = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    const SLIDE_MS = 420;
+    const SLIDE_EASE = "cubic-bezier(0.22, 0.61, 0.36, 1)";
+    const slides = new Map(); // productId -> { anims, out, token }
+    // Warm the cache so a photo never slides in blank.
+    const preloaded = new Set();
+    function preload(src) {
+      if (!src || preloaded.has(src)) return;
+      preloaded.add(src);
+      const img = new Image();
+      img.decoding = "async";
+      img.src = src;
+    }
+    const warmPhotos = () => products.forEach((p) => p.images.forEach(preload));
+    if (document.readyState === "complete") setTimeout(warmPhotos, 300);
+    else window.addEventListener("load", () => setTimeout(warmPhotos, 300), { once: true });
+
+    function settleSlide(id) {
+      const s = slides.get(id);
+      if (!s) return;
+      s.anims.forEach((a) => a.cancel());
+      s.out?.remove();
+      s.in && (s.in.style.transform = "");
+      slides.delete(id);
+    }
+    function slidePhoto(id, dir) {
+      const product = products.find((p) => p.id === id);
+      if (!product || product.images.length < 2) return;
+      const n = product.images.length;
+      shop.photo[id] = (shop.photo[id] + dir + n) % n;
+      const idx = shop.photo[id];
+      const media = $(`[data-media="${id}"]`, grid);
+      if (!media) return;
+      $$(".pz-dots span", media).forEach((d, i) => d.classList.toggle("is-on", i === idx));
+      settleSlide(id);
+      const current = $(".pz-photo", media);
+      const next = document.createElement("img");
+      next.className = "pz-photo";
+      next.alt = product.name;
+      next.draggable = false;
+      next.decoding = "async";
+      next.src = product.images[idx];
+      if (!current || photoMotionOff() || !next.animate) {
+        current ? current.replaceWith(next) : media.prepend(next);
+        return;
+      }
+      const token = {};
+      next.style.transform = `translateX(${dir * 100}%)`;
+      current.after(next);
+      slides.set(id, { anims: [], out: current, in: next, token });
+      // Wait (briefly) for the new photo to be ready so it never slides in empty.
+      const ready = next.decode ? next.decode().catch(() => {}) : Promise.resolve();
+      Promise.race([ready, new Promise((r) => setTimeout(r, 350))]).then(() => {
+        const s = slides.get(id);
+        if (!s || s.token !== token) return; // superseded by a newer tap
+        const opts = { duration: SLIDE_MS, easing: SLIDE_EASE, fill: "forwards" };
+        const outAnim = current.animate([{ transform: "translateX(0)" }, { transform: `translateX(${-dir * 100}%)` }], opts);
+        const inAnim = next.animate([{ transform: `translateX(${dir * 100}%)` }, { transform: "translateX(0)" }], opts);
+        s.anims = [outAnim, inAnim];
+        inAnim.onfinish = () => {
+          if (slides.get(id)?.token === token) settleSlide(id);
+        };
+      });
+    }
+    // Swipe left / right on a photo (phones, tablets, iPads).
+    let swipe = null;
+    grid.addEventListener("touchstart", (e) => {
+      const media = e.target.closest(".pz-media");
+      if (!media || e.touches.length !== 1 || e.target.closest("button")) return (swipe = null);
+      swipe = { id: Number(media.dataset.media), x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }, { passive: true });
+    grid.addEventListener("touchend", (e) => {
+      if (!swipe) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - swipe.x;
+      const dy = t.clientY - swipe.y;
+      const id = swipe.id;
+      swipe = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) slidePhoto(id, dx < 0 ? 1 : -1);
+    }, { passive: true });
+    grid.addEventListener("touchcancel", () => (swipe = null), { passive: true });
+
     grid.addEventListener("click", (e) => {
       const b = e.target.closest("[data-pz]");
       if (!b) return;
       const [act, a, c] = b.dataset.pz.split(":");
       const product = products.find((p) => p.id === Number(a));
       let focus = b.dataset.focus;
+      if (act === "photo") return slidePhoto(Number(a), Number(c));
       if (act === "variant") shop.selected[a] = Number(c);
-      else if (act === "photo") shop.photo[a] = (shop.photo[a] + Number(c) + product.images.length) % product.images.length;
       else if (act === "add") {
         const v = product.menu.find((m) => m.id === shop.selected[a]);
         addToCart(product, v);
@@ -2604,7 +2737,7 @@
         index: [
           // Phones/tablets only: the planner is a bottom sheet that must be expanded first.
           // "gate" steps block the tour until the user does the thing themselves.
-          { find: bySel(".m-sheet-toggle"), gate: true, done: () => Boolean(tripSheet?.isOpen()), say: "Tap More to open the full trip planner. Dates, passengers and more are inside!" },
+          { find: bySel(".m-sheet-toggle"), gate: true, done: () => Boolean(tripSheet?.isOpen()), say: "Tap More (or anywhere on Plan your trip) to open the planner. From, To, dates and passengers are all inside!" },
           { find: bySel("#origin"), inSheet: true, done: filled, say: "Start here! Where are you sailing from?" },
           { find: bySel("#destination"), inSheet: true, done: filled, say: "Now pick where you're going. Somewhere with good mangoes, ideally." },
           { find: bySel('[aria-label="Departure date"]'), inSheet: true, say: "Tap here to pick your travel date. Weekends go fast!" },
@@ -2799,10 +2932,10 @@
       }
       // The user pressed "Next" without doing the gated action: Doode won't move on.
       const GATE_NUDGES = [
-        "Nope! Tap More first. I can't show you the planner while it's folded up.",
+        "Nope! Tap More first. I can't show you From and To while the planner is folded up.",
         "Hold on, sailor! Open the planner with the green More button, then we keep going.",
-        "I'll wait... the More button won't tap itself. Go on!",
-        "Can't skip this one! Tap More to open the planner.",
+        "I'll wait... the planner won't open itself. Tap More or anywhere on Plan your trip!",
+        "Can't skip this one! Tap the planner to open it.",
       ];
       function tryPassGate() {
         if (!guide) return;

@@ -26,6 +26,41 @@
     const company = window.ENTREE_DATA.SHIPPING_COMPANIES.find(c => c.name === name);
     return company?.logo ? `<img class="${className}" src="../assets/images/${company.logo}" alt="${escape(name)} logo" />` : `<span class="${className} bf-logo-text">${escape(name)}</span>`;
   }
+  // The Shipping Line picked on the home page books that line's trip on each
+  // leg when it sails that day (the traveller can still change or cancel it).
+  function preselectPreferred(legs) {
+    const value = booking.get();
+    const all = value.tripType === "Round Trip" ? ["outbound", "return"] : ["outbound"];
+    const changes = {};
+    for (const leg of legs || all) {
+      const key = leg === "outbound" ? "outboundId" : "returnId";
+      if (value[key] && booking.selected(leg, value)) continue;
+      const pick = booking.options(leg, value).find(o => o.ferry === value.shippingLine);
+      if (pick) changes[key] = pick.id;
+    }
+    if (Object.keys(changes).length) booking.save(changes);
+  }
+  // "No trips left on this date" → move that leg one day later, keep the other leg's choice.
+  function showNextDay(leg) {
+    const value = booking.get();
+    const keep = { outboundId: value.outboundId, returnId: value.returnId };
+    let departureDate = value.departureDate, returnDate = value.returnDate;
+    if (leg === "outbound") {
+      departureDate = booking.addDays(departureDate, 1);
+      if (returnDate < departureDate) returnDate = departureDate;
+    } else returnDate = booking.addDays(returnDate, 1);
+    booking.save({ departureDate, returnDate });
+    const restore = {};
+    if (leg === "outbound" && returnDate === value.returnDate && keep.returnId) restore.returnId = keep.returnId;
+    if (leg === "return" && keep.outboundId) restore.outboundId = keep.outboundId;
+    if (Object.keys(restore).length) booking.save(restore);
+    preselectPreferred([leg]);
+    renderTrips();
+    const section = $(`#${leg}-trips`);
+    section?.scrollIntoView({ behavior: "smooth", block: "start" });
+    ($(`#${leg}-trips .bf-book-button`) || section?.querySelector("h2"))?.focus({ preventScroll: true });
+  }
+  const shortDate = value => new Date(value + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
   function summary(value = booking.get(), prices = true) {
     const totals = value.fareBreakdown || booking.totals(value);
     const legs = value.tripType === "Round Trip" ? ["outbound", "return"] : ["outbound"];
@@ -38,7 +73,7 @@
           ${choosing && trip ? `<button type="button" class="bf-icon-button" data-clear-trip="${leg}" aria-label="Remove ${returning ? "return" : "departure"} trip" title="Remove trip">×</button>` : choosing ? `<a class="bf-edit" href="#${leg}-trips" aria-label="Choose ${returning ? "return" : "departure"} trip">Choose</a>` : ""}</div>
           <p class="bf-leg-route">${escape(returning ? value.destination : value.origin)} <span aria-hidden="true">→</span> ${escape(returning ? value.origin : value.destination)}</p>
           <p class="bf-leg-date">${escape(date(returning ? value.returnDate : value.departureDate))}${trip ? ` | ${escape(trip.departureTime)} – ${escape(trip.arrivalTime)}${trip.arrivalNextDay ? " (+1 day)" : ""}` : ""}</p>
-          ${trip ? `<div class="bf-leg-company">${companyLogo(trip.ferry)}<div><strong>${escape(trip.ferry)}</strong><span>${escape(value.cabin)}</span></div></div><div class="bf-price-row"><span>Ticket price (${value.passengers} pax)</span><strong>${money(trip.pricePerPerson * value.passengers)}</strong></div>` : '<p class="bf-note">Choose a shipping line for this leg.</p>'}</section>`;
+          ${trip ? `<div class="bf-leg-company">${companyLogo(trip.ferry)}<div><strong>${escape(trip.ferry)}</strong><span>${escape(value.cabin)}</span></div></div><div class="bf-price-row"><span>Ticket price (${value.passengers} pax)</span><strong>${money(trip.pricePerPerson * value.passengers)}</strong></div>` : choosing && !booking.options(leg, value).length && value.passengers <= 80 ? `<p class="bf-note bf-note-warn">No sailings left on this date.</p><button type="button" class="bf-next-day-btn" data-next-day="${leg}">See ${escape(shortDate(booking.addDays(returning ? value.returnDate : value.departureDate, 1)))} trips</button>` : '<p class="bf-note">Choose a shipping line for this leg.</p>'}</section>`;
       }).join("")}
       <p class="bf-party-counts">${value.passengers} passengers · ${value.vehicles} vehicles · ${value.pets} pets</p>
       ${prices ? `<dl class="bf-costs"><div><dt>Items total</dt><dd>${money(totals.tickets)}</dd></div>
@@ -65,6 +100,7 @@
     const value = booking.get();
     const legs = value.tripType === "Round Trip" ? ["outbound", "return"] : ["outbound"];
     shell(`${heading("Choose your trips", "index", "Edit search")}
+      ${booking.movedFrom() && booking.movedFrom() < value.departureDate ? `<p class="bf-moved-note" role="status">All sailings on ${escape(shortDate(booking.movedFrom()))} have already left, so we're showing trips from <strong>${escape(shortDate(value.departureDate))}</strong>. <a href="index.html">Change dates</a></p>` : ""}
       <p class="bf-note">Compare departures from every shipping line below. “Booked” marks the trip you have chosen — your seats are held once you complete passenger details and payment.</p>
       <section class="bf-search-context" aria-label="Your search"><div><span class="bf-context-label">Your journey</span><strong>${escape(value.origin)} <span aria-hidden="true">→</span> ${escape(value.destination)}</strong><span>${escape(value.tripType)} · ${escape(date(value.departureDate))}${value.tripType === "Round Trip" ? ` — ${escape(date(value.returnDate))}` : ""}</span></div><div class="bf-context-chips"><span>${value.passengers} passengers</span><span>${value.vehicles} vehicles</span><span>${value.pets} pets</span><span>${escape(value.cabin)}</span></div><a href="index.html" class="bf-edit">Edit search</a></section>
       <div class="bf-layout bf-trips-layout"><div>${legs.map(leg => {
@@ -77,10 +113,12 @@
           ${selected ? '<span class="bf-booked-ribbon" aria-hidden="true">Booked</span>' : ""}
           <p class="bf-price-tag"><span>from </span><strong>${money(ferry.pricePerPerson)}</strong><span> per pax</span></p>
           <div class="bf-trip-logo">${companyLogo(ferry.ferry)}</div>
-          <div class="bf-trip-route"><h3>${escape(ferry.ferry)}</h3><p><time>${escape(ferry.departureTime)}</time><span>${escape(returning ? value.destination : value.origin)}</span></p><p><time>${escape(ferry.arrivalTime)}${ferry.arrivalNextDay ? '<small>+1 day</small>' : ''}</time><span>${escape(returning ? value.origin : value.destination)}</span></p></div>
+          <div class="bf-trip-route"><h3>${escape(ferry.ferry)}</h3><p><time>${escape(ferry.departureTime)}</time><span>${escape(returning ? value.destination : value.origin)}</span></p><p><time>${escape(ferry.arrivalTime)}</time><span>${escape(returning ? value.origin : value.destination)}</span>${ferry.arrivalNextDay ? '<span class="bf-next-day" title="Arrives the next day"><span aria-hidden="true">+1 day</span><span class="sr-only">, arrives the next day</span></span>' : ''}</p></div>
           <div class="bf-trip-duration"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 13V7h14v6M9 7V3h6v4M3 14l9-3 9 3-3 6H6l-3-6ZM2 21c2 2 4-2 6 0s4-2 6 0 4-2 8 0"/></svg>${escape(ferry.duration || "Scheduled")} trip</div>
           <div class="bf-trip-book"><button type="button" class="bf-book-button${selected ? " is-booked" : ""}" ${selected ? `data-clear-trip="${leg}"` : `data-select-trip="${leg}"`} data-ferry-id="${escape(ferry.id)}" aria-pressed="${selected}" aria-label="${selected ? "Cancel booking" : "Book now"}: ${escape(ferry.ferry)} ${returning ? "return" : "departure"}">${selected ? "Cancel" : "Book Now"}</button></div></article>`;
-        }).join("") || `<p class="bf-empty">${(returning ? value.returnDate : value.departureDate) === booking.dateValue(new Date()) ? "All of today's departures have already left." : "No departures match this passenger count."} <a href="index.html">Adjust your search</a> to see more options.</p>`}</div></section>`;
+        }).join("") || (value.passengers > 80
+          ? `<p class="bf-empty">No departures match this passenger count. <a href="index.html">Adjust your search</a> to see more options.</p>`
+          : `<div class="bf-empty bf-empty-date"><p>${(returning ? value.returnDate : value.departureDate) === booking.dateValue(new Date()) ? "All of today's sailings have already left." : "There are no sailings left on this date."}</p><button type="button" class="bf-next-day-btn" data-next-day="${leg}">See ${escape(shortDate(booking.addDays(returning ? value.returnDate : value.departureDate, 1)))} trips <span aria-hidden="true">→</span></button><a href="index.html">or change your dates</a></div>`)}</div></section>`;
       }).join("")}</div><aside class="bf-trip-sidebar">${summary()}</aside></div>`);
   }
 
@@ -336,6 +374,7 @@
       if (target.dataset.action === "go:trips") {
         const message = booking.searchError();
         if (message) { event.preventDefault(); event.stopImmediatePropagation(); error(message); return; }
+        preselectPreferred();
       }
       saved();
     }
@@ -344,6 +383,11 @@
       booking.save({ [target.dataset.selectTrip === "outbound" ? "outboundId" : "returnId"]: target.dataset.ferryId, completedId: "" });
       renderTrips();
       $(`[data-select-trip="${target.dataset.selectTrip}"][data-ferry-id="${target.dataset.ferryId}"]`)?.focus();
+    }
+    if (target.dataset.nextDay) {
+      event.preventDefault();
+      showNextDay(target.dataset.nextDay);
+      return;
     }
     if (target.dataset.clearTrip) {
       event.preventDefault();
@@ -374,7 +418,12 @@
   document.addEventListener("change", () => { if (page === "passenger-details") saveDetails(); });
   function init() {
     if (page === "index") restoreHome();
-    if (page === "trips") renderTrips();
+    if (page === "trips") {
+      // The departure day was moved on load (its sailings had all left): book the
+      // traveller's chosen shipping line on the new day, like a fresh search does.
+      if (booking.movedFrom()) preselectPreferred();
+      renderTrips();
+    }
     if (page === "passenger-details") renderPassengers();
     if (page === "payment") renderPayment();
     if (page === "confirmation") renderConfirmation();

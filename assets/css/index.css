@@ -366,8 +366,9 @@
 /* ==========================================================================
    Phones, tablets and iPads (anything that isn't the desktop view):
    full-screen hero + the booking card as a bottom sheet. Collapsed ("peek") it
-   shows the trip type, From and To; tapping "More" (or a field) expands it to
-   the whole form. The peek height is measured by app.js (--m-peek-h).
+   shows only the "Plan your trip" header and the trip type; tapping anywhere on
+   it (or "More") expands it to the whole form. The peek height is measured by
+   app.js (--m-peek-h).
    Keep this media query in sync with MOBILE_QUERY in app.js.
    ========================================================================== */
 .m-sheet-head,
@@ -399,7 +400,10 @@
 
 @media (max-width: 1024px), (hover: none) and (pointer: coarse) {
   :root {
-    --m-peek-h: 300px;
+    --m-peek-h: 170px;
+    /* Part of the screen hidden below the visible area (browser bars, device
+       frames, simulators). Measured by app.js; 0 on a normal phone. */
+    --m-sheet-bottom: 0px;
   }
 
   /* No white strip when mobile browsers collapse their toolbars or bounce:
@@ -419,7 +423,7 @@
     min-height: 100vh;
     min-height: 100lvh;
     align-items: flex-start;
-    padding: 84px 20px calc(var(--m-peek-h) + 24px);
+    padding: 84px 20px calc(var(--m-peek-h) + var(--m-sheet-bottom) + env(safe-area-inset-bottom, 0px) + 24px);
   }
 
   .entree-hero-container {
@@ -469,12 +473,12 @@
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: var(--m-sheet-bottom);
     z-index: 900;
     flex: none;
     width: 100%;
     max-width: 640px;
-    max-height: var(--m-peek-h);
+    max-height: calc(var(--m-peek-h) + env(safe-area-inset-bottom, 0px));
     margin: 0 auto;
     padding: 0 18px calc(22px + env(safe-area-inset-bottom, 0px));
     overflow: hidden;
@@ -486,21 +490,34 @@
     animation: m-sheet-in 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* Collapsed: fade the cut-off edge so it reads as "there's more below" */
-  .hero-glass-card:not(.is-sheet-open)::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 40px;
-    background: linear-gradient(rgba(255, 255, 255, 0), #ffffff 80%);
-    pointer-events: none;
+  /* Collapsed: only the header + trip type peek out. The whole sheet is one big
+     tap target that opens the planner; the form below stays hidden (and
+     untabbable) until then. */
+  .hero-glass-card:not(.is-sheet-open) {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .hero-glass-card .booking-inputs-bar,
+  .hero-glass-card .booking-widget-bottom {
+    transition: opacity 0.25s ease;
+  }
+
+  .hero-glass-card:not(.is-sheet-open) .booking-inputs-bar,
+  .hero-glass-card:not(.is-sheet-open) .booking-widget-bottom {
+    visibility: hidden;
+    opacity: 0;
+    /* Stay painted while the sheet slides shut, then hide */
+    transition: opacity 0.2s ease, visibility 0s linear 0.35s;
+  }
+
+  .hero-glass-card:not(.is-sheet-open) .booking-widget-top {
+    border-bottom-color: transparent;
   }
 
   .hero-glass-card.is-sheet-open {
-    max-height: 92vh;
-    max-height: 92svh;
+    max-height: calc(92vh - var(--m-sheet-bottom));
+    max-height: calc(92svh - var(--m-sheet-bottom));
     overflow-y: auto;
     overscroll-behavior: contain;
     box-shadow: 0 -18px 48px -12px rgba(5, 24, 33, 0.5);

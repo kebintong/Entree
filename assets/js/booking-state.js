@@ -24,9 +24,19 @@
     }
     return date;
   }
+  // The earliest day that still has a sailing: today, unless every shipping
+  // line's departure for today has already left (then tomorrow).
+  function firstBookableDate(now = new Date()) {
+    const today = dateValue(now);
+    const times = window.ENTREE_DATA.SHIPPING_COMPANIES.map(c => c.departure).filter(Boolean);
+    const leftToday = times.length && times.every(t => { const at = timeOn(today, t); return at && at <= now; });
+    return leftToday ? dateValue(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 12)) : today;
+  }
+  const addDays = (value, days) => { const d = new Date(value + "T12:00:00"); d.setDate(d.getDate() + days); return dateValue(d); };
   const count = value => Number.isSafeInteger(Number(value)) && Number(value) >= 0 ? Number(value) : 0;
   const string = value => typeof value === "string" ? value.slice(0, 200) : "";
-  function normalize(value = {}) {
+  let movedFrom = null; // set when a restored draft's departure day had no sailings left
+  function normalize(value = {}, onLoad = false) {
     if (!value || typeof value !== "object" || Array.isArray(value)) value = {};
     const today = new Date();
     const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 12);
@@ -34,8 +44,8 @@
       tripType: value.tripType === "One Way" ? "One Way" : "Round Trip",
       origin: typeof value.origin === "string" ? string(value.origin) : "Cebu",
       destination: typeof value.destination === "string" ? string(value.destination) : "Tagbilaran, Bohol",
-      departureDate: validDate(value.departureDate) ? value.departureDate : dateValue(today),
-      returnDate: validDate(value.returnDate) ? value.returnDate : dateValue(tomorrow),
+      departureDate: validDate(value.departureDate) ? value.departureDate : firstBookableDate(today),
+      returnDate: validDate(value.returnDate) ? value.returnDate : addDays(firstBookableDate(today), 1),
       passengers: count(value.passengers), vehicles: count(value.vehicles), pets: count(value.pets),
       shippingLine: window.ENTREE_DATA.SHIPPING_COMPANIES.some(c => c.name === value.shippingLine) ? value.shippingLine : "Supercat",
       cabin: ["Economy", "Business", "Private"].includes(value.cabin) ? value.cabin : "Economy",
@@ -50,16 +60,21 @@
         return Object.fromEntries(Object.entries(item && typeof item === "object" ? item : {}).filter(([key]) => ["name", "age", "gender", "type", "plate"].includes(key)).map(([key, val]) => [key, string(val)]));
       });
     }
-    // A draft restored from an earlier visit may point to a day that has passed.
+    // A draft restored from an earlier visit may point to a day that has passed
+    // (always fixed), or — when the page loads — to today after the last sailing
+    // has left. Either way it moves to the first bookable day. While a page is
+    // open we never move dates silently; the trips page offers "next day" instead.
     const todayValue = dateValue(today);
-    if (draft.departureDate < todayValue) {
-      draft.departureDate = todayValue;
-      if (draft.returnDate < todayValue) draft.returnDate = dateValue(tomorrow);
+    const earliest = onLoad ? firstBookableDate(today) : todayValue;
+    if (draft.departureDate < earliest) {
+      if (onLoad && validDate(value.departureDate)) movedFrom = value.departureDate;
+      draft.departureDate = earliest;
+      if (draft.returnDate < earliest) draft.returnDate = onLoad ? addDays(earliest, 1) : dateValue(tomorrow);
     }
     if (draft.tripType === "One Way") draft.returnId = "";
     return draft;
   }
-  let draft = normalize(read(sessionStorage, KEY, {}));
+  let draft = normalize(read(sessionStorage, KEY, {}), true);
   const recordsValue = read(localStorage, RECORDS_KEY, []);
   const records = Array.isArray(recordsValue) ? recordsValue.filter(b => b && typeof b.id === "string" && b.route && Array.isArray(b.passengerDetails) && Number.isFinite(b.totalPrice)) : [];
   window.ENTREE_DATA.MOCK_BOOKINGS.unshift(...records);
@@ -142,6 +157,7 @@
     if (value.origin.trim().toLowerCase() === value.destination.trim().toLowerCase()) return "Choose different origin and destination ports.";
     if (!validDate(value.departureDate)) return "Choose a departure date.";
     if (value.departureDate < dateValue(new Date())) return "Departure date can't be in the past.";
+    if (value.departureDate < firstBookableDate()) return "All of today's sailings have already left. Choose tomorrow or a later date.";
     if (value.tripType === "Round Trip" && (!validDate(value.returnDate) || value.returnDate < value.departureDate)) return "Return date must be on or after departure.";
     if (value.passengers < 1) return "Add at least one passenger to search for trips.";
     return "";
@@ -211,5 +227,5 @@
     save({ completedId: id });
     return record;
   }
-  window.ENTREE_BOOKING = { get: () => draft, save, options, selected, totals, searchError, selectionError, detailsError, complete, records: () => records, dateValue, refundQuote, requestRefund, refundOf: id => refunds[id] || null };
+  window.ENTREE_BOOKING = { get: () => draft, save, options, selected, firstBookableDate, addDays, movedFrom: () => movedFrom, totals, searchError, selectionError, detailsError, complete, records: () => records, dateValue, refundQuote, requestRefund, refundOf: id => refunds[id] || null };
 })();
