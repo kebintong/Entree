@@ -86,15 +86,8 @@
   function heading(title, back, label) {
     return `<div class="bf-heading"><a class="bf-edit" href="${back}.html">← ${label}</a><h1>${title}</h1></div>`;
   }
-  function updateHeader() {
-    const header = $("header");
-    if (!header) return;
-    const old = [...header.children].find(el => el.classList.contains("absolute") && el.classList.contains("left-1/2"));
-    old?.remove();
-  }
   function shell(content) {
     $("main").innerHTML = `<div class="bf-page">${content}</div>`;
-    updateHeader();
   }
   function renderTrips() {
     const value = booking.get();
@@ -204,7 +197,6 @@
     $$(".pax-count").forEach(counter => observer.observe(counter, { childList: true, characterData: true, subtree: true }));
   }
   function renderPayment() {
-    updateHeader();
     if (booking.detailsError()) {
       shell(`${heading("Payment", "passenger-details", "Passenger details")}<section class="bf-card"><h2>Complete your booking details</h2><p>${escape(booking.detailsError())}</p><a class="bf-primary" href="passenger-details.html">Passenger details →</a></section>`);
       return;
@@ -323,46 +315,45 @@
     const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
     const shortDate = value => new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
     const icon = (cls, body) => `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${cls}" aria-hidden="true">${body}</svg>`;
-    const pin = icon("lucide lucide-map-pin w-5 h-5 text-gray-400 mt-0.5", '<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle>');
-    const cal = icon("lucide lucide-calendar w-5 h-5 text-gray-400 mt-0.5", '<path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path>');
-    const user = icon("lucide lucide-user w-4 h-4 text-gray-400", '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>');
-    const pkg = icon("lucide lucide-package w-4 h-4 text-[#CCFF00]", '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path>');
-    const share = icon("lucide lucide-share-2 w-4 h-4", '<circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line>');
-    const btn = "bg-[#CCFF00] hover:bg-[#B8E600] text-black text-[13px] font-bold rounded-full px-4 py-2 transition-all shadow-sm";
-    const pill = "text-[11px] font-bold px-3 py-1 rounded-full border";
+    const pin = icon("lucide lucide-map-pin bookings-icon-pin", '<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle>');
+    const cal = icon("lucide lucide-calendar bookings-icon-pin", '<path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path>');
+    const user = icon("lucide lucide-user bookings-icon-user", '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>');
+    const pkg = icon("lucide lucide-package bookings-icon-package", '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path>');
+    const share = icon("lucide lucide-share-2 bookings-icon-share", '<circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line>');
+    const btn = "bookings-action-button";
     const extras = b => {
       const items = [];
-      if (b.pasalubongItems) items.push(`<div class="flex items-center gap-2">${pkg}<span class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif]">${plural(b.pasalubongItems, "add-on")}</span></div>`);
+      if (b.pasalubongItems) items.push(`<button type="button" class="bk-addons-link bookings-meta-item" data-action="booking-addons" aria-label="View ${plural(b.pasalubongItems, "pasalubong add-on")}">${pkg}<span class="bookings-meta-text">${plural(b.pasalubongItems, "add-on")}</span></button>`);
       const party = [b.vehicles ? plural(b.vehicles, "vehicle") : "", b.pets ? plural(b.pets, "pet") : ""].filter(Boolean).join(" · ");
-      if (party) items.push(`<span class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif]">${party}</span>`);
+      if (party) items.push(`<span class="bookings-meta-text">${party}</span>`);
       return items.join("");
     };
     const subtitle = b => [b.ferry + (b.returnFerry && b.returnFerry !== b.ferry ? ` / ${b.returnFerry}` : ""), b.tripType, b.cabin].filter(Boolean).map(escape).join(" · ");
-    const upcomingCard = b => `<div class="bk-card bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 hover:shadow-md transition-all cursor-pointer" data-booking="${escape(b.id)}" data-action="booking">
-      <div class="bk-card-head flex items-start justify-between mb-4"><div class="bk-card-title">
-        <div class="bk-card-ref flex items-center gap-2 mb-2"><span class="bk-ref font-['Poppins:Bold',sans-serif] font-bold text-[18px] text-[#363636]">${escape(b.reference)}</span>${b.departureDate <= today ? `<span class="${pill} bg-[#CCFF00] text-black border-[#dbdcd9]">TODAY</span>` : `<span class="${pill} bg-green-100 text-green-700 border-green-200">UPCOMING</span>`}</div>
-        <p class="text-[13px] text-[#999] font-['Poppins:Regular',sans-serif]">${subtitle(b)}</p>
-      </div><button type="button" class="bk-share text-black hover:bg-gray-100 text-[13px] font-bold rounded-full px-4 py-2 transition-all flex items-center gap-2" data-action="share" aria-label="Share trip">${share}<span>Share Trip</span></button></div>
-      <div class="bk-card-grid grid grid-cols-2 gap-4 mb-4">
-        <div class="flex items-start gap-3">${pin}<div><p class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif]">Route</p><p class="text-[15px] font-['Poppins:SemiBold',sans-serif] font-bold text-[#363636]">${escape(b.route.origin)} → ${escape(b.route.destination)}</p></div></div>
-        <div class="flex items-start gap-3">${cal}<div><p class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif]">Departure</p><p class="text-[15px] font-['Poppins:SemiBold',sans-serif] font-bold text-[#363636]">${escape(date(b.departureDate))}</p>${b.departureTime ? `<p class="text-[13px] text-[#666] font-['Poppins:Regular',sans-serif]">${escape(clock(b.departureTime))}${b.arrivalTime ? ` - ${escape(clock(b.arrivalTime))}` : ""}</p>` : ""}${b.returnDate ? `<p class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif] mt-1">Return: ${escape(date(b.returnDate))}${b.returnDepartureTime ? ` · ${escape(clock(b.returnDepartureTime))}` : ""}</p>` : ""}</div></div>
+    const upcomingCard = b => `<div class="bk-card bookings-card" data-booking="${escape(b.id)}" data-action="booking">
+      <div class="bk-card-head bookings-card-head"><div class="bk-card-title">
+        <div class="bk-card-ref bookings-card-ref"><span class="bk-ref bookings-ref">${escape(b.reference)}</span>${b.departureDate <= today ? `<span class="bookings-pill-today">TODAY</span>` : `<span class="bookings-pill-upcoming">UPCOMING</span>`}</div>
+        <p class="bookings-card-subtitle">${subtitle(b)}</p>
+      </div><button type="button" class="bk-share bookings-share-button" data-action="share" aria-label="Share trip">${share}<span>Share Trip</span></button></div>
+      <div class="bk-card-grid bookings-card-grid">
+        <div class="bookings-card-fact">${pin}<div><p class="bookings-fact-label">Route</p><p class="bookings-fact-value">${escape(b.route.origin)} → ${escape(b.route.destination)}</p></div></div>
+        <div class="bookings-card-fact">${cal}<div><p class="bookings-fact-label">Departure</p><p class="bookings-fact-value">${escape(date(b.departureDate))}</p>${b.departureTime ? `<p class="bookings-fact-time">${escape(clock(b.departureTime))}${b.arrivalTime ? ` - ${escape(clock(b.arrivalTime))}` : ""}</p>` : ""}${b.returnDate ? `<p class="bookings-fact-return">Return: ${escape(date(b.returnDate))}${b.returnDepartureTime ? ` · ${escape(clock(b.returnDepartureTime))}` : ""}</p>` : ""}</div></div>
       </div>
-      <div class="pt-4 border-t border-gray-100"><div class="bk-card-foot flex items-center justify-between flex-wrap gap-3">
-        <div class="bk-card-meta flex items-center gap-4"><div class="flex items-center gap-2">${user}<span class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif]">${plural(b.passengers, "passenger")}</span></div>${extras(b)}<p class="text-[18px] font-['Poppins:Bold',sans-serif] font-bold text-[#363636]">${peso(b.totalPrice)}</p></div>
-        <div class="bk-card-actions flex items-center gap-2"><button type="button" class="${btn}" data-action="go:rebook">Rebook</button><button type="button" class="${btn}" data-action="go:refund">Refund</button><button type="button" class="${btn}" data-action="addons">Buy Add-ons</button></div>
+      <div class="bookings-card-footer"><div class="bk-card-foot bookings-card-foot">
+        <div class="bk-card-meta bookings-card-meta"><div class="bookings-meta-item">${user}<span class="bookings-meta-text">${plural(b.passengers, "passenger")}</span></div>${extras(b)}<p class="bookings-card-price">${peso(b.totalPrice)}</p></div>
+        <div class="bk-card-actions bookings-card-actions"><button type="button" class="${btn}" data-action="go:rebook">Rebook</button><button type="button" class="${btn}" data-action="go:refund">Refund</button><button type="button" class="${btn}" data-action="addons">Buy Add-ons</button></div>
       </div></div></div>`;
     const pastCard = b => {
       const refunded = b.refund;
-      const badge = refunded ? `<span class="${pill} bg-red-50 text-red-600 border-red-200">REFUNDED</span>` : `<span class="${pill} bg-gray-100 text-gray-600 border-gray-200">COMPLETED</span>`;
-      const detail = refunded ? `<p class="text-[13px] text-red-600 font-['Poppins:Regular',sans-serif] mt-1">${escape(refunded.status)} ${escape(shortDate(refunded.requestedAt))} · ${peso(refunded.amount)} of ${peso(b.totalPrice)} (${refunded.percent}%) · 7–14 business days</p>` : "";
-      return `<div class="bk-card bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 ${refunded ? "hover:shadow-md transition-all cursor-pointer" : "opacity-75"}" data-booking="${escape(b.id)}"${refunded ? ' data-action="booking"' : ""}>
-        <div class="bk-card-ref flex items-center gap-2 mb-2"><span class="bk-ref font-['Poppins:Bold',sans-serif] text-[16px] text-[#666]">${escape(b.reference)}</span>${badge}</div>
-        <p class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif]">${escape(b.route.origin)} → ${escape(b.route.destination)} • ${escape(date(b.departureDate))}</p>${detail}</div>`;
+      const badge = refunded ? `<span class="bookings-pill-refunded">REFUNDED</span>` : `<span class="bookings-pill-completed">COMPLETED</span>`;
+      const detail = refunded ? `<p class="bookings-refund-note">${escape(refunded.status)} ${escape(shortDate(refunded.requestedAt))} · ${peso(refunded.amount)} of ${peso(b.totalPrice)} (${refunded.percent}%) · 7–14 business days</p>` : "";
+      return `<div class="bk-card ${refunded ? "bookings-card" : "bookings-card-muted"}" data-booking="${escape(b.id)}"${refunded ? ' data-action="booking"' : ""}>
+        <div class="bk-card-ref bookings-card-ref"><span class="bk-ref bookings-ref-past">${escape(b.reference)}</span>${badge}</div>
+        <p class="bookings-past-route">${escape(b.route.origin)} → ${escape(b.route.destination)} • ${escape(date(b.departureDate))}</p>${detail}</div>`;
     };
     const upcoming = bookings.filter(b => !b.refund && b.status !== "completed" && ends(b) >= today).sort((a, b) => a.departureDate.localeCompare(b.departureDate));
     const past = bookings.filter(b => !upcoming.includes(b)).sort((a, b) => (b.refund?.requestedAt || b.departureDate).localeCompare(a.refund?.requestedAt || a.departureDate));
-    const empty = text => `<div class="bk-card bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 text-[14px] text-[#666]">${text}</div>`;
-    upcomingList.innerHTML = upcoming.length ? upcoming.map(upcomingCard).join("") : empty('No upcoming trips. <a class="underline" href="index.html">Book a trip</a>');
+    const empty = text => `<div class="bk-card bookings-card-empty">${text}</div>`;
+    upcomingList.innerHTML = upcoming.length ? upcoming.map(upcomingCard).join("") : empty('No upcoming trips. <a class="bookings-empty-link" href="index.html">Book a trip</a>');
     pastList.innerHTML = past.length ? past.map(pastCard).join("") : empty("No past trips yet.");
   }
   // Capture navigation before the existing app's delegated handlers.

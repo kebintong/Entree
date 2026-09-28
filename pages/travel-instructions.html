@@ -4,40 +4,39 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Travel Instructions | Entree</title>
-    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/fonts.css" />
+    <link rel="stylesheet" href="../assets/css/base.css" />
     <link rel="stylesheet" href="../assets/css/site.css" />
+    <link rel="stylesheet" href="../assets/css/turtle.css" />
+    <link rel="stylesheet" href="../assets/css/travel-instructions.css" />
     <script src="../assets/js/data.js" defer></script>
     <script src="../assets/js/booking-state.js" defer></script>
     <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/dev-panel.js" defer></script>
+    <script src="../assets/js/turtle.js" defer></script>
     <script src="../assets/js/booking-flow.js" defer></script>
     <link rel="stylesheet" href="../assets/css/booking-flow.css" />
     <link rel="icon" type="image/png" href="../assets/images/entree-logo.png" />
 </head>
   <body data-page="travel-instructions">
-    <div
-      class="flex flex-col min-h-screen font-sans text-slate-900 bg-white selection:bg-[#CCFF00] selection:text-black overflow-x-hidden"
-    >
+    <div class="site-shell">
       <header
-        class="fixed top-0 left-0 w-full z-50 px-6 md:px-10 py-4 flex justify-between items-center h-20 transition-all duration-300 shadow-md border-b border-white/10"
+        class="site-header"
         style="
           background-image: url(../assets/images/ocean-background.png);
           background-size: cover;
           background-position: center top;
         "
       >
-        <div class="flex-1 flex items-center">
-          <a href="index.html" class="inline-flex items-center focus:outline-none" aria-label="Entree Home">
-            <div class="w-10 h-10 shrink-0">
-              <img
-                src="../assets/images/entree-logo.png"
-                alt="Entree Logo"
-                class="w-full h-full object-contain block"
-              />
+        <div class="site-header-left">
+          <a href="index.html" class="site-logo-link" aria-label="Entree Home">
+            <div class="site-logo">
+              <img src="../assets/images/entree-logo.png" alt="Entree Logo" class="site-logo-img" />
             </div>
           </a>
         </div>
-        <div class="flex items-center space-x-4 md:space-x-5 shrink-0 justify-end">
-          <div class="flex flex-col gap-2 items-end">
+        <div class="site-header-actions">
+          <div class="site-header-buttons">
             <a href="verify-booking.html" class="entree-pasalubong-btn" data-action="go:verify-booking">
               <span>Buy Pasalubong</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -61,22 +60,18 @@
           </a>
         </div>
       </header>
-      <main class="flex-1 flex flex-col relative w-full h-full">
-        <div class="w-full flex-1 bg-gray-50 flex flex-col items-center pt-20">
-          <div class="w-full max-w-[1000px] mx-auto px-6 py-8">
-            <div class="mb-8">
-              <h1
-                class="font-['Poppins:SemiBold',sans-serif] text-[32px] text-[#363636] mb-2"
-              >
+      <main class="site-main">
+        <div class="guide-stack site-page">
+          <div class="guide-box">
+            <div class="guide-box-2">
+              <h1 class="guide-travel-instructions-title">
                 Travel Instructions
               </h1>
-              <p class="text-[15px] text-[#666] font-['Poppins:Regular',sans-serif]">
+              <p class="guide-text">
                 Everything you need to know for a smooth ferry journey
               </p>
             </div>
-            <div
-              class="bg-[#CCFF00]/10 border-2 border-[#CCFF00] rounded-2xl p-6 mb-6 flex items-start gap-4"
-            >
+            <div class="guide-row">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -87,27 +82,25 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="lucide lucide-circle-alert w-6 h-6 text-[#84a300] shrink-0 mt-1"
+                class="guide-icon lucide lucide-circle-alert"
               >
                 <circle cx="12" cy="12" r="10"></circle>
                 <line x1="12" x2="12" y1="8" y2="12"></line>
                 <line x1="12" x2="12.01" y1="16" y2="16"></line>
               </svg>
               <div>
-                <h3
-                  class="font-['Poppins:Bold',sans-serif] text-[16px] text-[#363636] mb-2"
-                >
+                <h3 class="guide-important-reminder-subheading">
                   Important Reminder
                 </h3>
-                <p class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif]">
+                <p class="guide-text-2">
                   Please arrive at the terminal at least 1 hour before departure. Late arrivals may
                   result in denied boarding.
                 </p>
               </div>
             </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
-              <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-[#CCFF00] rounded-full flex items-center justify-center">
+            <div class="guide-card">
+              <div class="guide-row-2">
+                <div class="guide-circle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -118,18 +111,18 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-circle-check-big w-5 h-5 text-black"
+                    class="guide-icon-2 lucide lucide-circle-check-big"
                   >
                     <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
                     <path d="m9 11 3 3L22 4"></path>
                   </svg>
                 </div>
-                <h2 class="font-['Poppins:Bold',sans-serif] text-[20px] text-[#363636]">
+                <h2 class="guide-before-trip-heading">
                   Before Your Trip
                 </h2>
               </div>
-              <div class="space-y-4">
-                <div class="flex items-start gap-3">
+              <div class="guide-stack-2">
+                <div class="guide-row-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -140,7 +133,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-file-text w-5 h-5 text-[#CCFF00] mt-1 shrink-0"
+                    class="guide-icon-3 lucide lucide-file-text"
                   >
                     <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
                     <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
@@ -149,20 +142,16 @@
                     <path d="M16 17H8"></path>
                   </svg>
                   <div>
-                    <h3
-                      class="font-['Poppins:SemiBold',sans-serif] text-[15px] text-[#363636] mb-1"
-                    >
+                    <h3 class="guide-required-documents-subheading">
                       Required Documents
                     </h3>
-                    <p
-                      class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="guide-text-2">
                       Bring a valid government-issued ID and your booking confirmation. Children
                       must be accompanied by a parent or guardian with proper documentation.
                     </p>
                   </div>
                 </div>
-                <div class="flex items-start gap-3">
+                <div class="guide-row-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -173,30 +162,22 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-luggage w-5 h-5 text-[#CCFF00] mt-1 shrink-0"
+                    class="guide-icon-3 lucide lucide-luggage"
                   >
-                    <path
-                      d="M6 20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2"
-                    ></path>
+                    <path d="M6 20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2"></path>
                     <path d="M8 18V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v14"></path>
                     <path d="M10 20h4"></path>
                     <circle cx="16" cy="20" r="2"></circle>
                     <circle cx="8" cy="20" r="2"></circle>
                   </svg>
                   <div>
-                    <h3
-                      class="font-['Poppins:SemiBold',sans-serif] text-[15px] text-[#363636] mb-1"
-                    >
+                    <h3 class="guide-required-documents-subheading">
                       Baggage Guidelines
                     </h3>
-                    <p
-                      class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif] mb-2"
-                    >
+                    <p class="guide-each-passenger-text">
                       Each passenger is allowed:
                     </p>
-                    <ul
-                      class="list-disc list-inside text-[14px] text-[#666] font-['Poppins:Regular',sans-serif] space-y-1"
-                    >
+                    <ul class="guide-list">
                       <li>2 pieces of hand-carry luggage (max 7kg each)</li>
                       <li>2 pieces of check-in baggage (max 20kg each)</li>
                       <li>Excess baggage subject to additional fees</li>
@@ -205,9 +186,9 @@
                 </div>
               </div>
             </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
-              <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-[#CCFF00] rounded-full flex items-center justify-center">
+            <div class="guide-card">
+              <div class="guide-row-2">
+                <div class="guide-circle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -218,7 +199,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-map-pin w-5 h-5 text-black"
+                    class="guide-icon-2 lucide lucide-map-pin"
                   >
                     <path
                       d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
@@ -226,12 +207,12 @@
                     <circle cx="12" cy="10" r="3"></circle>
                   </svg>
                 </div>
-                <h2 class="font-['Poppins:Bold',sans-serif] text-[20px] text-[#363636]">
+                <h2 class="guide-before-trip-heading">
                   At the Terminal
                 </h2>
               </div>
-              <div class="space-y-4">
-                <div class="flex items-start gap-3">
+              <div class="guide-stack-2">
+                <div class="guide-row-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -242,20 +223,16 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-clock w-5 h-5 text-[#CCFF00] mt-1 shrink-0"
+                    class="guide-icon-3 lucide lucide-clock"
                   >
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
                   <div>
-                    <h3
-                      class="font-['Poppins:SemiBold',sans-serif] text-[15px] text-[#363636] mb-1"
-                    >
+                    <h3 class="guide-required-documents-subheading">
                       Check-in Process
                     </h3>
-                    <ol
-                      class="list-decimal list-inside text-[14px] text-[#666] font-['Poppins:Regular',sans-serif] space-y-1"
-                    >
+                    <ol class="guide-list-2">
                       <li>Proceed to the ticket counter for check-in</li>
                       <li>Present your booking reference and valid ID</li>
                       <li>Check in your baggage at the baggage counter</li>
@@ -264,7 +241,7 @@
                     </ol>
                   </div>
                 </div>
-                <div class="flex items-start gap-3">
+                <div class="guide-row-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -275,21 +252,17 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-info w-5 h-5 text-[#CCFF00] mt-1 shrink-0"
+                    class="guide-icon-3 lucide lucide-info"
                   >
                     <circle cx="12" cy="12" r="10"></circle>
                     <path d="M12 16v-4"></path>
                     <path d="M12 8h.01"></path>
                   </svg>
                   <div>
-                    <h3
-                      class="font-['Poppins:SemiBold',sans-serif] text-[15px] text-[#363636] mb-1"
-                    >
+                    <h3 class="guide-required-documents-subheading">
                       Terminal Facilities
                     </h3>
-                    <p
-                      class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="guide-text-2">
                       Most terminals have waiting lounges, restrooms, convenience stores, and food
                       stalls. Free WiFi is available in most major terminals.
                     </p>
@@ -297,9 +270,9 @@
                 </div>
               </div>
             </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
-              <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-[#CCFF00] rounded-full flex items-center justify-center">
+            <div class="guide-card">
+              <div class="guide-row-2">
+                <div class="guide-circle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -310,7 +283,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-ship w-5 h-5 text-black"
+                    class="guide-icon-2 lucide lucide-ship"
                   >
                     <path d="M12 10.189V14"></path>
                     <path d="M12 2v3"></path>
@@ -323,12 +296,12 @@
                     ></path>
                   </svg>
                 </div>
-                <h2 class="font-['Poppins:Bold',sans-serif] text-[20px] text-[#363636]">
+                <h2 class="guide-before-trip-heading">
                   During the Trip
                 </h2>
               </div>
-              <div class="space-y-4">
-                <div class="flex items-start gap-3">
+              <div class="guide-stack-2">
+                <div class="guide-row-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -339,25 +312,19 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-circle-check-big w-5 h-5 text-[#CCFF00] mt-1 shrink-0"
+                    class="guide-icon-3 lucide lucide-circle-check-big"
                   >
                     <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
                     <path d="m9 11 3 3L22 4"></path>
                   </svg>
                   <div>
-                    <h3
-                      class="font-['Poppins:SemiBold',sans-serif] text-[15px] text-[#363636] mb-1"
-                    >
+                    <h3 class="guide-required-documents-subheading">
                       Onboard Amenities
                     </h3>
-                    <p
-                      class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif] mb-2"
-                    >
+                    <p class="guide-each-passenger-text">
                       Most ferries offer:
                     </p>
-                    <ul
-                      class="list-disc list-inside text-[14px] text-[#666] font-['Poppins:Regular',sans-serif] space-y-1"
-                    >
+                    <ul class="guide-list">
                       <li>Air-conditioned seating areas</li>
                       <li>Restrooms and washing facilities</li>
                       <li>Snack bars and cafeterias</li>
@@ -366,7 +333,7 @@
                     </ul>
                   </div>
                 </div>
-                <div class="flex items-start gap-3">
+                <div class="guide-row-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -377,21 +344,17 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-circle-alert w-5 h-5 text-[#CCFF00] mt-1 shrink-0"
+                    class="guide-icon-3 lucide lucide-circle-alert"
                   >
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="12" x2="12" y1="8" y2="12"></line>
                     <line x1="12" x2="12.01" y1="16" y2="16"></line>
                   </svg>
                   <div>
-                    <h3
-                      class="font-['Poppins:SemiBold',sans-serif] text-[15px] text-[#363636] mb-1"
-                    >
+                    <h3 class="guide-required-documents-subheading">
                       Safety Guidelines
                     </h3>
-                    <ul
-                      class="list-disc list-inside text-[14px] text-[#666] font-['Poppins:Regular',sans-serif] space-y-1"
-                    >
+                    <ul class="guide-list">
                       <li>Wear your life vest when instructed by crew</li>
                       <li>Follow all safety announcements and instructions</li>
                       <li>Keep children supervised at all times</li>
@@ -402,24 +365,22 @@
                 </div>
               </div>
             </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <h2
-                class="font-['Poppins:Bold',sans-serif] text-[18px] text-[#363636] mb-4"
-              >
+            <div class="guide-card-2">
+              <h2 class="guide-need-help-heading">
                 Need Help?
               </h2>
-              <p class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif] mb-3">
+              <p class="guide-text-3">
                 For questions or assistance, contact our customer service:
               </p>
-              <div class="space-y-2 text-[14px] font-['Poppins:Regular',sans-serif]">
-                <p class="text-[#363636]">
-                  <span class="font-semibold">Email:</span> support@entree.ph
+              <div class="guide-stack-3">
+                <p class="guide-text-4">
+                  <span class="guide-email-text">Email:</span> support@entree.ph
                 </p>
-                <p class="text-[#363636]">
-                  <span class="font-semibold">Phone:</span> (032) 888 0100
+                <p class="guide-text-4">
+                  <span class="guide-email-text">Phone:</span> (032) 888 0100
                 </p>
-                <p class="text-[#363636]">
-                  <span class="font-semibold">Hours:</span> 24/7 Customer Support
+                <p class="guide-text-4">
+                  <span class="guide-email-text">Hours:</span> 24/7 Customer Support
                 </p>
               </div>
             </div>

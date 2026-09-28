@@ -4,40 +4,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Verify Booking | Entree</title>
-    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/fonts.css" />
+    <link rel="stylesheet" href="../assets/css/base.css" />
     <link rel="stylesheet" href="../assets/css/site.css" />
+    <link rel="stylesheet" href="../assets/css/turtle.css" />
+    <link rel="stylesheet" href="../assets/css/verify-booking.css" />
     <script src="../assets/js/data.js" defer></script>
     <script src="../assets/js/booking-state.js" defer></script>
+    <script src="../assets/js/verify-booking.js" defer></script>
     <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/dev-panel.js" defer></script>
+    <script src="../assets/js/turtle.js" defer></script>
     <script src="../assets/js/booking-flow.js" defer></script>
     <link rel="stylesheet" href="../assets/css/booking-flow.css" />
     <link rel="icon" type="image/png" href="../assets/images/entree-logo.png" />
 </head>
   <body data-page="verify-booking">
-    <div
-      class="flex flex-col min-h-screen font-sans text-slate-900 bg-white selection:bg-[#CCFF00] selection:text-black overflow-x-hidden"
-    >
+    <div class="site-shell">
       <header
-        class="fixed top-0 left-0 w-full z-50 px-6 md:px-10 py-4 flex justify-between items-center h-20 transition-all duration-300 shadow-md border-b border-white/10"
+        class="site-header"
         style="
           background-image: url(../assets/images/ocean-background.png);
           background-size: cover;
           background-position: center top;
         "
       >
-        <div class="flex-1 flex items-center">
-          <a href="index.html" class="inline-flex items-center focus:outline-none" aria-label="Entree Home">
-            <div class="w-10 h-10 shrink-0">
-              <img
-                src="../assets/images/entree-logo.png"
-                alt="Entree Logo"
-                class="w-full h-full object-contain block"
-              />
+        <div class="site-header-left">
+          <a href="index.html" class="site-logo-link" aria-label="Entree Home">
+            <div class="site-logo">
+              <img src="../assets/images/entree-logo.png" alt="Entree Logo" class="site-logo-img" />
             </div>
           </a>
         </div>
-        <div class="flex items-center space-x-4 md:space-x-5 shrink-0 justify-end">
-          <div class="flex flex-col gap-2 items-end">
+        <div class="site-header-actions">
+          <div class="site-header-buttons">
             <a href="bookings.html" class="entree-pasalubong-btn" data-action="go:bookings">
               <span>My Bookings</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -62,14 +62,12 @@
           </a>
         </div>
       </header>
-      <main class="flex-1 flex flex-col relative w-full h-full">
-        <div class="w-full flex-1 bg-white flex flex-col items-center justify-center px-6 pt-20">
-          <div class="w-full max-w-[480px] mx-auto">
-            <div class="bg-white rounded-lg border border-[#dbdcd9] p-8 shadow-sm">
-              <div class="text-center mb-8">
-                <div
-                  class="w-16 h-16 bg-[#CCFF00] rounded-full flex items-center justify-center mx-auto mb-4"
-                >
+      <main class="site-main">
+        <div class="verify-stack site-page">
+          <div class="verify-box">
+            <div class="verify-card">
+              <div class="verify-box-2">
+                <div class="verify-circle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -80,7 +78,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-calendar w-8 h-8 text-black stroke-[2.5]"
+                    class="verify-icon lucide lucide-calendar"
                   >
                     <path d="M8 2v4"></path>
                     <path d="M16 2v4"></path>
@@ -88,18 +86,14 @@
                     <path d="M3 10h18"></path>
                   </svg>
                 </div>
-                <h1
-                  class="font-['Poppins:SemiBold',sans-serif] text-[28px] text-[#363636] mb-2"
-                >
+                <h1 class="verify-booking-title">
                   Verify Your Booking
                 </h1>
-                <p class="text-[15px] text-[#999] font-['Poppins:Regular',sans-serif]">
+                <p class="verify-text">
                   Choose an upcoming trip to shop for Pasalubong
                 </p>
               </div>
-              <div
-                class="bg-[#CCFF00]/10 border border-[#CCFF00]/30 rounded-lg p-4 mb-6 flex gap-3"
-              >
+              <div class="verify-card-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -110,48 +104,39 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-circle-check w-5 h-5 text-black shrink-0 mt-0.5"
+                  class="verify-icon-2 lucide lucide-circle-check"
                 >
                   <circle cx="12" cy="12" r="10"></circle>
                   <path d="m9 12 2 2 4-4"></path>
                 </svg>
-                <p class="font-['Poppins:Regular',sans-serif] text-[13px] text-[#363636] leading-relaxed">
+                <p class="verify-text-2">
                   Pasalubong shopping is available for bookings with 14+ hours before departure
                 </p>
               </div>
-              <form class="space-y-5">
+              <form class="verify-form">
                 <fieldset class="vb-picker">
-                  <legend
-                    class="block text-[14px] font-['Poppins:Medium',sans-serif] text-[#363636] mb-2"
-                    >Your upcoming bookings</legend
+                  <legend class="verify-upcoming-bookings-label">Your upcoming bookings</legend
                   >
                   <div id="vb-bookings" class="vb-bookings"></div>
                 </fieldset>
                 <div>
-                  <label
-                    for="surname"
-                    class="block text-[14px] font-['Poppins:Medium',sans-serif] text-[#363636] mb-2"
-                    >Surname</label
+                  <label for="order-name" class="verify-upcoming-bookings-label">Who's ordering?</label
                   >
                   <input
-                    id="surname"
+                    id="order-name"
                     type="text"
-                    placeholder="Enter your surname"
-                    class="w-full px-4 py-3 border border-[#dbdcd9] rounded-lg font-['Poppins:Regular',sans-serif] text-[15px] text-[#363636] focus:outline-none focus:border-[#CCFF00] focus:ring-2 focus:ring-[#CCFF00]/20 transition-all"
+                    autocomplete="name"
+                    placeholder="Full name or surname"
+                    class="verify-order-name-input"
                     value=""
                   />
                 </div>
-                <button
-                  type="submit"
-                  class="w-full bg-[#CCFF00] hover:bg-[#B8E600] active:bg-[#99CC00] disabled:bg-gray-200 disabled:text-gray-400 text-black font-bold text-[15px] rounded-full py-3.5 px-6 flex justify-center items-center gap-2 transition-all shadow-sm disabled:cursor-not-allowed"
-                >
+                <button type="submit" class="verify-continue-shop-button">
                   Continue to Shop
                 </button>
               </form>
-              <div class="mt-6 pt-6 border-t border-[#dbdcd9]">
-                <p
-                  class="font-['Poppins'] text-[11px] text-[#999] text-center leading-relaxed"
-                >
+              <div class="verify-box-3">
+                <p class="verify-text-3">
                   Only bookings saved on this device are listed. Your booking reference is also in your confirmation email or SMS.
                 </p>
               </div>

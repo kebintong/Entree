@@ -4,40 +4,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Refund | Entree</title>
-    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/fonts.css" />
+    <link rel="stylesheet" href="../assets/css/base.css" />
     <link rel="stylesheet" href="../assets/css/site.css" />
+    <link rel="stylesheet" href="../assets/css/turtle.css" />
+    <link rel="stylesheet" href="../assets/css/refund.css" />
     <script src="../assets/js/data.js" defer></script>
     <script src="../assets/js/booking-state.js" defer></script>
+    <script src="../assets/js/refund.js" defer></script>
     <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/dev-panel.js" defer></script>
+    <script src="../assets/js/turtle.js" defer></script>
     <script src="../assets/js/booking-flow.js" defer></script>
     <link rel="stylesheet" href="../assets/css/booking-flow.css" />
     <link rel="icon" type="image/png" href="../assets/images/entree-logo.png" />
 </head>
   <body data-page="refund">
-    <div
-      class="flex flex-col min-h-screen font-sans text-slate-900 bg-white selection:bg-[#CCFF00] selection:text-black overflow-x-hidden"
-    >
+    <div class="site-shell">
       <header
-        class="fixed top-0 left-0 w-full z-50 px-6 md:px-10 py-4 flex justify-between items-center h-20 transition-all duration-300 shadow-md border-b border-white/10"
+        class="site-header"
         style="
           background-image: url(../assets/images/ocean-background.png);
           background-size: cover;
           background-position: center top;
         "
       >
-        <div class="flex-1 flex items-center">
-          <a href="index.html" class="inline-flex items-center focus:outline-none" aria-label="Entree Home">
-            <div class="w-10 h-10 shrink-0">
-              <img
-                src="../assets/images/entree-logo.png"
-                alt="Entree Logo"
-                class="w-full h-full object-contain block"
-              />
+        <div class="site-header-left">
+          <a href="index.html" class="site-logo-link" aria-label="Entree Home">
+            <div class="site-logo">
+              <img src="../assets/images/entree-logo.png" alt="Entree Logo" class="site-logo-img" />
             </div>
           </a>
         </div>
-        <div class="flex items-center space-x-4 md:space-x-5 shrink-0 justify-end">
-          <div class="flex flex-col gap-2 items-end">
+        <div class="site-header-actions">
+          <div class="site-header-buttons">
             <a href="verify-booking.html" class="entree-pasalubong-btn" data-action="go:verify-booking">
               <span>Buy Pasalubong</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -61,13 +61,10 @@
           </a>
         </div>
       </header>
-      <main class="flex-1 flex flex-col relative w-full h-full">
-        <div class="w-full flex-1 bg-gray-50 flex flex-col items-center pt-20">
-          <div class="w-full max-w-[1000px] mx-auto px-6 py-8">
-            <button
-              class="flex items-center gap-2 text-[#666] hover:text-[#363636] mb-6 transition-colors"
-              data-action="go:bookings"
-            >
+      <main class="site-main">
+        <div class="refund-stack site-page">
+          <div class="refund-box">
+            <button class="refund-select-option-button" data-action="go:bookings">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -78,30 +75,26 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="lucide lucide-arrow-left w-5 h-5"
+                class="refund-icon lucide lucide-arrow-left"
               >
                 <path d="m12 19-7-7 7-7"></path>
                 <path d="M19 12H5"></path>
               </svg>
             </button>
-            <div class="mb-8">
-              <h1
-                class="font-['Poppins:SemiBold',sans-serif] text-[32px] text-[#363636] mb-2"
-              >
+            <div class="refund-box-2">
+              <h1 class="refund-request-refund-title">
                 Request Refund
               </h1>
-              <p class="text-[15px] text-[#666] font-['Poppins:Regular',sans-serif]">
-                Booking Reference: <span class="font-semibold text-[#363636]">ENT-2026-001234</span>
+              <p class="refund-booking-reference-text">
+                Booking Reference: <span class="refund-text">ENT-2026-001234</span>
               </p>
             </div>
-            <div class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 mb-6">
-              <h2
-                class="font-['Poppins:Bold',sans-serif] text-[18px] text-[#363636] mb-4"
-              >
+            <div class="refund-card">
+              <h2 class="refund-current-booking-heading">
                 Current Booking
               </h2>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="flex items-start gap-3">
+              <div class="refund-grid">
+                <div class="refund-row">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -112,7 +105,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-map-pin w-5 h-5 text-red-500 mt-0.5"
+                    class="refund-icon-2 lucide lucide-map-pin"
                   >
                     <path
                       d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
@@ -120,19 +113,15 @@
                     <circle cx="12" cy="10" r="3"></circle>
                   </svg>
                   <div>
-                    <p
-                      class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="refund-route-text">
                       Route
                     </p>
-                    <p
-                      class="text-[15px] font-['Poppins:SemiBold',sans-serif] text-[#363636]"
-                    >
+                    <p class="refund-text-2">
                       Cebu → Tagbilaran, Bohol
                     </p>
                   </div>
                 </div>
-                <div class="flex items-start gap-3">
+                <div class="refund-row">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -143,7 +132,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-ship w-5 h-5 text-red-500 mt-0.5"
+                    class="refund-icon-2 lucide lucide-ship"
                   >
                     <path d="M12 10.189V14"></path>
                     <path d="M12 2v3"></path>
@@ -156,19 +145,15 @@
                     ></path>
                   </svg>
                   <div>
-                    <p
-                      class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="refund-route-text">
                       Ferry
                     </p>
-                    <p
-                      class="text-[15px] font-['Poppins:SemiBold',sans-serif] text-[#363636]"
-                    >
+                    <p class="refund-text-2">
                       Supercat
                     </p>
                   </div>
                 </div>
-                <div class="flex items-start gap-3">
+                <div class="refund-row">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -179,7 +164,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-calendar w-5 h-5 text-red-500 mt-0.5"
+                    class="refund-icon-2 lucide lucide-calendar"
                   >
                     <path d="M8 2v4"></path>
                     <path d="M16 2v4"></path>
@@ -187,24 +172,18 @@
                     <path d="M3 10h18"></path>
                   </svg>
                   <div>
-                    <p
-                      class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="refund-route-text">
                       Travel Date
                     </p>
-                    <p
-                      class="text-[15px] font-['Poppins:SemiBold',sans-serif] text-[#363636]"
-                    >
+                    <p class="refund-text-2">
                       Wed, Oct 30, 2026
                     </p>
-                    <p
-                      class="text-[13px] text-[#666] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="refund-text-3">
                       09:00 AM - 11:30 AM
                     </p>
                   </div>
                 </div>
-                <div class="flex items-start gap-3">
+                <div class="refund-row">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -215,7 +194,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-users w-5 h-5 text-red-500 mt-0.5"
+                    class="refund-icon-2 lucide lucide-users"
                   >
                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                     <circle cx="9" cy="7" r="4"></circle>
@@ -223,23 +202,19 @@
                     <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                   </svg>
                   <div>
-                    <p
-                      class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="refund-route-text">
                       Passengers
                     </p>
-                    <p
-                      class="text-[15px] font-['Poppins:SemiBold',sans-serif] text-[#363636]"
-                    >
+                    <p class="refund-text-2">
                       2 passengers
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6">
-              <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+            <div class="refund-card-2">
+              <div class="refund-row-2">
+                <div class="refund-circle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -250,19 +225,17 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-dollar-sign w-5 h-5 text-red-600"
+                    class="refund-icon-3 lucide lucide-dollar-sign"
                   >
                     <line x1="12" x2="12" y1="2" y2="22"></line>
                     <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                   </svg>
                 </div>
-                <h2 class="font-['Poppins:Bold',sans-serif] text-[20px] text-[#363636]">
+                <h2 class="refund-details-heading">
                   Refund Details
                 </h2>
               </div>
-              <div
-                class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-start gap-3"
-              >
+              <div class="refund-card-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -273,21 +246,17 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-circle-alert w-5 h-5 text-red-600 shrink-0 mt-0.5"
+                  class="refund-icon-4 lucide lucide-circle-alert"
                 >
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="12" x2="12" y1="8" y2="12"></line>
                   <line x1="12" x2="12.01" y1="16" y2="16"></line>
                 </svg>
                 <div>
-                  <p
-                    class="text-[14px] text-red-800 font-['Poppins:Medium',sans-serif] mb-1"
-                  >
+                  <p class="refund-policy-text">
                     Refund Policy
                   </p>
-                  <ul
-                    class="text-[13px] text-red-700 font-['Poppins:Regular',sans-serif] space-y-1"
-                  >
+                  <ul class="refund-list">
                     <li>• 48+ hours before: 100% refund</li>
                     <li>• 24-48 hours before: 50% refund</li>
                     <li>• Less than 24 hours: No refund</li>
@@ -295,52 +264,36 @@
                   </ul>
                 </div>
               </div>
-              <div class="mb-6">
-                <div class="bg-gray-50 rounded-lg border border-[#dbdcd9] p-4 mb-4">
-                  <div class="flex justify-between items-center mb-2">
-                    <span
-                      class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif]"
-                      >Booking Amount</span
+              <div class="refund-box-3">
+                <div class="refund-card-4">
+                  <div class="refund-row-3">
+                    <span class="refund-booking-amount-text">Booking Amount</span
                     >
-                    <span
-                      class="text-[16px] font-['Poppins:SemiBold',sans-serif] text-[#363636]"
-                      >₱4359.80</span
+                    <span class="refund-text-4">₱4359.80</span
                     >
                   </div>
-                  <div class="flex justify-between items-center mb-2">
-                    <span
-                      class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif]"
-                      >Refund Amount (100%)</span
+                  <div class="refund-row-3">
+                    <span class="refund-booking-amount-text">Refund Amount (100%)</span
                     >
-                    <span
-                      class="text-[16px] font-['Poppins:SemiBold',sans-serif] text-green-600"
-                      >₱4359.80</span
+                    <span class="refund-amount">₱4359.80</span
                     >
                   </div>
                 </div>
                 <div>
-                  <label
-                    class="block text-[14px] font-['Poppins:Medium',sans-serif] text-[#363636] mb-2"
-                    >Reason for Cancellation <span class="text-red-500">*</span>
+                  <label class="refund-reason-cancellation-label">Reason for Cancellation <span class="refund-text-5">*</span>
                   </label>
                   <textarea
                     placeholder="Tell us why you are cancelling — a short note helps us process your refund faster."
                     rows="4"
-                    class="w-full px-4 py-3 border border-[#dbdcd9] rounded-lg font-['Poppins:Regular',sans-serif] text-[15px] focus:outline-none focus:border-[#CCFF00] focus:ring-2 focus:ring-[#CCFF00]/20 resize-none transition-all"
+                    class="refund-field-textarea"
                   ></textarea>
                 </div>
               </div>
-              <div class="flex gap-3">
-                <button
-                  class="flex-1 border-2 border-gray-300 text-gray-600 hover:bg-gray-50 font-bold rounded-full py-3 transition-all"
-                  data-action="go:bookings"
-                >
+              <div class="refund-row-4">
+                <button class="refund-cancel-button" data-action="go:bookings">
                   Cancel
                 </button>
-                <button
-                  class="flex-1 bg-red-500 hover:bg-red-600 disabled:bg-gray-200 disabled:text-gray-400 text-white font-bold rounded-full py-3 transition-all shadow-sm disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  data-action="refund"
-                >
+                <button class="refund-confirm-refund-request-button" data-action="refund">
                   Confirm Refund Request
                 </button>
               </div>

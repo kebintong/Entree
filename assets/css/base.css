@@ -1,0 +1,439 @@
+/* Base styles loaded by every page: a small reset, the page frame (header and
+   logo) and a few helpers. Page-specific styles live in each page's own file. */
+
+/* ==========================================================================
+   Reset
+   Selectors are wrapped in :where() so they never outrank a class.
+   ========================================================================== */
+
+:where(*), :after, :before, ::backdrop {
+  box-sizing: border-box;
+  border: 0 solid;
+  margin: 0;
+  padding: 0;
+}
+
+::file-selector-button {
+  box-sizing: border-box;
+  border: 0 solid;
+  margin: 0;
+  padding: 0;
+}
+
+:where(html), :where(:host) {
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  line-height: 1.5;
+  font-family: 'Poppins', sans-serif;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(hr) {
+  height: 0;
+  color: inherit;
+  border-top-width: 1px;
+}
+
+:where(abbr:where([title])) {
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted;
+}
+
+:where(h1), :where(h2), :where(h3), :where(h4), :where(h5), :where(h6) {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+:where(a) {
+  color: inherit;
+  -webkit-text-decoration: inherit;
+  text-decoration: inherit;
+}
+
+:where(b), :where(strong) {
+  font-weight: bolder;
+}
+
+:where(code), :where(kbd), :where(samp), :where(pre) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  font-size: 1em;
+}
+
+:where(small) {
+  font-size: 80%;
+}
+
+:where(sub), :where(sup) {
+  vertical-align: baseline;
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+}
+
+:where(sub) {
+  bottom: -0.25em;
+}
+
+:where(sup) {
+  top: -0.5em;
+}
+
+:where(table) {
+  text-indent: 0;
+  border-color: inherit;
+  border-collapse: collapse;
+}
+
+:where(:-moz-focusring) {
+  outline: auto;
+}
+
+:where(progress) {
+  vertical-align: baseline;
+}
+
+:where(summary) {
+  display: list-item;
+}
+
+:where(ol), :where(ul), :where(menu) {
+  list-style: none;
+}
+
+:where(img), :where(svg), :where(video), :where(canvas), :where(audio), :where(iframe), :where(embed), :where(object) {
+  vertical-align: middle;
+  display: block;
+}
+
+:where(img), :where(video) {
+  max-width: 100%;
+  height: auto;
+}
+
+:where(button), :where(input), :where(select), :where(optgroup), :where(textarea) {
+  font: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  opacity: 1;
+  background-color: #0000;
+  border-radius: 0;
+}
+
+::file-selector-button {
+  font: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  opacity: 1;
+  background-color: #0000;
+  border-radius: 0;
+}
+
+:where(:where(select:is([multiple], [size])) optgroup) {
+  font-weight: bolder;
+}
+
+:where(:where(select:is([multiple], [size])) optgroup option) {
+  padding-inline-start: 20px;
+}
+
+::file-selector-button {
+  margin-inline-end: 4px;
+}
+
+::placeholder {
+  opacity: 1;
+}
+
+@supports (not ((-webkit-appearance: -apple-pay-button))) or (contain-intrinsic-size: 1px) {
+  ::placeholder {
+    color: currentColor;
+  }
+}
+
+@supports (not ((-webkit-appearance: -apple-pay-button))) or (contain-intrinsic-size: 1px) {
+  @supports (color: color-mix(in lab, red, red)) {
+    ::placeholder {
+      color: color-mix(in oklab, currentcolor 50%, transparent);
+    }
+  }
+}
+
+:where(textarea) {
+  resize: vertical;
+}
+
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+::-webkit-date-and-time-value {
+  min-height: 1lh;
+  text-align: inherit;
+}
+
+::-webkit-datetime-edit {
+  display: inline-flex;
+}
+
+::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+::-webkit-datetime-edit {
+  padding-block: 0;
+}
+
+::-webkit-datetime-edit-year-field {
+  padding-block: 0;
+}
+
+::-webkit-datetime-edit-month-field {
+  padding-block: 0;
+}
+
+::-webkit-datetime-edit-day-field {
+  padding-block: 0;
+}
+
+::-webkit-datetime-edit-hour-field {
+  padding-block: 0;
+}
+
+::-webkit-datetime-edit-minute-field {
+  padding-block: 0;
+}
+
+::-webkit-datetime-edit-second-field {
+  padding-block: 0;
+}
+
+::-webkit-datetime-edit-millisecond-field {
+  padding-block: 0;
+}
+
+::-webkit-datetime-edit-meridiem-field {
+  padding-block: 0;
+}
+
+::-webkit-calendar-picker-indicator {
+  line-height: 1;
+}
+
+:where(:-moz-ui-invalid) {
+  box-shadow: none;
+}
+
+:where(button), :where(input:where([type="button"], [type="reset"], [type="submit"])) {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+}
+
+::file-selector-button {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+}
+
+::-webkit-inner-spin-button {
+  height: auto;
+}
+
+::-webkit-outer-spin-button {
+  height: auto;
+}
+
+:where([hidden]:where(:not([hidden="until-found"]))) {
+  display: none !important;
+}
+
+:where(*) {
+  border-color: #0000001a;
+  outline-color: oklch(70.8% 0 0);
+}
+
+@supports (color: color-mix(in lab, red, red)) {
+  :where(*) {
+    outline-color: color-mix(in oklab, oklch(70.8% 0 0) 50%, transparent);
+  }
+}
+
+:where(body) {
+  background-color: #fff;
+  color: oklch(14.5% 0 0);
+}
+
+:where(html) {
+  font-size: 16px;
+}
+
+:where(h1) {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+:where(h2) {
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+:where(h3) {
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+:where(h4), :where(label), :where(button) {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+:where(input) {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Page frame shared by every page: wrapper, header and logo
+   ========================================================================== */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  display: flex;
+  height: 5rem;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-color: #ffffff1a;
+  padding-inline: 1.5rem;
+  padding-block: 1rem;
+  box-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.3s;
+}
+
+@media (min-width: 48rem) {
+  .site-header {
+    padding-inline: 2.5rem;
+  }
+}
+
+.site-header-actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+:where(.site-header-actions > :not(:last-child)) {
+  margin-inline-end: 1rem;
+  margin-inline-start: 0;
+}
+
+@media (min-width: 48rem) {
+  :where(.site-header-actions > :not(:last-child)) {
+    margin-inline-end: 1.25rem;
+    margin-inline-start: 0;
+  }
+}
+
+.site-header-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.site-header-left {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+.site-logo {
+  height: 2.5rem;
+  width: 2.5rem;
+  flex-shrink: 0;
+}
+
+.site-logo-img {
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.site-logo-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.site-main {
+  position: relative;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex: 1;
+  flex-direction: column;
+}
+
+.site-shell {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  overflow-x: hidden;
+  background-color: #fff;
+  font-family: 'Poppins', sans-serif;
+  color: #0f172b;
+}
+
+.site-shell ::selection {
+  background-color: #cf0;
+  color: #000;
+}
+
+.site-shell::selection {
+  background-color: #cf0;
+  color: #000;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.site-shell) {
+  background-color: #fff;
+}
+
+/* ==========================================================================
+   Helpers
+   ========================================================================== */
+
+/* Visually hidden but still read by screen readers */
+.sr-only {
+  border-width: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

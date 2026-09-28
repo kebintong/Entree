@@ -19,7 +19,7 @@ async function page(name, query = '') {
   for (const [key, val] of session) w.sessionStorage.setItem(key, val);
   for (const [key, val] of local) w.localStorage.setItem(key, val);
   if (w.document.readyState === 'loading') await new Promise(resolve => w.document.addEventListener('DOMContentLoaded', resolve));
-  for (const file of ['data.js', 'booking-state.js', 'app.js', 'booking-flow.js']) {
+  for (const file of ['data.js', 'booking-state.js', ...(fs.existsSync(path.join(root, 'assets/js', name + '.js')) ? [name + '.js'] : []), 'app.js', 'dev-panel.js', 'turtle.js', 'booking-flow.js']) {
     try { w.eval(fs.readFileSync(path.join(root, 'assets/js', file), 'utf8')); }
     catch (e) { errors.push(name + ': ' + e.stack); }
   }
@@ -116,10 +116,49 @@ async function page(name, query = '') {
   p.close();
   p=await page('verify-booking');
   const verify=p.doc.querySelector('form');
-  const inputs=verify.querySelectorAll('input');
-  inputs[0].value='UNKNOWN'; inputs[1].value='Nobody';
-  verify.dispatchEvent(new p.w.Event('submit',{bubbles:true,cancelable:true}));
-  assert.ok(p.doc.querySelector('.form-error').textContent.includes('No booking matches'));
+  const submitVerify=()=>verify.dispatchEvent(new p.w.Event('submit',{bubbles:true,cancelable:true}));
+  const orderName=p.doc.querySelector('#order-name');
+  p.doc.querySelector('input[name="vb-booking"][value="ENT-2026-001234"]').checked=true;
+  // A name that isn't on the booking asks before continuing and offers the passenger names.
+  orderName.value='Honda Civic TYPE R';
+  submitVerify();
+  let nameDialog=p.doc.querySelector('dialog.vb-name-dialog');
+  assert.ok(nameDialog);
+  assert.deepEqual([...nameDialog.querySelectorAll('.vb-nm-option strong')].map(el=>el.textContent),['Juan Dela Cruz','Maria Santos','Honda Civic TYPE R']);
+  assert.equal(nameDialog.querySelector('input[name="vb-order-name"]:checked').value,'');
+  assert.equal(nameDialog.querySelector('.vb-nm-continue').textContent,'Continue as Honda Civic TYPE R');
+  // Clicking a passenger only selects it; nothing is saved until Continue.
+  nameDialog.querySelectorAll('.vb-nm-option')[1].click();
+  assert.ok(p.doc.querySelector('dialog.vb-name-dialog'));
+  assert.equal(nameDialog.querySelector('.vb-nm-continue').textContent,'Continue as Maria Santos');
+  assert.equal(p.w.localStorage.getItem('entree.verification'),null);
+  nameDialog.querySelector('.vb-nm-edit').click();
+  assert.equal(p.doc.querySelector('dialog.vb-name-dialog'),null);
+  assert.equal(p.w.localStorage.getItem('entree.verification'),null);
+  // Continuing keeps the new name.
+  submitVerify();
+  p.doc.querySelector('dialog.vb-name-dialog .vb-nm-continue').click();
+  assert.deepEqual(JSON.parse(p.w.localStorage.getItem('entree.verification')),{reference:'ENT-2026-001234',name:'Honda Civic TYPE R',onBooking:false});
+  // Picking a passenger, then Continue, uses their full name.
+  submitVerify();
+  p.doc.querySelectorAll('dialog.vb-name-dialog .vb-nm-option')[1].click();
+  p.doc.querySelector('dialog.vb-name-dialog .vb-nm-continue').click();
+  assert.equal(orderName.value,'Maria Santos');
+  assert.deepEqual(JSON.parse(p.w.localStorage.getItem('entree.verification')),{reference:'ENT-2026-001234',name:'Maria Santos',onBooking:true});
+  // A passenger's surname goes straight through, no prompt.
+  orderName.value='  dela cruz ';
+  submitVerify();
+  assert.equal(p.doc.querySelector('dialog.vb-name-dialog'),null);
+  assert.equal(JSON.parse(p.w.localStorage.getItem('entree.verification')).name,'Juan Dela Cruz');
+  p.close();
+  // Pasalubong add-ons can be viewed from My Bookings.
+  p=await page('bookings');
+  const demoCard=p.doc.querySelector('[data-booking="1"]');
+  assert.ok(demoCard.querySelector('[data-action="booking-addons"]').textContent.includes('6 add-ons'));
+  demoCard.querySelector('[data-action="booking-addons"]').click();
+  const addOnsView=p.doc.querySelector('dialog.booking-modal #bm-addons');
+  assert.ok(addOnsView.textContent.includes('PSL-7Q2MKD'));
+  assert.ok(addOnsView.textContent.includes('Original Dried Mangoes'));
   p.close();
   p=await page('index');
   const trigger=p.doc.querySelector('[data-dropdown="shipping-line"] .custom-dropdown-trigger');

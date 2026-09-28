@@ -1,0 +1,485 @@
+/* Styles for pages/verify-booking.html (Verify Booking). Shared styles are in base.css and site.css. */
+
+/* ==========================================================================
+   Page layout and components
+   ========================================================================== */
+.verify-stack {
+  display: flex;
+  width: 100%;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  padding-inline: 1.5rem;
+  padding-top: 5rem;
+}
+
+.verify-box {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 480px;
+}
+
+.verify-card {
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  background-color: #fff;
+  padding: 2rem;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+}
+
+.verify-box-2 {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.verify-circle {
+  margin-inline: auto;
+  margin-bottom: 1rem;
+  display: flex;
+  height: 4rem;
+  width: 4rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: #cf0;
+}
+
+.verify-icon {
+  height: 2rem;
+  width: 2rem;
+  stroke-width: 2.5px;
+  color: #000;
+}
+
+.verify-booking-title {
+  margin-bottom: 0.5rem;
+  font-size: 28px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+.verify-text {
+  font-size: 15px;
+  color: #999;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.verify-card-2 {
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #ccff004d;
+  background-color: #ccff001a;
+  padding: 1rem;
+}
+
+.verify-icon-2 {
+  margin-top: 0.125rem;
+  height: 1.25rem;
+  width: 1.25rem;
+  flex-shrink: 0;
+  color: #000;
+}
+
+.verify-text-2 {
+  font-size: 13px;
+  line-height: 1.625;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+:where(.verify-form > :not(:last-child)) {
+  margin-block-end: 1.25rem;
+  margin-block-start: 0;
+}
+
+.verify-upcoming-bookings-label {
+  margin-bottom: 0.5rem;
+  display: block;
+  font-size: 14px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 500;
+}
+
+.verify-order-name-input {
+  width: 100%;
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  padding-inline: 1rem;
+  padding-block: 0.75rem;
+  font-size: 15px;
+  color: #363636;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.verify-order-name-input:focus {
+  border-color: #cf0;
+  box-shadow: 0 0 0 2px rgba(205, 255, 0, 0.2);
+}
+
+.verify-continue-shop-button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background-color: #cf0;
+  padding-inline: 1.5rem;
+  padding-block: 0.875rem;
+  font-size: 15px;
+  font-weight: 700;
+  color: #000;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .verify-continue-shop-button:hover {
+    background-color: #b8e600;
+  }
+}
+
+.verify-continue-shop-button:active {
+  background-color: #9c0;
+}
+
+.verify-continue-shop-button:disabled {
+  cursor: not-allowed;
+  background-color: #e5e7eb;
+  color: #99a1af;
+}
+
+.verify-box-3 {
+  margin-top: 1.5rem;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-color: #dbdcd9;
+  padding-top: 1.5rem;
+}
+
+.verify-text-3 {
+  text-align: center;
+  font-family: Poppins;
+  font-size: 11px;
+  line-height: 1.625;
+  color: #999;
+}
+
+/* ==========================================================================
+   Verify booking: pick an upcoming booking
+   ========================================================================== */
+.vb-picker {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.vb-bookings {
+  display: grid;
+  gap: 10px;
+  max-height: 340px;
+  overflow-y: auto;
+  padding: 2px;
+}
+
+.vb-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid #dbdcd9;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.vb-option:hover {
+  border-color: #b8e600;
+}
+
+.vb-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vb-option:has(input:checked) {
+  border-color: #b8e600;
+  background: #f7ffe0;
+  box-shadow: 0 0 0 1px #ccff00;
+}
+
+.vb-option:has(input:focus-visible) {
+  outline: 2px solid #007f70;
+  outline-offset: 2px;
+}
+
+.vb-option.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.vb-option.is-disabled:hover {
+  border-color: #dbdcd9;
+}
+
+.vb-logo {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 700;
+  color: #363636;
+}
+
+.vb-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 5px;
+}
+
+.vb-info {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+  font-size: 12px;
+  color: #666;
+}
+
+.vb-info strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #363636;
+  overflow-wrap: anywhere;
+}
+
+.vb-info em {
+  font-style: normal;
+  color: #dc2626;
+}
+
+.vb-radio {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: 2px solid #cbd5e1;
+  background: #fff;
+}
+
+.vb-option:has(input:checked) .vb-radio {
+  border-color: #051821;
+  background: radial-gradient(circle, #051821 0 4px, #ccff00 5px);
+}
+
+.vb-empty {
+  padding: 14px;
+  border-radius: 12px;
+  background: #f9fafb;
+  font-size: 13px;
+  color: #666;
+}
+
+.vb-empty a {
+  color: #007f70;
+  text-decoration: underline;
+}
+
+/* Verify booking: "name isn't on the booking" confirmation */
+dialog.vb-name-dialog {
+  width: min(460px, calc(100% - 32px));
+  padding: 26px;
+}
+
+dialog.vb-name-dialog > h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 6px;
+  padding-right: 28px;
+}
+
+dialog.vb-name-dialog p.vb-nm-lead {
+  margin: 0 0 18px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #4b5563;
+  overflow-wrap: anywhere;
+}
+
+.vb-nm-list {
+  display: grid;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 2px;
+  border: 0;
+  min-width: 0;
+}
+
+dialog.vb-name-dialog .vb-nm-list legend.vb-nm-label {
+  float: left;
+  width: 100%;
+  margin: 0 0 8px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #363636;
+}
+
+dialog.vb-name-dialog label.vb-nm-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #dbdcd9;
+  border-radius: 12px;
+  background: #fff;
+  font-weight: 400;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+dialog.vb-name-dialog label.vb-nm-option:hover {
+  border-color: #b8e600;
+}
+
+dialog.vb-name-dialog .vb-nm-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+}
+
+dialog.vb-name-dialog .vb-nm-option:has(input:checked) {
+  border-color: #b8e600;
+  background: #f7ffe0;
+  box-shadow: 0 0 0 1px #ccff00;
+}
+
+dialog.vb-name-dialog .vb-nm-option:has(input:focus-visible) {
+  outline: 2px solid #007f70;
+  outline-offset: 2px;
+}
+
+.vb-nm-option:has(input:checked) .vb-radio {
+  border-color: #051821;
+  background: radial-gradient(circle, #051821 0 4px, #ccff00 5px);
+}
+
+.vb-nm-option.is-new .vb-nm-avatar {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.vb-nm-avatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #ccff00;
+  color: #051821;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.vb-nm-text {
+  flex: 1;
+  display: grid;
+  min-width: 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.vb-nm-text strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #363636;
+  overflow-wrap: anywhere;
+}
+
+.vb-nm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.vb-nm-actions button {
+  padding: 10px 20px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.vb-nm-edit {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #374151;
+}
+
+.vb-nm-edit:hover {
+  background: #f3f4f6;
+}
+
+.vb-nm-continue {
+  border: none;
+  background: #ccff00;
+  color: #000;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.vb-nm-continue:hover {
+  background: #b8e600;
+}
+
+@media (max-width: 480px) {
+  .vb-nm-actions button {
+    flex: 1 1 100%;
+  }
+}

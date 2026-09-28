@@ -5,39 +5,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bookings | Entree</title>
-  <link rel="stylesheet" href="../assets/css/styles.css" />
+  <link rel="stylesheet" href="../assets/css/fonts.css" />
+  <link rel="stylesheet" href="../assets/css/base.css" />
   <link rel="stylesheet" href="../assets/css/site.css" />
+  <link rel="stylesheet" href="../assets/css/turtle.css" />
+  <link rel="stylesheet" href="../assets/css/bookings.css" />
   <script src="../assets/js/data.js" defer></script>
   <script src="../assets/js/booking-state.js" defer></script>
+    <script src="../assets/js/bookings.js" defer></script>
     <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/dev-panel.js" defer></script>
+    <script src="../assets/js/turtle.js" defer></script>
     <script src="../assets/js/booking-flow.js" defer></script>
     <link rel="stylesheet" href="../assets/css/booking-flow.css" />
   <link rel="icon" type="image/png" href="../assets/images/entree-logo.png" />
 </head>
 
 <body data-page="bookings">
-  <div
-    class="flex flex-col min-h-screen font-sans text-slate-900 bg-white selection:bg-[#CCFF00] selection:text-black overflow-x-hidden">
+  <div class="site-shell">
     <header
-      class="fixed top-0 left-0 w-full z-50 px-6 md:px-10 py-4 flex justify-between items-center h-20 transition-all duration-300 shadow-md border-b border-white/10"
+      class="site-header"
       style="
           background-image: url(../assets/images/ocean-background.png);
           background-size: cover;
           background-position: center top;
         ">
-      <div class="flex-1 flex items-center">
-        <a href="index.html" class="inline-flex items-center focus:outline-none" aria-label="Entree Home">
-          <div class="w-10 h-10 shrink-0">
-            <img
-              src="../assets/images/entree-logo.png"
-              alt="Entree Logo"
-              class="w-full h-full object-contain block"
-            />
+      <div class="site-header-left">
+        <a href="index.html" class="site-logo-link" aria-label="Entree Home">
+          <div class="site-logo">
+            <img src="../assets/images/entree-logo.png" alt="Entree Logo" class="site-logo-img" />
           </div>
         </a>
       </div>
-      <div class="flex items-center space-x-4 md:space-x-5 shrink-0 justify-end">
-        <div class="flex flex-col gap-2 items-end">
+      <div class="site-header-actions">
+        <div class="site-header-buttons">
           <a href="verify-booking.html" class="entree-pasalubong-btn" data-action="go:verify-booking">
               <span>Buy Pasalubong</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -61,17 +62,16 @@
           </a>
       </div>
     </header>
-    <main class="flex-1 flex flex-col relative w-full h-full">
-      <div class="w-full flex-1 bg-gray-50 flex flex-col items-center pt-20">
-        <div class="bk-container w-full max-w-[1200px] mx-auto px-6 py-8">
-          <div class="bk-layout flex gap-6 mb-8">
-            <div class="bk-main flex-1">
-              <div class="mb-8">
-                <h2
-                  class="font-['Poppins:SemiBold',sans-serif] font-bold text-[24px] text-[#363636] mb-4 flex items-center gap-2">
+    <main class="site-main">
+      <div class="bookings-stack site-page">
+        <div class="bookings-box bk-container">
+          <div class="bookings-row bk-layout">
+            <div class="bookings-box-2 bk-main">
+              <div class="bookings-box-3">
+                <h2 class="bookings-upcoming-trips-heading">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-ship w-6 h-6 text-[#CCFF00]">
+                    class="bookings-icon lucide lucide-ship">
                     <path d="M12 10.189V14"></path>
                     <path d="M12 2v3"></path>
                     <path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"></path>
@@ -83,463 +83,63 @@
                     </path>
                   </svg>Upcoming Trips
                 </h2>
-                <div class="space-y-4">
-                  <div
-                    class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 hover:shadow-md transition-all cursor-pointer"
-                    data-booking="1" data-action="booking">
-                    <div class="flex items-start justify-between mb-4">
-                      <div>
-                        <div class="flex items-center gap-2 mb-2">
-                          <span
-                            class="font-['Poppins:Bold',sans-serif] font-bold text-[18px] text-[#363636]">ENT-2026-001234</span>
-                          <span
-                            class="text-[11px] font-bold px-3 py-1 rounded-full border bg-green-100 text-green-700 border-green-200">UPCOMING</span>
-                        </div>
-                        <p class="text-[13px] text-[#999] font-['Poppins:Regular',sans-serif]">
-                          Supercat
-                        </p>
-                      </div>
-                      <button
-                        class="text-black hover:bg-gray-100 text-[13px] font-bold rounded-full px-4 py-2 transition-all flex items-center gap-2"
-                        data-action="share">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-share2 lucide-share-2 w-4 h-4">
-                          <circle cx="18" cy="5" r="3"></circle>
-                          <circle cx="6" cy="12" r="3"></circle>
-                          <circle cx="18" cy="19" r="3"></circle>
-                          <line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line>
-                          <line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line>
-                        </svg>Share Trip
-                      </button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                      <div class="flex items-start gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-map-pin w-5 h-5 text-gray-400 mt-0.5">
-                          <path
-                            d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
-                          </path>
-                          <circle cx="12" cy="10" r="3"></circle>
-                        </svg>
-                        <div>
-                          <p class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif]">
-                            Route
-                          </p>
-                          <p class="text-[15px] font-['Poppins:SemiBold',sans-serif] font-bold text-[#363636]">
-                            Cebu → Tagbilaran, Bohol
-                          </p>
-                        </div>
-                      </div>
-                      <div class="flex items-start gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-calendar w-5 h-5 text-gray-400 mt-0.5">
-                          <path d="M8 2v4"></path>
-                          <path d="M16 2v4"></path>
-                          <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                          <path d="M3 10h18"></path>
-                        </svg>
-                        <div>
-                          <p class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif]">
-                            Departure
-                          </p>
-                          <p class="text-[15px] font-['Poppins:SemiBold',sans-serif] font-bold text-[#363636]">
-                            Fri, Oct 30, 2026
-                          </p>
-                          <p class="text-[13px] text-[#666] font-['Poppins:Regular',sans-serif]">
-                            09:00 AM - 11:30 AM
-                          </p>
-                          <p class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif] mt-1">
-                            Return: Mon, Nov 2, 2026
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="pt-4 border-t border-gray-100">
-                      <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                          <div class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                              stroke-linejoin="round" class="lucide lucide-user w-4 h-4 text-gray-400">
-                              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                              <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                            <span class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif]">2
-                              passengers</span>
-                          </div>
-                          <div class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                              stroke-linejoin="round" class="lucide lucide-package w-4 h-4 text-[#CCFF00]">
-                              <path
-                                d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z">
-                              </path>
-                              <path d="M12 22V12"></path>
-                              <polyline points="3.29 7 12 12 20.71 7"></polyline>
-                              <path d="m7.5 4.27 9 5.15"></path>
-                            </svg>
-                            <span class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif]">6
-                              add-ons</span>
-                          </div>
-                          <div class="text-left">
-                            <p class="text-[18px] font-['Poppins:Bold',sans-serif] font-bold text-[#363636]">
-                              ₱4359.80
-                            </p>
-                          </div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                          <button
-                            class="bg-[#CCFF00] hover:bg-[#B8E600] text-black text-[13px] font-bold rounded-full px-4 py-2 transition-all shadow-sm"
-                            data-action="go:rebook">
-                            Rebook
-                          </button>
-                          <button
-                            class="bg-[#CCFF00] hover:bg-[#B8E600] text-black text-[13px] font-bold rounded-full px-4 py-2 transition-all shadow-sm"
-                            data-action="go:refund">
-                            Refund
-                          </button>
-                          <button
-                            class="bg-[#CCFF00] hover:bg-[#B8E600] text-black text-[13px] font-bold rounded-full px-4 py-2 transition-all shadow-sm"
-                            data-action="addons">
-                            Buy Add-ons
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 hover:shadow-md transition-all cursor-pointer"
-                    data-booking="2" data-action="booking">
-                    <div class="flex items-start justify-between mb-4">
-                      <div>
-                        <div class="flex items-center gap-2 mb-2">
-                          <span
-                            class="font-['Poppins:Bold',sans-serif] text-[18px] text-[#363636]">ENT-2026-001189</span>
-                          <span
-                            class="text-[11px] font-bold px-3 py-1 rounded-full border bg-green-100 text-green-700 border-green-200">UPCOMING</span>
-                        </div>
-                        <p class="text-[13px] text-[#999] font-['Poppins:Regular',sans-serif]">
-                          FastCat
-                        </p>
-                      </div>
-                      <button
-                        class="text-black hover:bg-gray-100 text-[13px] font-bold rounded-full px-4 py-2 transition-all flex items-center gap-2"
-                        data-action="share">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-share2 lucide-share-2 w-4 h-4">
-                          <circle cx="18" cy="5" r="3"></circle>
-                          <circle cx="6" cy="12" r="3"></circle>
-                          <circle cx="18" cy="19" r="3"></circle>
-                          <line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line>
-                          <line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line>
-                        </svg>Share Trip
-                      </button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                      <div class="flex items-start gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-map-pin w-5 h-5 text-gray-400 mt-0.5">
-                          <path
-                            d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
-                          </path>
-                          <circle cx="12" cy="10" r="3"></circle>
-                        </svg>
-                        <div>
-                          <p class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif]">
-                            Route
-                          </p>
-                          <p class="text-[15px] font-['Poppins:SemiBold',sans-serif] text-[#363636]">
-                            Manila → Coron, Palawan
-                          </p>
-                        </div>
-                      </div>
-                      <div class="flex items-start gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="lucide lucide-calendar w-5 h-5 text-gray-400 mt-0.5">
-                          <path d="M8 2v4"></path>
-                          <path d="M16 2v4"></path>
-                          <rect width="18" height="18" x="3" y="4" rx="2"></rect>
-                          <path d="M3 10h18"></path>
-                        </svg>
-                        <div>
-                          <p class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif]">
-                            Departure
-                          </p>
-                          <p class="text-[15px] font-['Poppins:SemiBold',sans-serif] text-[#363636]">
-                            Sun, Nov 15, 2026
-                          </p>
-                          <p class="text-[13px] text-[#666] font-['Poppins:Regular',sans-serif]">
-                            07:00 AM - 10:00 AM
-                          </p>
-                          <p class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif] mt-1">
-                            Return: Sun, Nov 22, 2026
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="pt-4 border-t border-gray-100">
-                      <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                          <div class="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                              stroke-linejoin="round" class="lucide lucide-user w-4 h-4 text-gray-400">
-                              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                              <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                            <span class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif]">4
-                              passengers</span>
-                          </div>
-                          <div class="text-left">
-                            <p class="text-[18px] font-['Poppins:Bold',sans-serif] text-[#363636]">
-                              ₱8200.00
-                            </p>
-                          </div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                          <button
-                            class="bg-[#CCFF00] hover:bg-[#B8E600] text-black text-[13px] font-bold rounded-full px-4 py-2 transition-all shadow-sm"
-                            data-action="go:rebook">
-                            Rebook
-                          </button>
-                          <button
-                            class="bg-[#CCFF00] hover:bg-[#B8E600] text-black text-[13px] font-bold rounded-full px-4 py-2 transition-all shadow-sm"
-                            data-action="go:refund">
-                            Refund
-                          </button>
-                          <button
-                            class="bg-[#CCFF00] hover:bg-[#B8E600] text-black text-[13px] font-bold rounded-full px-4 py-2 transition-all shadow-sm"
-                            data-action="addons">
-                            Buy Add-ons
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div class="bookings-stack-2">
                 </div>
               </div>
               <div>
-                <h2
-                  class="font-['Poppins:SemiBold',sans-serif] text-[24px] text-[#363636] mb-4 flex items-center gap-2">
+                <h2 class="bookings-past-trips-heading">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="lucide lucide-clock w-6 h-6 text-gray-400">
+                    class="bookings-icon-2 lucide lucide-clock">
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>Past Trips
                 </h2>
-                <div class="space-y-4">
-                  <div class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 opacity-75">
-                    <div class="flex items-start justify-between">
-                      <div>
-                        <div class="flex items-center gap-2 mb-2">
-                          <span class="font-['Poppins:Bold',sans-serif] text-[16px] text-[#666]">ENT-2026-000987</span>
-                          <span
-                            class="text-[11px] font-bold px-3 py-1 rounded-full border bg-gray-100 text-gray-600 border-gray-200">COMPLETED</span>
-                        </div>
-                        <p class="text-[14px] text-[#666] font-['Poppins:Regular',sans-serif]">
-                          Cebu → Bohol • Thu, Sep 10, 2026
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                <div class="bookings-stack-2">
                 </div>
               </div>
             </div>
-            <div class="bk-aside w-[280px] flex-shrink-0">
-              <div class="bk-calendar bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-4 sticky top-24">
+            <div class="bookings-box-4 bk-aside">
+              <div class="bookings-card-2 bk-calendar">
                 <!-- Date Header -->
-                <div class="mb-4 pb-3 border-b border-gray-100 flex items-center justify-between">
+                <div class="bookings-row-2">
                   <div>
-                    <span class="text-[11px] font-medium tracking-wider uppercase text-gray-400 block font-['Poppins:Medium',sans-serif]">Today</span>
-                    <p id="pht-date-str" class="text-[16px] font-semibold text-[#1f2937] font-['Poppins:SemiBold',sans-serif] tracking-tight mt-0.5">Mon, Sep 21, 2026</p>
+                    <span class="bookings-today-text tracking-wider">Today</span>
+                    <p id="pht-date-str" class="bookings-today-date text-[#1f2937]">Mon, Sep 21, 2026</p>
                   </div>
-                  <button data-action="month:today" class="text-[11px] font-semibold px-2.5 py-1 rounded-md bg-gray-50 hover:bg-gray-100 text-gray-600 hover:text-gray-900 border border-[#dbdcd9] transition-colors" title="Jump to today">
+                  <button data-action="month:today" class="bookings-today-button hover:text-gray-900" title="Jump to today">
                     Today
                   </button>
                 </div>
-                <div class="flex items-center justify-between mb-3">
-                  <button
-                    class="w-7 h-7 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors text-gray-600 hover:text-black"
-                    data-action="month:-1" aria-label="Previous month">
+                <div class="bookings-row-3">
+                  <button class="bookings-previous-month-button" data-action="month:-1" aria-label="Previous month">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                      class="lucide lucide-chevron-left w-4 h-4">
+                      class="bookings-icon-3 lucide lucide-chevron-left">
                       <path d="m15 18-6-6 6-6"></path>
                     </svg>
                   </button>
-                  <h3 class="font-['Poppins:SemiBold',sans-serif] text-[14px] font-semibold text-[#1f2937]">
+                  <h3 class="bookings-month-label text-[#1f2937]">
                     Sep 2026
                   </h3>
-                  <button
-                    class="w-7 h-7 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors text-gray-600 hover:text-black"
-                    data-action="month:1" aria-label="Next month">
+                  <button class="bookings-previous-month-button" data-action="month:1" aria-label="Next month">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                      class="lucide lucide-chevron-right w-4 h-4">
+                      class="bookings-icon-3 lucide lucide-chevron-right">
                       <path d="m9 18 6-6-6-6"></path>
                     </svg>
                   </button>
                 </div>
-                <div class="grid grid-cols-7 gap-1">
-                  <div class="text-center text-[10px] font-['Poppins:SemiBold',sans-serif] text-[#999] py-1">
-                    S
-                  </div>
-                  <div class="text-center text-[10px] font-['Poppins:SemiBold',sans-serif] text-[#999] py-1">
-                    M
-                  </div>
-                  <div class="text-center text-[10px] font-['Poppins:SemiBold',sans-serif] text-[#999] py-1">
-                    T
-                  </div>
-                  <div class="text-center text-[10px] font-['Poppins:SemiBold',sans-serif] text-[#999] py-1">
-                    W
-                  </div>
-                  <div class="text-center text-[10px] font-['Poppins:SemiBold',sans-serif] text-[#999] py-1">
-                    T
-                  </div>
-                  <div class="text-center text-[10px] font-['Poppins:SemiBold',sans-serif] text-[#999] py-1">
-                    F
-                  </div>
-                  <div class="text-center text-[10px] font-['Poppins:SemiBold',sans-serif] text-[#999] py-1">
-                    S
-                  </div>
-                  <div class="aspect-square"></div>
-                  <div class="aspect-square"></div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    1
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    2
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    3
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    4
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    5
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    6
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    7
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    8
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    9
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    10
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    11
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    12
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    13
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    14
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    15
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all bg-gray-200 text-[#363636]">
-                    16
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    17
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    18
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    19
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    20
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    21
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    22
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    23
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    24
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    25
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    26
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    27
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    28
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    29
-                  </div>
-                  <div
-                    class="aspect-square flex items-center justify-center rounded text-[11px] font-['Poppins:Medium',sans-serif] transition-all text-[#666]">
-                    30
-                  </div>
+                <div class="bookings-grid">
                 </div>
-                <div class="mt-3 pt-3 border-t border-gray-200 space-y-2">
-                  <div class="flex items-center gap-2 text-[10px] font-['Poppins:Regular',sans-serif]">
-                    <div class="w-3 h-3 bg-[#CCFF00] rounded"></div>
-                    <span class="text-[#666]">Trip dates</span>
+                <div class="bookings-stack-3">
+                  <div class="bookings-row-4">
+                    <div class="bookings-box-5"></div>
+                    <span class="bookings-trip-dates-text">Trip dates</span>
                   </div>
-                  <div class="flex items-center gap-2 text-[10px] font-['Poppins:Regular',sans-serif]">
-                    <div class="w-3 h-3 bg-gray-200 rounded"></div>
-                    <span class="text-[#666]">Today</span>
+                  <div class="bookings-row-4">
+                    <div class="bookings-box-6"></div>
+                    <span class="bookings-trip-dates-text">Today</span>
                   </div>
                 </div>
               </div>

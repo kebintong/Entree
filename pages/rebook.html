@@ -4,40 +4,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Rebook | Entree</title>
-    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/fonts.css" />
+    <link rel="stylesheet" href="../assets/css/base.css" />
     <link rel="stylesheet" href="../assets/css/site.css" />
+    <link rel="stylesheet" href="../assets/css/turtle.css" />
+    <link rel="stylesheet" href="../assets/css/rebook.css" />
     <script src="../assets/js/data.js" defer></script>
     <script src="../assets/js/booking-state.js" defer></script>
+    <script src="../assets/js/rebook.js" defer></script>
     <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/dev-panel.js" defer></script>
+    <script src="../assets/js/turtle.js" defer></script>
     <script src="../assets/js/booking-flow.js" defer></script>
     <link rel="stylesheet" href="../assets/css/booking-flow.css" />
     <link rel="icon" type="image/png" href="../assets/images/entree-logo.png" />
 </head>
   <body data-page="rebook">
-    <div
-      class="flex flex-col min-h-screen font-sans text-slate-900 bg-white selection:bg-[#CCFF00] selection:text-black overflow-x-hidden"
-    >
+    <div class="site-shell">
       <header
-        class="fixed top-0 left-0 w-full z-50 px-6 md:px-10 py-4 flex justify-between items-center h-20 transition-all duration-300 shadow-md border-b border-white/10"
+        class="site-header"
         style="
           background-image: url(../assets/images/ocean-background.png);
           background-size: cover;
           background-position: center top;
         "
       >
-        <div class="flex-1 flex items-center">
-          <a href="index.html" class="inline-flex items-center focus:outline-none" aria-label="Entree Home">
-            <div class="w-10 h-10 shrink-0">
-              <img
-                src="../assets/images/entree-logo.png"
-                alt="Entree Logo"
-                class="w-full h-full object-contain block"
-              />
+        <div class="site-header-left">
+          <a href="index.html" class="site-logo-link" aria-label="Entree Home">
+            <div class="site-logo">
+              <img src="../assets/images/entree-logo.png" alt="Entree Logo" class="site-logo-img" />
             </div>
           </a>
         </div>
-        <div class="flex items-center space-x-4 md:space-x-5 shrink-0 justify-end">
-          <div class="flex flex-col gap-2 items-end">
+        <div class="site-header-actions">
+          <div class="site-header-buttons">
             <a href="verify-booking.html" class="entree-pasalubong-btn" data-action="go:verify-booking">
               <span>Buy Pasalubong</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -61,13 +61,10 @@
           </a>
         </div>
       </header>
-      <main class="flex-1 flex flex-col relative w-full h-full">
-        <div class="w-full flex-1 bg-gray-50 flex flex-col items-center pt-20">
-          <div class="w-full max-w-[1000px] mx-auto px-6 py-8">
-            <button
-              class="flex items-center gap-2 text-[#666] hover:text-[#363636] mb-6 transition-colors"
-              data-action="go:bookings"
-            >
+      <main class="site-main">
+        <div class="rebook-stack site-page">
+          <div class="rebook-box">
+            <button class="rebook-select-option-button" data-action="go:bookings">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -78,30 +75,26 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="lucide lucide-arrow-left w-5 h-5"
+                class="rebook-icon lucide lucide-arrow-left"
               >
                 <path d="m12 19-7-7 7-7"></path>
                 <path d="M19 12H5"></path>
               </svg>
             </button>
-            <div class="mb-8">
-              <h1
-                class="font-['Poppins:SemiBold',sans-serif] text-[32px] text-[#363636] mb-2"
-              >
+            <div class="rebook-box-2">
+              <h1 class="rebook-reschedule-trip-title">
                 Reschedule Your Trip
               </h1>
-              <p class="text-[15px] text-[#666] font-['Poppins:Regular',sans-serif]">
-                Booking Reference: <span class="font-semibold text-[#363636]">ENT-2026-001234</span>
+              <p class="rebook-booking-reference-text">
+                Booking Reference: <span class="rebook-text">ENT-2026-001234</span>
               </p>
             </div>
-            <div class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 mb-6">
-              <h2
-                class="font-['Poppins:Bold',sans-serif] text-[18px] text-[#363636] mb-4"
-              >
+            <div class="rebook-card">
+              <h2 class="rebook-current-booking-heading">
                 Current Booking
               </h2>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="flex items-start gap-3">
+              <div class="rebook-grid">
+                <div class="rebook-row">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -112,7 +105,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-map-pin w-5 h-5 text-[#CCFF00] mt-0.5"
+                    class="rebook-icon-2 lucide lucide-map-pin"
                   >
                     <path
                       d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
@@ -120,19 +113,15 @@
                     <circle cx="12" cy="10" r="3"></circle>
                   </svg>
                   <div>
-                    <p
-                      class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="rebook-route-text">
                       Route
                     </p>
-                    <p
-                      class="text-[15px] font-['Poppins:SemiBold',sans-serif] text-[#363636]"
-                    >
+                    <p class="rebook-text-2">
                       Cebu → Tagbilaran, Bohol
                     </p>
                   </div>
                 </div>
-                <div class="flex items-start gap-3">
+                <div class="rebook-row">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -143,7 +132,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-ship w-5 h-5 text-[#CCFF00] mt-0.5"
+                    class="rebook-icon-2 lucide lucide-ship"
                   >
                     <path d="M12 10.189V14"></path>
                     <path d="M12 2v3"></path>
@@ -156,19 +145,15 @@
                     ></path>
                   </svg>
                   <div>
-                    <p
-                      class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="rebook-route-text">
                       Ferry
                     </p>
-                    <p
-                      class="text-[15px] font-['Poppins:SemiBold',sans-serif] text-[#363636]"
-                    >
+                    <p class="rebook-text-2">
                       Supercat
                     </p>
                   </div>
                 </div>
-                <div class="flex items-start gap-3">
+                <div class="rebook-row">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -179,7 +164,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-calendar w-5 h-5 text-[#CCFF00] mt-0.5"
+                    class="rebook-icon-2 lucide lucide-calendar"
                   >
                     <path d="M8 2v4"></path>
                     <path d="M16 2v4"></path>
@@ -187,24 +172,18 @@
                     <path d="M3 10h18"></path>
                   </svg>
                   <div>
-                    <p
-                      class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="rebook-route-text">
                       Travel Date
                     </p>
-                    <p
-                      class="text-[15px] font-['Poppins:SemiBold',sans-serif] text-[#363636]"
-                    >
+                    <p class="rebook-text-2">
                       Wed, Oct 30, 2026
                     </p>
-                    <p
-                      class="text-[13px] text-[#666] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="rebook-text-3">
                       09:00 AM - 11:30 AM
                     </p>
                   </div>
                 </div>
-                <div class="flex items-start gap-3">
+                <div class="rebook-row">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -215,7 +194,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-users w-5 h-5 text-[#CCFF00] mt-0.5"
+                    class="rebook-icon-2 lucide lucide-users"
                   >
                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                     <circle cx="9" cy="7" r="4"></circle>
@@ -223,22 +202,18 @@
                     <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                   </svg>
                   <div>
-                    <p
-                      class="text-[12px] text-[#999] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="rebook-route-text">
                       Passengers
                     </p>
-                    <p
-                      class="text-[15px] font-['Poppins:SemiBold',sans-serif] text-[#363636]"
-                    >
+                    <p class="rebook-text-2">
                       2 passengers
                     </p>
                   </div>
                 </div>
               </div>
-            </div>            <div class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6">
-              <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-[#CCFF00] rounded-full flex items-center justify-center">
+            </div>            <div class="rebook-card-2">
+              <div class="rebook-row-2">
+                <div class="rebook-circle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -249,7 +224,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-refresh-cw w-5 h-5 text-black"
+                    class="rebook-icon-3 lucide lucide-refresh-cw"
                   >
                     <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
                     <path d="M21 3v5h-5"></path>
@@ -257,13 +232,11 @@
                     <path d="M8 16H3v5"></path>
                   </svg>
                 </div>
-                <h2 class="font-['Poppins:Bold',sans-serif] text-[20px] text-[#363636]">
+                <h2 class="rebook-select-new-travel-heading">
                   Select New Travel Date
                 </h2>
               </div>
-              <div
-                class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex items-start gap-3"
-              >
+              <div class="rebook-card-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -274,48 +247,33 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-circle-alert w-5 h-5 text-blue-600 shrink-0 mt-0.5"
+                  class="rebook-icon-4 lucide lucide-circle-alert"
                 >
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="12" x2="12" y1="8" y2="12"></line>
                   <line x1="12" x2="12.01" y1="16" y2="16"></line>
                 </svg>
                 <div>
-                  <p
-                    class="text-[14px] text-blue-800 font-['Poppins:Medium',sans-serif] mb-1"
-                  >
+                  <p class="rebook-reschedule-policy-text">
                     Reschedule Policy
                   </p>
-                  <p
-                    class="text-[13px] text-blue-700 font-['Poppins:Regular',sans-serif]"
-                  >
+                  <p class="rebook-text-4">
                     Free rescheduling is available for bookings made 24+ hours before departure. A
                     ₱200 fee applies for reschedules within 24 hours.
                   </p>
                 </div>
               </div>
-              <div class="mb-6">
-                <div class="flex items-center justify-between mb-3">
-                  <label
-                    class="block text-[14px] font-['Poppins:Medium',sans-serif] text-[#363636]"
-                    >Select Passengers to Reschedule</label
+              <div class="rebook-box-3">
+                <div class="rebook-row-3">
+                  <label class="rebook-select-passengers-reschedule-label">Select Passengers to Reschedule</label
                   >
-                  <button
-                    class="text-[13px] font-['Poppins:Medium',sans-serif] text-[#CCFF00] hover:text-[#B8E600] transition-colors"
-                    data-action="select-passengers"
-                  >
+                  <button class="rebook-deselect-all-button" data-action="select-passengers">
                     Deselect All
                   </button>
                 </div>
-                <div class="space-y-2">
-                  <label
-                    class="flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all border-[#CCFF00] bg-[#CCFF00]/10"
-                  >
-                    <input
-                      type="checkbox"
-                      class="w-5 h-5 accent-[#CCFF00] cursor-pointer"
-                      checked=""
-                    />
+                <div class="rebook-stack-2">
+                  <label class="rebook-passenger-option">
+                    <input type="checkbox" class="rebook-passenger-checkbox" checked="" />
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -326,94 +284,38 @@
                       stroke-width="2"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      class="lucide lucide-user w-5 h-5 text-gray-500"
+                      class="rebook-icon-5 lucide lucide-user"
                     >
                       <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                       <circle cx="12" cy="7" r="4"></circle>
                     </svg>
-                    <div class="flex-1">
-                      <p
-                        class="text-[14px] font-['Poppins:SemiBold',sans-serif] text-[#363636]"
-                      >
+                    <div class="rebook-box-4">
+                      <p class="rebook-juan-dela-text">
                         Juan Dela Cruz
                       </p>
-                      <p
-                        class="text-[12px] text-[#666] font-['Poppins:Regular',sans-serif]"
-                      >
+                      <p class="rebook-text-5">
                         35 years old • Male • Seat A12
                       </p>
                     </div>
                   </label>
-                  <label
-                    class="flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all border-[#CCFF00] bg-[#CCFF00]/10"
-                  >
-                    <input
-                      type="checkbox"
-                      class="w-5 h-5 accent-[#CCFF00] cursor-pointer"
-                      checked=""
-                    />
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="lucide lucide-user w-5 h-5 text-gray-500"
-                    >
-                      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                      <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                    <div class="flex-1">
-                      <p
-                        class="text-[14px] font-['Poppins:SemiBold',sans-serif] text-[#363636]"
-                      >
-                        Maria Santos
-                      </p>
-                      <p
-                        class="text-[12px] text-[#666] font-['Poppins:Regular',sans-serif]"
-                      >
-                        32 years old • Female • Seat A13
-                      </p>
-                    </div>
-                  </label>
                 </div>
-                <p
-                  class="text-[12px] text-[#666] font-['Poppins:Regular',sans-serif] mt-2"
-                >
+                <p class="rebook-text-6">
                   2 of 2 passengers selected
                 </p>
               </div>
-              <div class="mb-6">
-                <label
-                  class="block text-[14px] font-['Poppins:Medium',sans-serif] text-[#363636] mb-3"
-                  >When is your new schedule?</label
+              <div class="rebook-box-3">
+                <label class="rebook-when-new-schedule-label">When is your new schedule?</label
                 >
-                <input
-                  type="date"
-                  class="w-full px-4 py-3 border border-[#dbdcd9] rounded-lg font-['Poppins:Regular',sans-serif] text-[15px] focus:outline-none focus:border-[#CCFF00] focus:ring-2 focus:ring-[#CCFF00]/20 transition-all"
-                  value=""
-                />
-                <p
-                  class="text-[12px] text-[#666] font-['Poppins:Regular',sans-serif] mt-2"
-                >
+                <input type="date" class="rebook-field-input" value="" />
+                <p class="rebook-text-6">
                   We'll show Supercat trips for 1 week starting from this date
                 </p>
               </div>
-              <div class="flex gap-3">
-                <button
-                  class="flex-1 border-2 border-gray-300 text-gray-600 hover:bg-gray-50 font-bold rounded-full py-3 transition-all"
-                  data-action="go:bookings"
-                >
+              <div class="rebook-row-4">
+                <button class="rebook-cancel-button" data-action="go:bookings">
                   Cancel
                 </button>
-                <button
-                  class="flex-1 bg-[#CCFF00] hover:bg-[#B8E600] disabled:bg-gray-200 disabled:text-gray-400 text-black font-bold rounded-full py-3 transition-all shadow-sm disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                  data-action="reschedule"
-                >
+                <button class="rebook-confirm-reschedule-button" data-action="reschedule">
                   Confirm Reschedule
                 </button>
               </div>

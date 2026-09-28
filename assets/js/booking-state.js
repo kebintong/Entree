@@ -83,6 +83,18 @@
   const refunds = refundsValue && typeof refundsValue === "object" && !Array.isArray(refundsValue) ? refundsValue : {};
   const applyRefund = b => { if (b && refunds[b.id]) { b.refund = refunds[b.id]; b.status = "refunded"; } };
   window.ENTREE_DATA.MOCK_BOOKINGS.forEach(applyRefund);
+  // Pasalubong orders placed in the shop are saved by booking reference; attach them to their booking.
+  const ordersValue = read(localStorage, "entree.pasalubongOrders", []);
+  const pasalubongOrders = Array.isArray(ordersValue) ? ordersValue.filter(o => o && o.booking && Array.isArray(o.lines)) : [];
+  window.ENTREE_DATA.MOCK_BOOKINGS.forEach(b => {
+    if (!b || !b.reference) return;
+    const own = pasalubongOrders.filter(o => String(o.booking).toUpperCase() === String(b.reference).toUpperCase());
+    const all = [...(Array.isArray(b.pasalubongOrders) ? b.pasalubongOrders : []), ...own];
+    if (!all.length) return;
+    b.pasalubongOrders = all;
+    b.pasalubongItems = all.reduce((n, o) => n + o.lines.reduce((s, l) => s + (Number(l.qty) || 0), 0), 0);
+    b.hasPasalubong = true;
+  });
   const departureAt = b => b ? timeOn(b.departureDate, b.departureTime) : null;
   function refundQuote(b, now = new Date()) {
     const departs = departureAt(b);

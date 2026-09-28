@@ -1,0 +1,226 @@
+/* Styles for pages/travel-instructions.html (the travel instructions page). Shared styles are in base.css and site.css. */
+
+/* ==========================================================================
+   Page layout and components
+   ========================================================================== */
+.guide-stack {
+  display: flex;
+  width: 100%;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9fafb;
+  padding-top: 5rem;
+}
+
+.guide-box {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1000px;
+  padding-inline: 1.5rem;
+  padding-block: 2rem;
+}
+
+.guide-box-2 {
+  margin-bottom: 2rem;
+}
+
+.guide-travel-instructions-title {
+  margin-bottom: 0.5rem;
+  font-size: 32px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+.guide-text {
+  font-size: 15px;
+  color: #666;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.guide-row {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  border-radius: 1rem;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #cf0;
+  background-color: #ccff001a;
+  padding: 1.5rem;
+}
+
+.guide-icon {
+  margin-top: 0.25rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  flex-shrink: 0;
+  color: #84a300;
+}
+
+.guide-important-reminder-subheading {
+  margin-bottom: 0.5rem;
+  font-size: 16px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 700;
+}
+
+.guide-text-2 {
+  font-size: 14px;
+  color: #666;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.guide-card {
+  margin-bottom: 1.5rem;
+  border-radius: 1rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #e5e7eb;
+  background-color: #fff;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+}
+
+.guide-row-2 {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.guide-circle {
+  display: flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: #cf0;
+}
+
+.guide-icon-2 {
+  height: 1.25rem;
+  width: 1.25rem;
+  color: #000;
+}
+
+.guide-before-trip-heading {
+  font-size: 20px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 700;
+}
+
+:where(.guide-stack-2 > :not(:last-child)) {
+  margin-block-end: 1rem;
+  margin-block-start: 0;
+}
+
+.guide-row-3 {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.guide-icon-3 {
+  margin-top: 0.25rem;
+  height: 1.25rem;
+  width: 1.25rem;
+  flex-shrink: 0;
+  color: #cf0;
+}
+
+.guide-required-documents-subheading {
+  margin-bottom: 0.25rem;
+  font-size: 15px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+.guide-each-passenger-text {
+  margin-bottom: 0.5rem;
+  font-size: 14px;
+  color: #666;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.guide-list {
+  list-style-position: inside;
+  list-style-type: disc;
+  font-size: 14px;
+  color: #666;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+:where(.guide-list > :not(:last-child)) {
+  margin-block-end: 0.25rem;
+  margin-block-start: 0;
+}
+
+.guide-list-2 {
+  list-style-position: inside;
+  list-style-type: decimal;
+  font-size: 14px;
+  color: #666;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+:where(.guide-list-2 > :not(:last-child)) {
+  margin-block-end: 0.25rem;
+  margin-block-start: 0;
+}
+
+.guide-card-2 {
+  border-radius: 1rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #e5e7eb;
+  background-color: #fff;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+}
+
+.guide-need-help-heading {
+  margin-bottom: 1rem;
+  font-size: 18px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 700;
+}
+
+.guide-text-3 {
+  margin-bottom: 0.75rem;
+  font-size: 14px;
+  color: #666;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+:where(.guide-stack-3 > :not(:last-child)) {
+  margin-block-end: 0.5rem;
+  margin-block-start: 0;
+}
+
+.guide-stack-3 {
+  font-size: 14px;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.guide-text-4 {
+  color: #363636;
+}
+
+.guide-email-text {
+  font-weight: 600;
+}

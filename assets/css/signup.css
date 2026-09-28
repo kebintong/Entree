@@ -1,0 +1,474 @@
+/* Styles for pages/signup.html (the sign-up page). Shared styles are in base.css and site.css. */
+
+/* ==========================================================================
+   Page layout and components
+   ========================================================================== */
+.signup-stack {
+  display: flex;
+  width: 100%;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  padding-top: 5rem;
+}
+
+.signup-box {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 800px;
+  padding-inline: 1.5rem;
+  padding-block: 2rem;
+}
+
+.signup-box-2 {
+  margin-bottom: 2rem;
+}
+
+.signup-create-account-title {
+  margin-bottom: 0.5rem;
+  font-size: 32px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+.signup-text {
+  font-size: 14px;
+  color: #979797;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+:where(.signup-form > :not(:last-child)) {
+  margin-block-end: 1.5rem;
+  margin-block-start: 0;
+}
+
+.signup-card {
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  background-color: #fff;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+}
+
+.signup-personal-information-heading {
+  margin-bottom: 1rem;
+  font-size: 18px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+.signup-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .signup-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.signup-first-name-label {
+  margin-bottom: 0.5rem;
+  display: block;
+  font-size: 12px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 500;
+}
+
+.signup-box-3 {
+  position: relative;
+}
+
+.signup-icon {
+  position: absolute;
+  top: 50%;
+  left: 0.75rem;
+  height: 1rem;
+  width: 1rem;
+  translate: 0 -50%;
+  transform: ;
+  color: #999;
+}
+
+.signup-field-input {
+  width: 100%;
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  padding-block: 0.75rem;
+  padding-right: 1rem;
+  padding-left: 2.5rem;
+  font-size: 15px;
+  color: #363636;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.signup-field-input:focus {
+  border-color: #cf0;
+  box-shadow: 0 0 0 2px rgba(205, 255, 0, 0.2);
+}
+
+@media (min-width: 48rem) {
+  .signup-box-4 {
+    grid-column: span 2 / span 2;
+  }
+}
+
+.signup-field-input-2 {
+  width: 100%;
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  padding-inline: 1rem;
+  padding-block: 0.75rem;
+  font-size: 15px;
+  color: #363636;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.signup-field-input-2:focus {
+  border-color: #cf0;
+  box-shadow: 0 0 0 2px rgba(205, 255, 0, 0.2);
+}
+
+.signup-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+:where(.signup-stack-2 > :not(:last-child)) {
+  margin-block-end: 1rem;
+  margin-block-start: 0;
+}
+
+.signup-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.signup-terms-checkbox {
+  margin-top: 0.25rem;
+  height: 1rem;
+  width: 1rem;
+  cursor: pointer;
+  accent-color: #cf0;
+}
+
+.signup-terms-label {
+  font-size: 12px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.signup-terms-conditions-text {
+  color: #007f70;
+  text-decoration-line: underline;
+}
+
+.signup-create-account-button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background-color: #cf0;
+  padding-inline: 1.5rem;
+  padding-block: 0.875rem;
+  font-weight: 700;
+  color: #000;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .signup-create-account-button:hover {
+    background-color: #b8e600;
+  }
+}
+
+.signup-create-account-button:disabled {
+  cursor: not-allowed;
+  background-color: #e5e7eb;
+  color: #99a1af;
+}
+
+.signup-icon-2 {
+  height: 1.25rem;
+  width: 1.25rem;
+  stroke-width: 2.5px;
+}
+
+.signup-already-have-text {
+  text-align: center;
+  font-size: 12px;
+  color: #979797;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.signup-login-text {
+  color: #000;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+@media (hover: hover) {
+  .signup-login-text:hover {
+    text-decoration-line: underline;
+  }
+}
+
+/* ==========================================================================
+   Date field (sign-up birthdate) — same look as the booking form's date picker
+   ========================================================================== */
+.edf {
+  position: relative;
+}
+
+.edf-native {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.edf-trigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 58px;
+  padding: 0 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  background: #f8fafc;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.edf-trigger:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+}
+
+.edf-trigger.is-open,
+.edf-trigger:focus-visible {
+  background: #ffffff;
+  border-color: #007f70;
+  box-shadow: 0 0 0 3px rgba(0, 127, 112, 0.12);
+  outline: none;
+}
+
+.edf-trigger.is-invalid {
+  border-color: #e11d48;
+  box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.12);
+}
+
+.edf-icon {
+  color: #007f70;
+  flex-shrink: 0;
+}
+
+.edf-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  padding: 9px 0;
+}
+
+.edf-label {
+  font-family: Poppins, sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #64748b;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+.edf-value {
+  font-family: Poppins, sans-serif;
+  font-size: 13.5px;
+  color: #1e293b;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.edf-value.is-empty {
+  color: #94a3b8;
+}
+
+.edf-trigger .edf-chevron {
+  color: #94a3b8;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.edf-trigger.is-open .edf-chevron {
+  transform: rotate(180deg);
+  color: #007f70;
+}
+
+.edf-calendar {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 250;
+  width: 320px;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #334155;
+  font-family: Poppins, sans-serif;
+  box-shadow: 0 14px 28px -6px rgba(15, 23, 42, 0.18), 0 4px 10px -2px rgba(15, 23, 42, 0.06);
+}
+
+.edf-calendar[hidden] {
+  display: none;
+}
+
+.edf-calendar .calendar-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.edf-selects {
+  display: flex;
+  gap: 6px;
+}
+
+.edf-select {
+  padding: 5px 6px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0f172a;
+  font: 400 12.5px Poppins, sans-serif;
+  cursor: pointer;
+}
+
+.edf-select:focus-visible {
+  outline: 2px solid #007f70;
+  outline-offset: 1px;
+}
+
+.edf-calendar .calendar-weekdays,
+.edf-calendar .calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+  text-align: center;
+}
+
+.edf-calendar .calendar-weekdays {
+  margin-bottom: 6px;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 28px;
+}
+
+.edf-calendar .calendar-day,
+.edf-calendar .calendar-nav,
+.edf-calendar .calendar-footer button {
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  color: #334155;
+  font: 400 12px Poppins, sans-serif;
+}
+
+.edf-calendar .calendar-day {
+  height: 36px;
+  padding: 0;
+}
+
+.edf-calendar .calendar-day:disabled {
+  color: #cbd5e1;
+  cursor: default;
+}
+
+.edf-calendar .calendar-nav {
+  width: 32px;
+  height: 32px;
+  font-size: 24px;
+  line-height: 1;
+  color: #007f70;
+}
+
+.edf-calendar .calendar-day:not(:disabled):hover,
+.edf-calendar .calendar-nav:hover,
+.edf-calendar .calendar-footer button:hover {
+  background: #f0fdf9;
+  color: #007f70;
+}
+
+.edf-calendar .calendar-day.is-selected {
+  background: #e6f7f4;
+  color: #007f70;
+  font-weight: 500;
+  box-shadow: inset 0 0 0 1px #007f70;
+}
+
+.edf-calendar button:focus-visible {
+  outline: 2px solid #007f70;
+  outline-offset: 1px;
+}
+
+.edf-calendar .calendar-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.edf-calendar .calendar-footer button {
+  padding: 7px 10px;
+  color: #007f70;
+}
+
+@media (max-width: 480px) {
+  .edf-calendar {
+    width: min(320px, calc(100vw - 48px));
+  }
+}

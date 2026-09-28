@@ -1,0 +1,358 @@
+/* Styles for pages/payment.html (the payment page). Shared styles are in base.css and site.css. */
+
+/* ==========================================================================
+   Page layout and components
+   ========================================================================== */
+.payment-stack {
+  display: flex;
+  width: 100%;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: auto;
+  background-color: #fff;
+}
+
+.payment-box {
+  width: 100%;
+  padding-top: 5rem;
+}
+
+.payment-box-2 {
+  width: 100%;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-color: #f3f4f6;
+  background-color: #fff;
+}
+
+.payment-box-3 {
+  margin-inline: auto;
+  max-width: 1200px;
+  padding-inline: 120px;
+  padding-block: 1rem;
+}
+
+.payment-row {
+  display: flex;
+  align-items: center;
+  gap: 77px;
+}
+
+.payment-box-4 {
+  width: 114px;
+  flex-shrink: 0;
+}
+
+.payment-go-back-button {
+  display: flex;
+  height: 33px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: #b2f510;
+  padding-inline: 1.25rem;
+  padding-block: 0.5rem;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .payment-go-back-button:hover {
+    background-color: #a3e000;
+  }
+}
+
+.payment-icon {
+  height: 1.25rem;
+  width: 1.25rem;
+  stroke-width: 2.5px;
+  color: #000;
+}
+
+.payment-box-5 {
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.payment-stack-2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 0.25rem;
+}
+
+.payment-stack-3 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.25rem;
+  padding-inline: 0.5rem;
+}
+
+.payment-row-2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.payment-search-text {
+  font-family: Poppins;
+  font-size: 14px;
+  line-height: 22px;
+  white-space: nowrap;
+  color: #363636;
+}
+
+.payment-circle {
+  height: 3px;
+  width: 100%;
+  border-radius: 9999px;
+  background-color: #fff;
+}
+
+.payment-box-6 {
+  height: 15px;
+  width: 19px;
+  flex-shrink: 0;
+}
+
+.payment-icon-2 {
+  height: 100%;
+  width: 100%;
+}
+
+.payment-text {
+  font-family: Poppins;
+  font-size: 14px;
+  line-height: 22px;
+  white-space: nowrap;
+  color: #007f70;
+}
+
+.payment-circle-2 {
+  height: 3px;
+  width: 100%;
+  border-radius: 9999px;
+  background-color: #007f70;
+}
+
+.payment-box-7 {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1200px;
+  padding-inline: 120px;
+  padding-block: 3rem;
+}
+
+.payment-card {
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  background-color: #fff;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.payment-card) {
+  padding: 2rem;
+}
+
+.payment-box-8 {
+  margin-bottom: 2rem;
+}
+
+.payment-title {
+  margin-bottom: 0.5rem;
+  font-family: Poppins;
+  font-size: 28px;
+  font-weight: 700;
+  color: #101828;
+}
+
+.payment-box-9 {
+  font-family: Poppins;
+  font-size: 14px;
+  color: #6a7282;
+}
+
+.payment-card-2 {
+  margin-bottom: 2rem;
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  background-color: #f9fafb;
+  padding: 1.5rem;
+}
+
+.payment-row-3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.payment-total-amount-text {
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  color: #364153;
+}
+
+.payment-text-2 {
+  font-family: Poppins;
+  font-size: 24px;
+  font-weight: 700;
+  color: #101828;
+}
+
+:where(.payment-stack-4 > :not(:last-child)) {
+  margin-block-end: 1rem;
+  margin-block-start: 0;
+}
+
+.payment-stack-4 {
+  margin-bottom: 2rem;
+}
+
+.payment-select-payment-method-subheading {
+  margin-bottom: 1rem;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  color: #101828;
+}
+
+.payment-gcash-instant-payment-button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  padding: 1.25rem;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.payment-gcash-instant-payment-button) {
+  border-color: #dbdcd9;
+}
+
+@media (hover: hover) {
+  /* Lower priority (:where) so the hand-written responsive rules can still override these */
+  :where(.payment-gcash-instant-payment-button:hover) {
+    border-color: #cf0;
+  }
+}
+
+.payment-row-4 {
+  display: flex;
+  height: 3.5rem;
+  width: 3.5rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.625rem;
+  background-color: #155dfc;
+}
+
+.payment-icon-3 {
+  height: 1.75rem;
+  width: 1.75rem;
+  color: #fff;
+}
+
+.payment-box-10 {
+  flex: 1;
+  text-align: left;
+}
+
+.payment-box-11 {
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 700;
+  color: #101828;
+}
+
+.payment-row-5 {
+  display: flex;
+  height: 3.5rem;
+  width: 3.5rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.625rem;
+  background-color: #00a63e;
+}
+
+.payment-complete-payment-button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding-inline: 1.5rem;
+  padding-block: 1rem;
+  font-size: 14px;
+  font-weight: 700;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.payment-complete-payment-button) {
+  background-color: #e5e7eb;
+  color: #99a1af;
+}
+
+.payment-icon-4 {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.payment-preview-note {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #bedbff;
+  background-color: #eff6ff;
+  padding: 1rem;
+}
+
+.payment-box-12 {
+  margin-top: 0.125rem;
+  height: 1.25rem;
+  width: 1.25rem;
+  flex-shrink: 0;
+}
+
+.payment-icon-5 {
+  height: 100%;
+  width: 100%;
+  color: #155dfc;
+}
+
+.payment-box-13 {
+  flex: 1;
+}
+
+.payment-text-3 {
+  font-family: Poppins;
+  font-size: 14px;
+  color: #1c398e;
+}

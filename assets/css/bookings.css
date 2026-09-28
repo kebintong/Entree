@@ -1,0 +1,1191 @@
+/* Styles for pages/bookings.html (My Bookings). Shared styles are in base.css and site.css. */
+
+/* ==========================================================================
+   Page layout and components
+   ========================================================================== */
+.bookings-stack {
+  display: flex;
+  width: 100%;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9fafb;
+  padding-top: 5rem;
+}
+
+.bookings-box {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1200px;
+  padding-inline: 1.5rem;
+  padding-block: 2rem;
+}
+
+.bookings-row {
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.bookings-box-2 {
+  flex: 1;
+}
+
+.bookings-box-3 {
+  margin-bottom: 2rem;
+}
+
+.bookings-upcoming-trips-heading {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-upcoming-trips-heading) {
+  font-size: 24px;
+}
+
+.bookings-icon {
+  height: 1.5rem;
+  width: 1.5rem;
+  color: #cf0;
+}
+
+:where(.bookings-stack-2 > :not(:last-child)) {
+  margin-block-end: 1rem;
+  margin-block-start: 0;
+}
+
+.bookings-past-trips-heading {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-past-trips-heading) {
+  font-size: 24px;
+}
+
+.bookings-icon-2 {
+  height: 1.5rem;
+  width: 1.5rem;
+  color: #99a1af;
+}
+
+.bookings-box-4 {
+  flex-shrink: 0;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-box-4) {
+  width: 280px;
+}
+
+.bookings-card-2 {
+  top: 6rem;
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  background-color: #fff;
+  padding: 1rem;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-card-2) {
+  position: sticky;
+}
+
+.bookings-row-2 {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-color: #f3f4f6;
+  padding-bottom: 0.75rem;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-row-2) {
+  align-items: center;
+}
+
+.bookings-today-text {
+  display: block;
+  font-size: 11px;
+  color: #99a1af;
+  text-transform: uppercase;
+  font-family: Poppins, sans-serif;
+  font-weight: 500;
+}
+
+.bookings-today-date {
+  margin-top: 0.125rem;
+  font-size: 16px;
+  letter-spacing: -0.025em;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+.bookings-today-button {
+  border-radius: calc(0.625rem - 2px);
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  background-color: #f9fafb;
+  padding-inline: 0.625rem;
+  padding-block: 0.25rem;
+  font-size: 11px;
+  font-weight: 600;
+  color: #4a5565;
+  transition-duration: 0.15s;
+  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .bookings-today-button:hover {
+    background-color: #f3f4f6;
+  }
+}
+
+.bookings-row-3 {
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bookings-previous-month-button {
+  display: flex;
+  height: 1.75rem;
+  width: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  color: #4a5565;
+  transition-duration: 0.15s;
+  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .bookings-previous-month-button:hover {
+    background-color: #f3f4f6;
+    color: #000;
+  }
+}
+
+.bookings-icon-3 {
+  height: 1rem;
+  width: 1rem;
+}
+
+.bookings-month-label {
+  font-size: 14px;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+.bookings-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.25rem;
+}
+
+.bookings-stack-3 {
+  border-color: #e5e7eb;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-stack-3) {
+  margin-top: 0.75rem;
+  border-top-style: solid;
+  border-top-width: 1px;
+  padding-top: 0.75rem;
+}
+
+:where(.bookings-stack-3 > :not(:last-child)) {
+  margin-block-end: 0.5rem;
+  margin-block-start: 0;
+}
+
+.bookings-row-4 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 10px;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.bookings-box-5 {
+  height: 0.75rem;
+  width: 0.75rem;
+  border-radius: 0.25rem;
+  background-color: #cf0;
+}
+
+.bookings-trip-dates-text {
+  color: #666;
+}
+
+.bookings-box-6 {
+  height: 0.75rem;
+  width: 0.75rem;
+  border-radius: 0.25rem;
+  background-color: #e5e7eb;
+}
+
+/* ==========================================================================
+   Elements added by the page script
+   ========================================================================== */
+.bookings-card {
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  background-color: #fff;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-card) {
+  padding: 1.5rem;
+}
+
+@media (hover: hover) {
+  .bookings-card:hover {
+    box-shadow: 0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a;
+  }
+}
+
+.bookings-card-muted {
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  background-color: #fff;
+  opacity: 0.75;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-card-muted) {
+  padding: 1.5rem;
+}
+
+.bookings-card-empty {
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  background-color: #fff;
+  padding: 1.5rem;
+  font-size: 14px;
+  color: #666;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+}
+
+.bookings-empty-link {
+  text-decoration-line: underline;
+}
+
+.bookings-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-card-head) {
+  margin-bottom: 1rem;
+}
+
+.bookings-card-ref {
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bookings-ref {
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 700;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-ref) {
+  font-size: 18px;
+}
+
+.bookings-ref-past {
+  color: #666;
+  font-family: Poppins, sans-serif;
+  font-weight: 700;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-ref-past) {
+  font-size: 16px;
+}
+
+.bookings-pill-today {
+  border-radius: 9999px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  background-color: #cf0;
+  padding-inline: 0.75rem;
+  padding-block: 0.25rem;
+  font-size: 11px;
+  font-weight: 700;
+  color: #000;
+}
+
+.bookings-pill-upcoming {
+  border-radius: 9999px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #b9f8cf;
+  background-color: #dbfce7;
+  padding-inline: 0.75rem;
+  padding-block: 0.25rem;
+  font-size: 11px;
+  font-weight: 700;
+  color: #008236;
+}
+
+.bookings-pill-refunded {
+  border-radius: 9999px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #ffc9c9;
+  background-color: #fef2f2;
+  padding-inline: 0.75rem;
+  padding-block: 0.25rem;
+  font-size: 11px;
+  font-weight: 700;
+  color: #e7000b;
+}
+
+.bookings-pill-completed {
+  border-radius: 9999px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #e5e7eb;
+  background-color: #f3f4f6;
+  padding-inline: 0.75rem;
+  padding-block: 0.25rem;
+  font-size: 11px;
+  font-weight: 700;
+  color: #4a5565;
+}
+
+.bookings-card-subtitle {
+  font-size: 13px;
+  color: #999;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.bookings-share-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  font-size: 13px;
+  font-weight: 700;
+  color: #000;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .bookings-share-button:hover {
+    background-color: #f3f4f6;
+  }
+}
+
+.bookings-card-grid {
+  margin-bottom: 1rem;
+  display: grid;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-card-grid) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.bookings-card-fact {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.bookings-fact-label {
+  font-size: 12px;
+  color: #999;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.bookings-fact-value {
+  font-size: 15px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+.bookings-fact-time {
+  font-size: 13px;
+  color: #666;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.bookings-fact-return {
+  margin-top: 0.25rem;
+  font-size: 12px;
+  color: #999;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.bookings-card-footer {
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-color: #f3f4f6;
+  padding-top: 1rem;
+}
+
+.bookings-card-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-card-foot) {
+  align-items: center;
+}
+
+.bookings-card-meta {
+  display: flex;
+  align-items: center;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-card-meta) {
+  gap: 1rem;
+}
+
+.bookings-meta-item {
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-meta-item) {
+  display: flex;
+}
+
+.bookings-meta-text {
+  font-size: 14px;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-meta-text) {
+  color: #666;
+}
+
+.bookings-card-price {
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 700;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-card-price) {
+  font-size: 18px;
+}
+
+.bookings-card-actions {
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-card-actions) {
+  display: flex;
+}
+
+.bookings-action-button {
+  border-radius: 9999px;
+  background-color: #cf0;
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  font-weight: 700;
+  color: #000;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-action-button) {
+  font-size: 13px;
+}
+
+@media (hover: hover) {
+  .bookings-action-button:hover {
+    background-color: #b8e600;
+  }
+}
+
+.bookings-refund-note {
+  margin-top: 0.25rem;
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  color: #e7000b;
+  font-weight: 400;
+}
+
+.bookings-past-route {
+  font-size: 14px;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-past-route) {
+  color: #666;
+}
+
+.bookings-icon-pin {
+  margin-top: 0.125rem;
+  height: 1.25rem;
+  width: 1.25rem;
+  color: #99a1af;
+}
+
+.bookings-icon-user {
+  height: 1rem;
+  width: 1rem;
+  color: #99a1af;
+}
+
+.bookings-icon-package {
+  height: 1rem;
+  width: 1rem;
+  color: #cf0;
+}
+
+.bookings-icon-share {
+  height: 1rem;
+  width: 1rem;
+}
+
+.bookings-cal-weekday {
+  padding-block: 0.25rem;
+  text-align: center;
+  font-size: 10px;
+  color: #999;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+.bookings-cal-day {
+  display: flex;
+  cursor: default;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  font-size: 11px;
+  color: #666;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-user-select: none;
+  user-select: none;
+  font-family: Poppins, sans-serif;
+  font-weight: 500;
+}
+
+/* Lower priority (:where) so the hand-written responsive rules can still override these */
+:where(.bookings-cal-day) {
+  aspect-ratio: 1;
+}
+
+@media (hover: hover) {
+  .bookings-cal-day:hover {
+    background-color: #f3f4f6;
+  }
+}
+
+.bookings-cal-day-trip {
+  display: flex;
+  aspect-ratio: 1;
+  cursor: default;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  background-color: #cf0;
+  font-family: Poppins, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #000;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.bookings-cal-day-today {
+  display: flex;
+  aspect-ratio: 1;
+  cursor: default;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  background-color: #e5e7eb;
+  font-family: Poppins, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.bookings-cal-day-trip-today {
+  display: flex;
+  aspect-ratio: 1;
+  cursor: default;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  background-color: #cf0;
+  font-family: Poppins, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #000;
+  box-shadow: 0 0 0 2px currentcolor, 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ==========================================================================
+   Buy Add-ons modal
+   ========================================================================== */
+dialog.addons-modal {
+  width: min(560px, calc(100% - 32px));
+  padding: 28px;
+}
+
+dialog.addons-modal > h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 16px;
+}
+
+.ao-trip {
+  padding: 12px 14px;
+}
+
+.ao-trip .bm-logo {
+  width: 44px;
+  height: 44px;
+}
+
+.ao-trip .bm-title strong {
+  font-size: 16px;
+}
+
+.ao-list {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ao-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+}
+
+.ao-option.is-featured {
+  border-color: #d9f99d;
+  background: linear-gradient(135deg, #f7ffe0 0%, #ffffff 70%);
+}
+
+.ao-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #f3f4f6;
+  color: #007f70;
+}
+
+.ao-option.is-featured .ao-icon {
+  background: #ccff00;
+  color: #051821;
+}
+
+.ao-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.ao-text strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.ao-text span {
+  display: block;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #666;
+}
+
+.ao-side {
+  flex-shrink: 0;
+}
+
+.addons-modal .ao-cta {
+  margin: 0;
+  padding: 9px 18px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.ao-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #4b5563;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ao-tag.is-muted {
+  color: #9ca3af;
+}
+
+dialog p.ao-note {
+  margin: 14px 0 0;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+@media (max-width: 520px) {
+  dialog.addons-modal {
+    padding: 20px;
+  }
+
+  .ao-option {
+    flex-wrap: wrap;
+  }
+
+  .ao-side {
+    width: 100%;
+    padding-left: 56px;
+  }
+}
+
+/* Pasalubong add-ons: in Booking details and the Buy Add-ons modal */
+.bm-order {
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  font-size: 13px;
+}
+
+.bm-order + .bm-order {
+  margin-top: 8px;
+}
+
+.bm-order-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 14px;
+  color: #363636;
+}
+
+.bm-order-head strong {
+  font-weight: 600;
+}
+
+.bm-order-head span {
+  font-weight: 700;
+}
+
+dialog p.bm-order-meta {
+  margin: 2px 0 8px;
+  font-size: 12px;
+  color: #8a8a8a;
+  overflow-wrap: anywhere;
+}
+
+.bm-order-meta strong {
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.bm-order-tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #fff7ed;
+  color: #c2410c;
+  font-size: 11px;
+  font-style: normal;
+}
+
+.bm-order-lines {
+  margin: 0;
+  padding: 8px 0 0;
+  list-style: none;
+  border-top: 1px dashed #e5e7eb;
+}
+
+.bm-order-lines li {
+  display: flex;
+  gap: 10px;
+  padding: 3px 0;
+  color: #666;
+}
+
+.bm-order-qty {
+  min-width: 26px;
+  color: #363636;
+  font-weight: 600;
+}
+
+.bm-order-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.bm-order-price {
+  color: #363636;
+  white-space: nowrap;
+}
+
+dialog p.bm-order-note,
+dialog p.bm-order-empty {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #8a8a8a;
+}
+
+dialog p.bm-order-empty {
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px dashed #d1d5db;
+  border-radius: 14px;
+  font-size: 13px;
+}
+
+.bm-order-note a,
+.bm-order-empty a {
+  color: #007f70;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+#bm-addons {
+  scroll-margin-top: 12px;
+  border-radius: 16px;
+  transition: box-shadow 0.6s ease;
+}
+
+#bm-addons.is-highlighted {
+  animation: bm-addons-flash 1.8s ease-out 0.3s;
+}
+
+@keyframes bm-addons-flash {
+  0%,
+  40% {
+    box-shadow: 0 0 0 6px #ccff0080;
+  }
+  100% {
+    box-shadow: 0 0 0 6px #ccff0000;
+  }
+}
+
+.ao-added {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #fafafa;
+}
+
+.ao-added-text {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  font-size: 12.5px;
+  color: #666;
+}
+
+.ao-added-text strong {
+  font-size: 14px;
+  font-weight: 600;
+  color: #363636;
+}
+
+.ao-view {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  background: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #363636;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ao-view:hover {
+  background: #f3f4f6;
+}
+
+.bk-addons-link {
+  padding: 2px 6px;
+  margin: -2px -6px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.bk-addons-link:hover span {
+  color: #363636;
+  text-decoration: underline;
+}
+
+.bk-addons-link:focus-visible {
+  outline: 2px solid #007f70;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #bm-addons.is-highlighted {
+    animation: none;
+  }
+}
+
+/* ==========================================================================
+   My Bookings: tablet / iPad / mobile layout
+   ========================================================================== */
+.bk-main {
+  min-width: 0;
+}
+
+.bk-ref {
+  white-space: nowrap;
+}
+
+.bk-card-ref {
+  flex-wrap: wrap;
+}
+
+/* Tablets and iPads: calendar moves above the trips as a compact strip */
+@media (max-width: 1024px) {
+  .bk-layout {
+    flex-direction: column;
+  }
+
+  .bk-aside {
+    order: -1;
+    width: 100%;
+  }
+
+  .bk-calendar {
+    position: static;
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(0, 480px);
+    grid-template-rows: auto auto 1fr;
+    column-gap: 32px;
+    align-items: start;
+  }
+
+  .bk-calendar > :nth-child(1) {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .bk-calendar > :nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .bk-calendar > :nth-child(3) {
+    grid-column: 2;
+    grid-row: 2 / span 2;
+  }
+
+  .bk-calendar > :nth-child(3) > div {
+    aspect-ratio: auto;
+    min-height: 34px;
+  }
+
+  .bk-calendar > :nth-child(4) {
+    grid-column: 1;
+    grid-row: 3;
+    margin-top: 0;
+    border-top: 0;
+    padding-top: 0;
+  }
+}
+
+/* Phones */
+@media (max-width: 640px) {
+  .bk-container {
+    padding: 20px 16px 32px;
+  }
+
+  .bk-main h2 {
+    font-size: 20px;
+  }
+
+  .bk-card {
+    padding: 16px;
+  }
+
+  .bk-card-head {
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .bk-card-title {
+    min-width: 0;
+  }
+
+  .bk-ref {
+    font-size: 16px !important;
+  }
+
+  .bk-share {
+    flex-shrink: 0;
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+  }
+
+  .bk-share span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .bk-card-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .bk-card-foot {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .bk-card-meta {
+    flex-wrap: wrap;
+    gap: 6px 14px;
+  }
+
+  .bk-card-meta > p {
+    margin-left: auto;
+  }
+
+  .bk-card-actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .bk-card-actions > button {
+    padding: 10px 6px;
+    font-size: 12.5px;
+    white-space: nowrap;
+  }
+
+  /* Calendar sits under the trips on phones, full width */
+  .bk-aside {
+    order: 0;
+  }
+
+  .bk-calendar {
+    display: block;
+  }
+
+  .bk-calendar > :nth-child(1) {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .bk-calendar > :nth-child(3) > div {
+    min-height: 38px;
+  }
+
+  .bk-calendar > :nth-child(4) {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e5e7eb;
+  }
+}

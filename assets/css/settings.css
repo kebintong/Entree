@@ -1,0 +1,351 @@
+/* Styles for pages/settings.html (account settings). Shared styles are in base.css and site.css. */
+
+/* ==========================================================================
+   Page layout and components
+   ========================================================================== */
+.settings-stack {
+  display: flex;
+  width: 100%;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f9fafb;
+  padding-top: 5rem;
+}
+
+.settings-box {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1000px;
+  padding-inline: 1.5rem;
+  padding-block: 2rem;
+}
+
+.settings-box-2 {
+  margin-bottom: 2rem;
+}
+
+.settings-account-settings-title {
+  margin-bottom: 0.5rem;
+  font-size: 32px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+.settings-text {
+  font-size: 15px;
+  color: #666;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.settings-card {
+  margin-bottom: 1.5rem;
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  background-color: #fff;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+}
+
+.settings-row {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.settings-circle {
+  display: flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: #cf0;
+}
+
+.settings-icon {
+  height: 1.25rem;
+  width: 1.25rem;
+  color: #000;
+}
+
+.settings-profile-information-heading {
+  font-size: 20px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 700;
+}
+
+:where(.settings-stack-2 > :not(:last-child)) {
+  margin-block-end: 1rem;
+  margin-block-start: 0;
+}
+
+.settings-email-address-label {
+  margin-bottom: 0.5rem;
+  display: block;
+  font-size: 14px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 500;
+}
+
+.settings-box-3 {
+  position: relative;
+}
+
+.settings-icon-2 {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  height: 1.25rem;
+  width: 1.25rem;
+  translate: 0 -50%;
+  transform: ;
+  color: #999;
+}
+
+.settings-field-input {
+  width: 100%;
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  background-color: #f9fafb;
+  padding-block: 0.75rem;
+  padding-right: 1rem;
+  padding-left: 3rem;
+  font-size: 15px;
+  color: #6a7282;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.settings-field-input-2 {
+  width: 100%;
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  padding-block: 0.75rem;
+  padding-right: 1rem;
+  padding-left: 3rem;
+  font-size: 15px;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.settings-field-input-2:focus {
+  border-color: #cf0;
+  box-shadow: 0 0 0 2px rgba(205, 255, 0, 0.2);
+}
+
+.settings-update-profile-button {
+  border-radius: 9999px;
+  background-color: #cf0;
+  padding-inline: 1.5rem;
+  padding-block: 0.875rem;
+  font-size: 14px;
+  font-weight: 700;
+  color: #000;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .settings-update-profile-button:hover {
+    background-color: #b8e600;
+  }
+}
+
+.settings-row-2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: calc(0.625rem + 4px);
+  background-color: #f9fafb;
+  padding: 1rem;
+}
+
+.settings-row-3 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.settings-icon-3 {
+  height: 1.25rem;
+  width: 1.25rem;
+  color: #6a7282;
+}
+
+.settings-change-password-text {
+  font-size: 15px;
+  color: #363636;
+  font-family: Poppins, sans-serif;
+  font-weight: 600;
+}
+
+.settings-update-password-text {
+  font-size: 13px;
+  color: #666;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.settings-change-button {
+  border-radius: 9999px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #d1d5dc;
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  font-size: 13px;
+  font-weight: 700;
+  color: #4a5565;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .settings-change-button:hover {
+    background-color: #f3f4f6;
+  }
+}
+
+.settings-label {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+  align-items: center;
+}
+
+.settings-field-input-3 {
+  border-width: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.settings-circle-2 {
+  height: 1.5rem;
+  width: 2.75rem;
+  border-radius: 9999px;
+  background-color: #e5e7eb;
+}
+
+.settings-field-input-3:focus ~ .settings-circle-2 {
+  box-shadow: 0 0 0 4px rgba(205, 255, 0, 0.2);
+  outline-style: none;
+}
+
+.settings-field-input-3:checked ~ .settings-circle-2::after {
+  translate: 100% 0;
+  border-color: #fff;
+  content: "";
+}
+
+.settings-circle-2::after {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  height: 1.25rem;
+  width: 1.25rem;
+  border-radius: 9999px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #d1d5dc;
+  background-color: #fff;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  content: "";
+}
+
+.settings-field-input-3:checked ~ .settings-circle-2 {
+  background-color: #cf0;
+}
+
+.settings-box-4 {
+  padding-block: 2rem;
+  text-align: center;
+}
+
+.settings-icon-4 {
+  margin-inline: auto;
+  margin-bottom: 1rem;
+  height: 3rem;
+  width: 3rem;
+  color: #d1d5dc;
+}
+
+.settings-no-saved-text {
+  margin-bottom: 1rem;
+  font-size: 15px;
+  color: #999;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.settings-add-payment-method-button {
+  border-radius: 9999px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #cf0;
+  padding-inline: 1.5rem;
+  padding-block: 0.5rem;
+  font-size: 14px;
+  font-weight: 700;
+  color: #cf0;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .settings-add-payment-method-button:hover {
+    background-color: #cf0;
+    color: #000;
+  }
+}
+
+.settings-card-2 {
+  border-radius: 1rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #e5e7eb;
+  background-color: #fff;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+}
+
+.settings-field-select {
+  width: 100%;
+  border-radius: 0.625rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #dbdcd9;
+  padding-inline: 1rem;
+  padding-block: 0.75rem;
+  font-size: 15px;
+  font-family: Poppins, sans-serif;
+  font-weight: 400;
+}
+
+.settings-field-select:focus {
+  border-color: #cf0;
+  box-shadow: 0 0 0 2px rgba(205, 255, 0, 0.2);
+}

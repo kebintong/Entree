@@ -209,9 +209,27 @@ window.ENTREE_DATA = {
           seatNumber: "A13",
         },
       ],
-      totalPrice: 4359.8,
+      totalPrice: 4231.3,
       hasPasalubong: true,
       pasalubongItems: 6,
+      pasalubongOrders: [
+        {
+          ref: "PSL-7Q2MKD",
+          booking: "ENT-2026-001234",
+          name: "Juan Dela Cruz",
+          onBooking: true,
+          method: "gcash",
+          placedAt: "2026-09-20T10:15:00+08:00",
+          items: 6,
+          total: 1210,
+          lines: [
+            { id: 100, name: "Original Dried Mangoes", qty: 2, price: 180 },
+            { id: 300, name: "Assorted Pastry Box", qty: 1, price: 350 },
+            { id: 301, name: "Cheese Ensaymada", qty: 1, price: 260 },
+            { id: 201, name: "Woven Coin Purse", qty: 2, price: 120 },
+          ],
+        },
+      ],
       addOns: [
         {
           name: "Vehicle (Motorcycle)",
@@ -222,21 +240,6 @@ window.ENTREE_DATA = {
           name: "Pet Carrier (Small Dog)",
           quantity: 1,
           price: 150,
-        },
-        {
-          name: "Dried Mangoes",
-          quantity: 2,
-          price: 30,
-        },
-        {
-          name: "Woven Coin Purse",
-          quantity: 1,
-          price: 8.5,
-        },
-        {
-          name: "Ube Hopia Box",
-          quantity: 2,
-          price: 30,
         },
         {
           name: "Extra Luggage (15kg)",

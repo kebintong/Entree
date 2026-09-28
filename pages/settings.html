@@ -4,40 +4,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Settings | Entree</title>
-    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="../assets/css/fonts.css" />
+    <link rel="stylesheet" href="../assets/css/base.css" />
     <link rel="stylesheet" href="../assets/css/site.css" />
+    <link rel="stylesheet" href="../assets/css/turtle.css" />
+    <link rel="stylesheet" href="../assets/css/settings.css" />
     <script src="../assets/js/data.js" defer></script>
     <script src="../assets/js/booking-state.js" defer></script>
+    <script src="../assets/js/settings.js" defer></script>
     <script src="../assets/js/app.js" defer></script>
+    <script src="../assets/js/dev-panel.js" defer></script>
+    <script src="../assets/js/turtle.js" defer></script>
     <script src="../assets/js/booking-flow.js" defer></script>
     <link rel="stylesheet" href="../assets/css/booking-flow.css" />
     <link rel="icon" type="image/png" href="../assets/images/entree-logo.png" />
 </head>
   <body data-page="settings">
-    <div
-      class="flex flex-col min-h-screen font-sans text-slate-900 bg-white selection:bg-[#CCFF00] selection:text-black overflow-x-hidden"
-    >
+    <div class="site-shell">
       <header
-        class="fixed top-0 left-0 w-full z-50 px-6 md:px-10 py-4 flex justify-between items-center h-20 transition-all duration-300 shadow-md border-b border-white/10"
+        class="site-header"
         style="
           background-image: url(../assets/images/ocean-background.png);
           background-size: cover;
           background-position: center top;
         "
       >
-        <div class="flex-1 flex items-center">
-          <a href="index.html" class="inline-flex items-center focus:outline-none" aria-label="Entree Home">
-            <div class="w-10 h-10 shrink-0">
-              <img
-                src="../assets/images/entree-logo.png"
-                alt="Entree Logo"
-                class="w-full h-full object-contain block"
-              />
+        <div class="site-header-left">
+          <a href="index.html" class="site-logo-link" aria-label="Entree Home">
+            <div class="site-logo">
+              <img src="../assets/images/entree-logo.png" alt="Entree Logo" class="site-logo-img" />
             </div>
           </a>
         </div>
-        <div class="flex items-center space-x-4 md:space-x-5 shrink-0 justify-end">
-          <div class="flex flex-col gap-2 items-end">
+        <div class="site-header-actions">
+          <div class="site-header-buttons">
             <a href="verify-booking.html" class="entree-pasalubong-btn" data-action="go:verify-booking">
               <span>Buy Pasalubong</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -61,22 +61,20 @@
           </a>
         </div>
       </header>
-      <main class="flex-1 flex flex-col relative w-full h-full">
-        <div class="w-full flex-1 bg-gray-50 flex flex-col items-center pt-20">
-          <div class="w-full max-w-[1000px] mx-auto px-6 py-8">
-            <div class="mb-8">
-              <h1
-                class="font-['Poppins:SemiBold',sans-serif] text-[32px] text-[#363636] mb-2"
-              >
+      <main class="site-main">
+        <div class="settings-stack site-page">
+          <div class="settings-box">
+            <div class="settings-box-2">
+              <h1 class="settings-account-settings-title">
                 Account Settings
               </h1>
-              <p class="text-[15px] text-[#666] font-['Poppins:Regular',sans-serif]">
+              <p class="settings-text">
                 Manage your account preferences and security
               </p>
             </div>
-            <div class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 mb-6">
-              <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-[#CCFF00] rounded-full flex items-center justify-center">
+            <div class="settings-card">
+              <div class="settings-row">
+                <div class="settings-circle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -87,23 +85,21 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-user w-5 h-5 text-black"
+                    class="settings-icon lucide lucide-user"
                   >
                     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
                   </svg>
                 </div>
-                <h2 class="font-['Poppins:Bold',sans-serif] text-[20px] text-[#363636]">
+                <h2 class="settings-profile-information-heading">
                   Profile Information
                 </h2>
               </div>
-              <div class="space-y-4">
+              <div class="settings-stack-2">
                 <div>
-                  <label
-                    class="block text-[14px] font-['Poppins:Medium',sans-serif] text-[#363636] mb-2"
-                    >Email Address</label
+                  <label class="settings-email-address-label">Email Address</label
                   >
-                  <div class="relative">
+                  <div class="settings-box-3">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -114,25 +110,23 @@
                       stroke-width="2"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      class="lucide lucide-mail absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#999]"
+                      class="settings-icon-2 lucide lucide-mail"
                     >
                       <rect width="20" height="16" x="2" y="4" rx="2"></rect>
                       <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                     </svg>
                     <input
                       type="email"
-                      class="w-full pl-12 pr-4 py-3 border border-[#dbdcd9] rounded-lg font-['Poppins:Regular',sans-serif] text-[15px] bg-gray-50 text-gray-500"
+                      class="settings-field-input"
                       disabled=""
                       value="" placeholder="name@email.com"
                     />
                   </div>
                 </div>
                 <div>
-                  <label
-                    class="block text-[14px] font-['Poppins:Medium',sans-serif] text-[#363636] mb-2"
-                    >Phone Number</label
+                  <label class="settings-email-address-label">Phone Number</label
                   >
-                  <div class="relative">
+                  <div class="settings-box-3">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -143,29 +137,23 @@
                       stroke-width="2"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      class="lucide lucide-phone absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#999]"
+                      class="settings-icon-2 lucide lucide-phone"
                     >
                       <path
                         d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
                       ></path>
                     </svg>
-                    <input
-                      type="tel"
-                      placeholder="+63 917 123 4567"
-                      class="w-full pl-12 pr-4 py-3 border border-[#dbdcd9] rounded-lg font-['Poppins:Regular',sans-serif] text-[15px] focus:outline-none focus:border-[#CCFF00] focus:ring-2 focus:ring-[#CCFF00]/20"
-                    />
+                    <input type="tel" placeholder="+63 917 123 4567" class="settings-field-input-2" />
                   </div>
                 </div>
-                <button
-                  class="bg-[#CCFF00] hover:bg-[#B8E600] text-black font-bold rounded-full px-6 py-3.5 text-[14px] transition-all shadow-sm"
-                >
+                <button class="settings-update-profile-button">
                   Update Profile
                 </button>
               </div>
             </div>
-            <div class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 mb-6">
-              <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-[#CCFF00] rounded-full flex items-center justify-center">
+            <div class="settings-card">
+              <div class="settings-row">
+                <div class="settings-circle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -176,20 +164,20 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-shield w-5 h-5 text-black"
+                    class="settings-icon lucide lucide-shield"
                   >
                     <path
                       d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
                     ></path>
                   </svg>
                 </div>
-                <h2 class="font-['Poppins:Bold',sans-serif] text-[20px] text-[#363636]">
+                <h2 class="settings-profile-information-heading">
                   Security
                 </h2>
               </div>
-              <div class="space-y-4">
-                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-                  <div class="flex items-center gap-3">
+              <div class="settings-stack-2">
+                <div class="settings-row-2">
+                  <div class="settings-row-3">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -200,35 +188,29 @@
                       stroke-width="2"
                       stroke-linecap="round"
                       stroke-linejoin="round"
-                      class="lucide lucide-lock w-5 h-5 text-gray-500"
+                      class="settings-icon-3 lucide lucide-lock"
                     >
                       <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
                       <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                     </svg>
                     <div>
-                      <p
-                        class="font-['Poppins:SemiBold',sans-serif] text-[15px] text-[#363636]"
-                      >
+                      <p class="settings-change-password-text">
                         Change Password
                       </p>
-                      <p
-                        class="text-[13px] text-[#666] font-['Poppins:Regular',sans-serif]"
-                      >
+                      <p class="settings-update-password-text">
                         Update your password regularly
                       </p>
                     </div>
                   </div>
-                  <button
-                    class="border-2 border-gray-300 text-gray-600 hover:bg-gray-100 text-[13px] font-bold rounded-full px-4 py-2 transition-all"
-                  >
+                  <button class="settings-change-button">
                     Change
                   </button>
                 </div>
               </div>
             </div>
-            <div class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 mb-6">
-              <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-[#CCFF00] rounded-full flex items-center justify-center">
+            <div class="settings-card">
+              <div class="settings-row">
+                <div class="settings-circle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -239,7 +221,7 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-bell w-5 h-5 text-black"
+                    class="settings-icon lucide lucide-bell"
                   >
                     <path d="M10.268 21a2 2 0 0 0 3.464 0"></path>
                     <path
@@ -247,76 +229,58 @@
                     ></path>
                   </svg>
                 </div>
-                <h2 class="font-['Poppins:Bold',sans-serif] text-[20px] text-[#363636]">
+                <h2 class="settings-profile-information-heading">
                   Notifications
                 </h2>
               </div>
-              <div class="space-y-4">
-                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+              <div class="settings-stack-2">
+                <div class="settings-row-2">
                   <div>
-                    <p
-                      class="font-['Poppins:SemiBold',sans-serif] text-[15px] text-[#363636]"
-                    >
+                    <p class="settings-change-password-text">
                       Email Notifications
                     </p>
-                    <p
-                      class="text-[13px] text-[#666] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="settings-update-password-text">
                       Receive booking confirmations and updates
                     </p>
                   </div>
-                  <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" class="sr-only peer" checked="" />
-                    <div
-                      class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#CCFF00]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#CCFF00]"
-                    ></div>
+                  <label class="settings-label">
+                    <input type="checkbox" class="settings-field-input-3" checked="" />
+                    <div class="settings-circle-2"></div>
                   </label>
                 </div>
-                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                <div class="settings-row-2">
                   <div>
-                    <p
-                      class="font-['Poppins:SemiBold',sans-serif] text-[15px] text-[#363636]"
-                    >
+                    <p class="settings-change-password-text">
                       SMS Notifications
                     </p>
-                    <p
-                      class="text-[13px] text-[#666] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="settings-update-password-text">
                       Receive text message alerts
                     </p>
                   </div>
-                  <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" class="sr-only peer" />
-                    <div
-                      class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#CCFF00]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#CCFF00]"
-                    ></div>
+                  <label class="settings-label">
+                    <input type="checkbox" class="settings-field-input-3" />
+                    <div class="settings-circle-2"></div>
                   </label>
                 </div>
-                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                <div class="settings-row-2">
                   <div>
-                    <p
-                      class="font-['Poppins:SemiBold',sans-serif] text-[15px] text-[#363636]"
-                    >
+                    <p class="settings-change-password-text">
                       Promotional Emails
                     </p>
-                    <p
-                      class="text-[13px] text-[#666] font-['Poppins:Regular',sans-serif]"
-                    >
+                    <p class="settings-update-password-text">
                       Receive special offers and deals
                     </p>
                   </div>
-                  <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" class="sr-only peer" checked="" />
-                    <div
-                      class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#CCFF00]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#CCFF00]"
-                    ></div>
+                  <label class="settings-label">
+                    <input type="checkbox" class="settings-field-input-3" checked="" />
+                    <div class="settings-circle-2"></div>
                   </label>
                 </div>
               </div>
             </div>
-            <div class="bg-white rounded-lg shadow-sm border border-[#dbdcd9] p-6 mb-6">
-              <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-[#CCFF00] rounded-full flex items-center justify-center">
+            <div class="settings-card">
+              <div class="settings-row">
+                <div class="settings-circle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -327,17 +291,17 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-credit-card w-5 h-5 text-black"
+                    class="settings-icon lucide lucide-credit-card"
                   >
                     <rect width="20" height="14" x="2" y="5" rx="2"></rect>
                     <line x1="2" x2="22" y1="10" y2="10"></line>
                   </svg>
                 </div>
-                <h2 class="font-['Poppins:Bold',sans-serif] text-[20px] text-[#363636]">
+                <h2 class="settings-profile-information-heading">
                   Payment Methods
                 </h2>
               </div>
-              <div class="text-center py-8">
+              <div class="settings-box-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -348,26 +312,22 @@
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="lucide lucide-credit-card w-12 h-12 text-gray-300 mx-auto mb-4"
+                  class="settings-icon-4 lucide lucide-credit-card"
                 >
                   <rect width="20" height="14" x="2" y="5" rx="2"></rect>
                   <line x1="2" x2="22" y1="10" y2="10"></line>
                 </svg>
-                <p
-                  class="text-[15px] text-[#999] font-['Poppins:Regular',sans-serif] mb-4"
-                >
+                <p class="settings-no-saved-text">
                   No saved payment methods
                 </p>
-                <button
-                  class="border-2 border-[#CCFF00] text-[#CCFF00] hover:bg-[#CCFF00] hover:text-black text-[14px] font-bold rounded-full px-6 py-2 transition-all"
-                >
+                <button class="settings-add-payment-method-button">
                   Add Payment Method
                 </button>
               </div>
             </div>
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-[#CCFF00] rounded-full flex items-center justify-center">
+            <div class="settings-card-2">
+              <div class="settings-row">
+                <div class="settings-circle">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -378,38 +338,30 @@
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    class="lucide lucide-globe w-5 h-5 text-black"
+                    class="settings-icon lucide lucide-globe"
                   >
                     <circle cx="12" cy="12" r="10"></circle>
                     <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
                     <path d="M2 12h20"></path>
                   </svg>
                 </div>
-                <h2 class="font-['Poppins:Bold',sans-serif] text-[20px] text-[#363636]">
+                <h2 class="settings-profile-information-heading">
                   Language &amp; Region
                 </h2>
               </div>
-              <div class="space-y-4">
+              <div class="settings-stack-2">
                 <div>
-                  <label
-                    class="block text-[14px] font-['Poppins:Medium',sans-serif] text-[#363636] mb-2"
-                    >Language</label
+                  <label class="settings-email-address-label">Language</label
                   >
-                  <select
-                    class="w-full px-4 py-3 border border-[#dbdcd9] rounded-lg font-['Poppins:Regular',sans-serif] text-[15px] focus:outline-none focus:border-[#CCFF00] focus:ring-2 focus:ring-[#CCFF00]/20"
-                  >
+                  <select class="settings-field-select">
                     <option>English</option>
                     <option>Filipino</option>
                   </select>
                 </div>
                 <div>
-                  <label
-                    class="block text-[14px] font-['Poppins:Medium',sans-serif] text-[#363636] mb-2"
-                    >Currency</label
+                  <label class="settings-email-address-label">Currency</label
                   >
-                  <select
-                    class="w-full px-4 py-3 border border-[#dbdcd9] rounded-lg font-['Poppins:Regular',sans-serif] text-[15px] focus:outline-none focus:border-[#CCFF00] focus:ring-2 focus:ring-[#CCFF00]/20"
-                  >
+                  <select class="settings-field-select">
                     <option>PHP (₱)</option>
                     <option>USD ($)</option>
                   </select>
