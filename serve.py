@@ -1,4 +1,4 @@
-"""Local dev server for Entree that never lets the browser cache files.
+"""Local  for Entree that never lets the browser cache files.
 
 Use this instead of `py -m http.server` so edits always show up on a normal refresh.
 
