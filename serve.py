@@ -2,7 +2,7 @@
 
 Use this instead of `py -m http.server` so edits always show up on a normal refresh.
 
-    cd "D:\\Clark pt2\\Entree\\Entree"
+    cd path\\to\\Entree     (the folder that contains serve.py)
     py serve.py            (serves on port 1000)
     py serve.py 8085       (or pick a port)
 

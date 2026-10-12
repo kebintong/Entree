@@ -19,8 +19,10 @@ async function page(name, query = '') {
   for (const [key, val] of session) w.sessionStorage.setItem(key, val);
   for (const [key, val] of local) w.localStorage.setItem(key, val);
   if (w.document.readyState === 'loading') await new Promise(resolve => w.document.addEventListener('DOMContentLoaded', resolve));
-  for (const file of ['data.js', 'booking-state.js', ...(fs.existsSync(path.join(root, 'assets/js', name + '.js')) ? [name + '.js'] : []), 'app.js', 'dev-panel.js', 'turtle.js', 'booking-flow.js']) {
-    try { w.eval(fs.readFileSync(path.join(root, 'assets/js', file), 'utf8')); }
+  // Run the same scripts, in the same order, that the page itself lists.
+  const scripts = [...html.matchAll(/<script src="\.\.\/(assets\/js\/[^"?]+\.js)/g)].map(m => m[1]);
+  for (const file of scripts) {
+    try { w.eval(fs.readFileSync(path.join(root, file), 'utf8')); }
     catch (e) { errors.push(name + ': ' + e.stack); }
   }
   assert.ok(w.document.querySelector('link[rel="icon"]'), name + ' favicon');
@@ -73,7 +75,8 @@ async function page(name, query = '') {
   const id=p.w.ENTREE_BOOKING.records()[0].id;
   p.close();
   p=await page('confirmation');
-  assert.equal(p.doc.querySelector('h1').textContent,'Booking confirmed');
+  assert.equal(p.doc.querySelector('.bc-eyebrow').textContent,'Booking confirmed');
+  assert.ok(p.doc.querySelector('h1').textContent.startsWith("You're all set"));
   assert.ok(p.doc.querySelector('main').textContent.includes('Dumaguete'));
   assert.ok(!p.doc.querySelector('main').textContent.includes('Cebu'));
   p.close();
@@ -114,6 +117,12 @@ async function page(name, query = '') {
   assert.equal(p.doc.querySelector('[data-action="complete-payment"]'),null);
   assert.ok(p.doc.querySelector('main').textContent.includes('Complete your booking details'));
   p.close();
+  // The site ships with no demo bookings, so add a test-only booking with a pasalubong order.
+  const soon=new Date(Date.now()+30*864e5).toISOString().slice(0,10);
+  const records=JSON.parse(local.get('entree.bookings.v1')||'[]');
+  records.unshift({id:'fixture-1',reference:'ENT-2026-001234',status:'upcoming',route:{origin:'Cebu',destination:'Tagbilaran, Bohol'},ferry:'Supercat',departureDate:soon,departureTime:'09:00 AM',arrivalTime:'11:30 AM',passengers:2,passengerDetails:[{name:'Juan Dela Cruz',age:35,gender:'Male'},{name:'Maria Santos',age:32,gender:'Female'}],totalPrice:4231.3});
+  local.set('entree.bookings.v1',JSON.stringify(records));
+  local.set('entree.pasalubongOrders',JSON.stringify([{ref:'PSL-7Q2MKD',booking:'ENT-2026-001234',name:'Juan Dela Cruz',onBooking:true,method:'gcash',placedAt:'2026-09-20T10:15:00+08:00',items:6,total:1210,lines:[{id:100,name:'Original Dried Mangoes',qty:2,price:180},{id:300,name:'Assorted Pastry Box',qty:1,price:350},{id:301,name:'Cheese Ensaymada',qty:1,price:260},{id:201,name:'Woven Coin Purse',qty:2,price:120}]}]));
   p=await page('verify-booking');
   const verify=p.doc.querySelector('form');
   const submitVerify=()=>verify.dispatchEvent(new p.w.Event('submit',{bubbles:true,cancelable:true}));
@@ -153,7 +162,7 @@ async function page(name, query = '') {
   p.close();
   // Pasalubong add-ons can be viewed from My Bookings.
   p=await page('bookings');
-  const demoCard=p.doc.querySelector('[data-booking="1"]');
+  const demoCard=p.doc.querySelector('[data-booking="fixture-1"]');
   assert.ok(demoCard.querySelector('[data-action="booking-addons"]').textContent.includes('6 add-ons'));
   demoCard.querySelector('[data-action="booking-addons"]').click();
   const addOnsView=p.doc.querySelector('dialog.booking-modal #bm-addons');

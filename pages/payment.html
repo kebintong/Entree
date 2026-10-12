@@ -4,19 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Payment | Entree</title>
-    <link rel="stylesheet" href="../assets/css/fonts.css?v=20260928" />
+    <link rel="preload" href="../assets/fonts/pxiEyp8kv8JHgFVrJJfecg.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="../assets/fonts/pxiByp8kv8JHgFVrLGT9Z1xlFQ.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="../assets/fonts/pxiByp8kv8JHgFVrLEj6Z1xlFQ.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="../assets/fonts/pxiByp8kv8JHgFVrLCz7Z1xlFQ.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="../assets/css/fonts.css?v=20261006" />
     <link rel="stylesheet" href="../assets/css/base.css?v=20260928" />
-    <link rel="stylesheet" href="../assets/css/site.css?v=20260928" />
+    <link rel="stylesheet" href="../assets/css/site.css?v=20261006" />
     <link rel="stylesheet" href="../assets/css/turtle.css?v=20260928" />
-    <link rel="stylesheet" href="../assets/css/payment.css?v=20260928" />
-    <script src="../assets/js/data.js?v=20260928" defer></script>
-    <script src="../assets/js/booking-state.js?v=20260928" defer></script>
-    <script src="../assets/js/payment.js?v=20260928" defer></script>
-    <script src="../assets/js/app.js?v=20260928" defer></script>
-    <script src="../assets/js/dev-panel.js?v=20260928" defer></script>
+    <link rel="stylesheet" href="../assets/css/payment.css?v=20261006" />
+    <script src="../assets/js/data.js?v=20261007b" defer></script>
+    <script src="../assets/js/catalog-store.js?v=20261010c" defer></script>
+    <script src="../assets/js/accounts.js?v=20261010" defer></script>
+    <script src="../assets/js/dev-slot.js?v=20261006" defer></script>
+    <script src="../assets/js/booking-state.js?v=20261009" defer></script>
+    <script src="../assets/js/payment.js?v=20261006" defer></script>
+    <script src="../assets/js/app.js?v=20261010" defer></script>
     <script src="../assets/js/turtle.js?v=20260928" defer></script>
     <script src="../assets/js/booking-flow.js?v=20260928" defer></script>
-    <link rel="stylesheet" href="../assets/css/booking-flow.css?v=20260928" />
+    <link rel="stylesheet" href="../assets/css/booking-flow.css?v=20261007b" />
+    <link rel="stylesheet" href="../assets/css/motion.css?v=20261006d" />
+    <script src="../assets/js/motion.js?v=20261006d" defer></script>
     <link rel="icon" type="image/png" href="../assets/images/entree-logo.png" />
 </head>
   <body data-page="payment">
@@ -62,257 +70,73 @@
         </div>
       </header>
       <main class="site-main">
-        <div class="payment-stack site-page">
-          <div class="payment-box">
-            <div class="payment-box-2">
-              <div class="payment-box-3">
-                <div class="payment-row">
-                  <div class="payment-box-4">
-                    <button class="payment-go-back-button" data-action="back">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class="payment-icon lucide lucide-chevron-left"
-                      >
-                        <path d="m15 18-6-6 6-6"></path>
-                      </svg>
-                    </button>
-                  </div>
-                  <div class="payment-box-5">
-                    <div class="payment-stack-2">
-                      <div class="payment-stack-3">
-                        <div class="payment-row-2">
-                          <p class="payment-search-text">
-                            Search
-                          </p>
-                        </div>
-                        <div class="payment-circle"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="payment-box-6">
-                    <svg class="payment-icon-2" fill="none" viewBox="0 0 19 15.033">
-                      <path
-                        d="M11.2764 0.322266L18.3223 7.36816L11.2764 14.4141"
-                        stroke="#363636"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                      <path
-                        d="M0.677734 7.36816H18.3223"
-                        stroke="#363636"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="payment-box-5">
-                    <div class="payment-stack-2">
-                      <div class="payment-stack-3">
-                        <div class="payment-row-2">
-                          <p class="payment-search-text">
-                            Trips
-                          </p>
-                        </div>
-                        <div class="payment-circle"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="payment-box-6">
-                    <svg class="payment-icon-2" fill="none" viewBox="0 0 19 15.033">
-                      <path
-                        d="M11.2764 0.322266L18.3223 7.36816L11.2764 14.4141"
-                        stroke="#363636"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                      <path
-                        d="M0.677734 7.36816H18.3223"
-                        stroke="#363636"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="payment-box-5">
-                    <div class="payment-stack-2">
-                      <div class="payment-stack-3">
-                        <div class="payment-row-2">
-                          <p class="payment-search-text">
-                            Passenger Details
-                          </p>
-                        </div>
-                        <div class="payment-circle"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="payment-box-6">
-                    <svg class="payment-icon-2" fill="none" viewBox="0 0 19 15.033">
-                      <path
-                        d="M11.2764 0.322266L18.3223 7.36816L11.2764 14.4141"
-                        stroke="#363636"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                      <path
-                        d="M0.677734 7.36816H18.3223"
-                        stroke="#363636"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div class="payment-box-5">
-                    <div class="payment-stack-2">
-                      <div class="payment-stack-3">
-                        <p class="payment-text">
-                          Payment
-                        </p>
-                        <div class="payment-circle-2"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="payment-box-7">
-            <div class="payment-card">
-              <div class="payment-box-8">
-                <h1 class="payment-title">
-                  Payment
-                </h1>
-                <p class="payment-box-9">
-                  Select your preferred payment method
-                </p>
-              </div>
-              <div class="payment-card-2">
-                <div class="payment-row-3">
-                  <span class="payment-total-amount-text">Total Amount</span
-                  >
-                  <span data-booking-total class="payment-text-2">₱ 4,359.80</span
-                  >
-                </div>
-              </div>
-              <div class="payment-stack-4">
-                <h3 class="payment-select-payment-method-subheading">
-                  Select Payment Method
-                </h3>
-                <button
-                  class="payment-gcash-instant-payment-button hover:ring-2 hover:ring-[#CCFF00]/20"
-                  data-action="payment:gcash"
-                >
-                  <div class="payment-row-4">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="payment-icon-3 lucide lucide-credit-card"
-                    >
-                      <rect width="20" height="14" x="2" y="5" rx="2"></rect>
-                      <line x1="2" x2="22" y1="10" y2="10"></line>
-                    </svg>
-                  </div>
-                  <div class="payment-box-10">
-                    <div class="payment-box-11">
-                      GCash
-                    </div>
-                    <div class="payment-box-9">
-                      Instant payment via GCash
-                    </div>
-                  </div>
+        <div class="pay-page site-page">
+          <!-- Progress: where the traveller is in the booking -->
+          <nav class="pay-steps" aria-label="Booking progress">
+            <button type="button" class="pay-back" data-action="back" aria-label="Back to passenger details">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              <span>Back</span>
+            </button>
+            <ol>
+              <li class="is-done"><a href="index.html"><span class="pay-step-dot"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="pay-step-label">Search</span></a></li>
+              <li class="is-done"><a href="trips.html"><span class="pay-step-dot"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="pay-step-label">Trips</span></a></li>
+              <li class="is-done"><a href="passenger-details.html"><span class="pay-step-dot"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><span class="pay-step-label">Passengers</span></a></li>
+              <li class="is-current" aria-current="step"><span class="pay-step-dot">4</span><span class="pay-step-label">Payment</span></li>
+            </ol>
+          </nav>
+
+          <div class="pay-layout">
+            <!-- Left: choose how to pay -->
+            <section class="pay-card pay-methods" aria-labelledby="pay-title">
+              <h1 class="pay-title" id="pay-title">Payment</h1>
+              <p class="pay-subtitle">Choose how you'd like to pay. Your seats are held while you finish.</p>
+
+              <h2 class="pay-section-label">Payment method</h2>
+              <div class="pay-options">
+                <button type="button" class="pay-option" data-action="payment:gcash" aria-pressed="false">
+                  <span class="pay-option-icon pay-option-gcash" aria-hidden="true">G</span>
+                  <span class="pay-option-text">
+                    <strong>GCash</strong>
+                    <span>Instant payment from your GCash wallet</span>
+                  </span>
+                  <span class="pay-option-radio" aria-hidden="true"></span>
                 </button>
-                <button
-                  class="payment-gcash-instant-payment-button hover:ring-2 hover:ring-[#CCFF00]/20"
-                  data-action="payment:bank"
-                >
-                  <div class="payment-row-5">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="payment-icon-3 lucide lucide-building2 lucide-building-2"
-                    >
-                      <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path>
-                      <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path>
-                      <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path>
-                      <path d="M10 6h4"></path>
-                      <path d="M10 10h4"></path>
-                      <path d="M10 14h4"></path>
-                      <path d="M10 18h4"></path>
-                    </svg>
-                  </div>
-                  <div class="payment-box-10">
-                    <div class="payment-box-11">
-                      Online Banking
-                    </div>
-                    <div class="payment-box-9">
-                      Pay via your bank account
-                    </div>
-                  </div>
+                <button type="button" class="pay-option" data-action="payment:bank" aria-pressed="false">
+                  <span class="pay-option-icon pay-option-bank" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-6 9 6"/><path d="M5 10v8"/><path d="M9.5 10v8"/><path d="M14.5 10v8"/><path d="M19 10v8"/><path d="M3 21h18"/></svg>
+                  </span>
+                  <span class="pay-option-text">
+                    <strong>Online Banking</strong>
+                    <span>BPI, BDO, UnionBank and more</span>
+                  </span>
+                  <span class="pay-option-radio" aria-hidden="true"></span>
                 </button>
               </div>
-              <button disabled="" class="payment-complete-payment-button" data-action="complete-payment">
+
+              <button type="button" disabled class="pay-submit" data-action="complete-payment">
                 <span>Complete Payment</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="payment-icon-4 lucide lucide-arrow-right"
-                >
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
+                <span class="pay-submit-amount" data-pay-amount></span>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </button>
+              <p class="pay-hint" data-pay-hint>Select a payment method to continue.</p>
+
               <div class="payment-preview-note">
-                <div class="payment-box-12">
-                  <svg class="payment-icon-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fill-rule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                </div>
-                <div class="payment-box-13">
-                  <p class="payment-text-3">
-                    Your payment information is secure and encrypted. You will be redirected to your
-                    payment provider to complete the transaction.
-                  </p>
-                </div>
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                <p>Your payment information is secure and encrypted. You will be redirected to your payment provider to complete the transaction.</p>
               </div>
-            </div>
+            </section>
+
+            <!-- Right: what you're paying for (trip summary is inserted here by booking-flow.js) -->
+            <aside class="pay-summary" aria-labelledby="pay-summary-title">
+              <h2 class="pay-summary-title" id="pay-summary-title">Your trip</h2>
+              <div class="pay-due">
+                <div class="pay-due-row">
+                  <span>Total due</span>
+                  <strong data-booking-total>₱0.00</strong>
+                </div>
+                <p>Includes booking fee. Vehicle and pet fees are already added.</p>
+              </div>
+            </aside>
           </div>
         </div>
       </main>

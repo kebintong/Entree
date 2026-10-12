@@ -13,8 +13,8 @@ window.ENTREE_PAGES["verify-booking"] = (E) => {
     if (quote) return quote.hours;
     return (new Date(b.departureDate + "T00:00:00") - new Date()) / 36e5;
   };
-  // The developer panel (Insert + Delete) can switch the 14-hour cutoff off for testing.
-  const cutoff = store.get("dev.skipCutoff") === true ? 0 : 14;
+  // The optional developer panel (Insert + Delete) can switch the 14-hour cutoff off for this tab.
+  const cutoff = window.ENTREE_DEV_SLOT?.flag("skipCutoff") ? 0 : 14;
   const upcoming = data.MOCK_BOOKINGS.filter((b) => b && b.route && b.reference && !b.refund && b.status !== "completed" && hoursLeft(b) > 0).sort((a, b) =>
     a.departureDate.localeCompare(b.departureDate),
   );

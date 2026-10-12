@@ -8,24 +8,28 @@
   <meta name="description"
     content="Book ferry trips across the Philippines with trusted shipping lines—Supercat, OceanJet, FastCat, and more." />
   <link rel="icon" type="image/png" href="../assets/images/entree-logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="../assets/css/fonts.css?v=20260928" />
+  <link rel="preload" href="../assets/images/hero-water.webp" as="image" type="image/webp" fetchpriority="high" />
+  <link rel="preload" href="../assets/fonts/pxiEyp8kv8JHgFVrJJfecg.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/pxiByp8kv8JHgFVrLGT9Z1xlFQ.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/pxiByp8kv8JHgFVrLEj6Z1xlFQ.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../assets/fonts/pxiByp8kv8JHgFVrLCz7Z1xlFQ.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/css/fonts.css?v=20261006" />
   <link rel="stylesheet" href="../assets/css/base.css?v=20260928" />
-  <link rel="stylesheet" href="../assets/css/site.css?v=20260928" />
+  <link rel="stylesheet" href="../assets/css/site.css?v=20261006" />
   <link rel="stylesheet" href="../assets/css/turtle.css?v=20260928" />
   <link rel="stylesheet" href="../assets/css/index.css?v=20260928" />
-  <script src="../assets/js/data.js?v=20260928" defer></script>
-  <script src="../assets/js/booking-state.js?v=20260928" defer></script>
+  <script src="../assets/js/data.js?v=20261007b" defer></script>
+  <script src="../assets/js/catalog-store.js?v=20261010c" defer></script>
+  <script src="../assets/js/accounts.js?v=20261010" defer></script>
+  <script src="../assets/js/dev-slot.js?v=20261006" defer></script>
+  <script src="../assets/js/booking-state.js?v=20261009" defer></script>
     <script src="../assets/js/index.js?v=20260928" defer></script>
-    <script src="../assets/js/app.js?v=20260928" defer></script>
-    <script src="../assets/js/dev-panel.js?v=20260928" defer></script>
+    <script src="../assets/js/app.js?v=20261010" defer></script>
     <script src="../assets/js/turtle.js?v=20260928" defer></script>
     <script src="../assets/js/booking-flow.js?v=20260928" defer></script>
-    <link rel="stylesheet" href="../assets/css/booking-flow.css?v=20260928" />
+    <link rel="stylesheet" href="../assets/css/booking-flow.css?v=20261007b" />
+    <link rel="stylesheet" href="../assets/css/motion.css?v=20261006d" />
+    <script src="../assets/js/motion.js?v=20261006d" defer></script>
 </head>
 
 <body data-page="index">
@@ -59,8 +63,18 @@
       <section class="entree-hero-section">
         <!-- Hero Background Image & Gradient Overlay -->
         <div class="entree-hero-bg">
-          <img src="../assets/images/ocean-background.png" alt="Ocean background" />
+          <!-- Living sea: the photo slowly drifts with sunlight and waves over it.
+               hero-water.webp is the ocean photo with the boat removed; hero-boat.webp is the boat. -->
+          <div class="hero-scene" aria-hidden="true">
+            <img class="hero-scene-water" src="../assets/images/hero-water.webp" alt="" fetchpriority="high" decoding="async" />
+            <img class="hero-boat" src="../assets/images/hero-boat.webp" alt="" decoding="async" />
+          </div>
+          <div class="hero-light" aria-hidden="true"></div>
           <div class="entree-hero-vignette"></div>
+          <div class="hero-waves" aria-hidden="true">
+            <svg class="hero-wave hero-wave-back" viewBox="0 0 2880 120" preserveAspectRatio="none"><path d="M0 60 C 240 20 480 20 720 60 S 1200 100 1440 60 S 1920 20 2160 60 S 2640 100 2880 60 V120 H0 Z" /></svg>
+            <svg class="hero-wave hero-wave-front" viewBox="0 0 2880 120" preserveAspectRatio="none"><path d="M0 70 C 180 40 540 40 720 70 S 1260 100 1440 70 S 1980 40 2160 70 S 2700 100 2880 70 V120 H0 Z" /></svg>
+          </div>
         </div>
 
         <!-- Two-Column Hero Layout Container -->
@@ -71,8 +85,8 @@
               <img src="../assets/images/entree-logo.png" alt="Entree Logo" class="entree-hero-logo" />
               <span class="entree-hero-logo-text">entree</span>
             </div>
-            <h1 class="entree-hero-title">
-              Your Journey Starts at Sea
+            <h1 class="entree-hero-title" aria-label="Your Journey Starts at Sea">
+              <span aria-hidden="true"><span class="hw" style="--i:0"><span>Your</span></span> <span class="hw" style="--i:1"><span>Journey</span></span> <span class="hw" style="--i:2"><span>Starts</span></span> <span class="hw" style="--i:3"><span>at</span></span> <span class="hw" style="--i:4"><span>Sea</span></span></span>
             </h1>
             <p class="entree-hero-subtitle">
               Book ferry trips across the Philippines with trusted shipping lines—all in one place.

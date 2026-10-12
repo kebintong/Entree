@@ -1,0 +1,455 @@
+/* ==========================================================================
+   Entree — Motion
+   Fluid, GPU-friendly animation layer. Only transform and opacity are
+   animated (no WebGL, no blur, no per-frame JavaScript), so it stays smooth
+   on modest laptops and phones. Pairs with assets/js/motion.js.
+   Everything switches off under prefers-reduced-motion.
+   ========================================================================== */
+
+:root {
+  --m-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --m-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --m-ease-sea: cubic-bezier(0.45, 0, 0.55, 1);
+  --m-lime: #C2F800;
+  --m-teal: #007f70;
+}
+
+/* ==========================================================================
+   1. Homepage — the living sea (the photo drifts; the boat stays still)
+   ========================================================================== */
+
+/* The scene is the ocean photo (boat removed) sized like object-fit: cover,
+   with the boat on its own layer at exactly the spot it was cut from. */
+.entree-hero-bg {
+  container-type: size;
+  overflow: hidden;
+  background: #0b6f6a;
+}
+
+.hero-scene {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100cqw, 133.334cqh);
+  aspect-ratio: 4 / 3;
+  translate: calc(-50% - var(--px, 0) * 14px) calc(-50% - var(--py, 0) * 10px);
+  transform: scale(1.06);
+  transition: translate 1.2s var(--m-ease-out);
+  will-change: transform;
+}
+
+.entree-hero-bg .hero-scene-water {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Fallback for browsers without container units: plain cover photo */
+@supports not (width: 1cqw) {
+  .hero-scene {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    translate: none;
+  }
+
+  .entree-hero-bg .hero-scene-water {
+    object-fit: cover;
+  }
+
+  .hero-boat {
+    display: none;
+  }
+}
+
+.entree-hero-bg .hero-boat {
+  position: absolute;
+  left: 50.25%;
+  top: 38.767%;
+  width: 7.075%;
+  height: 26.467%;
+  filter: drop-shadow(8px 14px 12px rgba(2, 38, 40, 0.4));
+  user-select: none;
+}
+
+/* Sunlight moving across the water */
+.hero-light {
+  position: absolute;
+  inset: -20%;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(38% 30% at 28% 32%, rgba(255, 255, 255, 0.16), transparent 70%),
+    radial-gradient(30% 26% at 74% 70%, rgba(214, 255, 240, 0.12), transparent 70%);
+  will-change: transform;
+}
+
+/* Headline words sit in a clipping mask so they can rise out of it */
+.entree-hero-title .hw {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.entree-hero-title .hw > span {
+  display: inline-block;
+}
+
+/* Search Ferries arrows keep their vertical centring when nudged */
+.hero-search-cta .hero-search-cta-icon {
+  transition: transform 0.35s var(--m-ease-out);
+}
+
+.hero-search-cta:hover .hero-search-cta-icon {
+  transform: translate(3px, -50%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* --- ambient sea (pauses when the hero is off-screen or the tab is hidden) --- */
+  .hero-scene {
+    animation: m-sea-drift 26s var(--m-ease-sea) infinite alternate;
+  }
+
+  .hero-light {
+    animation: m-light-drift 18s var(--m-ease-sea) infinite alternate;
+  }
+
+  .is-offscreen .hero-scene,
+  .is-offscreen .hero-light {
+    animation-play-state: paused;
+  }
+
+  /* --- entrance choreography --- */
+  body[data-page="index"] .entree-hero-actions > * {
+    animation: m-drop 0.9s var(--m-ease-out) backwards;
+  }
+
+  body[data-page="index"] .entree-hero-actions > :nth-child(1) { animation-delay: 0.5s; }
+  body[data-page="index"] .entree-hero-actions > :nth-child(2) { animation-delay: 0.6s; }
+
+  body[data-page="index"] .entree-hero-logo {
+    animation: m-chevron-in 1s var(--m-ease-out) 0.05s backwards;
+  }
+
+  body[data-page="index"] .entree-hero-logo-text {
+    animation: m-slide-right 0.9s var(--m-ease-out) 0.2s backwards;
+  }
+
+  /* each word rises out of a mask; the mask lifts once the word has landed
+     so the headline's soft shadow is never clipped */
+  .entree-hero-title .hw {
+    animation: m-mask 0.95s linear backwards;
+    animation-delay: calc(0.25s + var(--i, 0) * 0.08s);
+  }
+
+  .entree-hero-title .hw > span {
+    animation: m-word-up 0.95s var(--m-ease-out) backwards;
+    animation-delay: calc(0.25s + var(--i, 0) * 0.08s);
+  }
+
+  body[data-page="index"] .entree-hero-subtitle {
+    animation: m-rise 0.9s var(--m-ease-out) 0.7s backwards;
+  }
+
+  @media (min-width: 1025px) {
+    body[data-page="index"] .hero-glass-card {
+      animation: m-card-in 1.1s var(--m-ease-out) 0.35s backwards;
+    }
+
+    body[data-page="index"] .hero-glass-card .booking-widget-top,
+    body[data-page="index"] .hero-glass-card .booking-inputs-bar > * {
+      animation: m-rise 0.7s var(--m-ease-out) backwards;
+    }
+
+    body[data-page="index"] .hero-glass-card .booking-widget-top { animation-delay: 0.6s; }
+    body[data-page="index"] .hero-glass-card .booking-inputs-bar > :nth-child(1) { animation-delay: 0.66s; }
+    body[data-page="index"] .hero-glass-card .booking-inputs-bar > :nth-child(2) { animation-delay: 0.72s; }
+    body[data-page="index"] .hero-glass-card .booking-inputs-bar > :nth-child(3) { animation-delay: 0.78s; }
+    body[data-page="index"] .hero-glass-card .booking-inputs-bar > :nth-child(4) { animation-delay: 0.84s; }
+    body[data-page="index"] .hero-glass-card .booking-inputs-bar > :nth-child(5) { animation-delay: 0.9s; }
+  }
+
+  /* Search Ferries catches the light now and then */
+  .hero-search-cta {
+    isolation: isolate;
+  }
+
+  .hero-search-cta::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.6) 50%, transparent 62%) no-repeat;
+    background-size: 250% 100%;
+    background-position: 150% 0;
+    animation: m-sheen 5s ease-in-out 1.6s infinite;
+  }
+}
+
+@keyframes m-sea-drift {
+  from { transform: scale(1.06) translate3d(-0.7%, 0.5%, 0); }
+  to { transform: scale(1.13) translate3d(0.9%, -0.8%, 0); }
+}
+
+@keyframes m-light-drift {
+  from { transform: translate3d(-4%, -3%, 0) rotate(-3deg); }
+  to { transform: translate3d(5%, 4%, 0) rotate(4deg); }
+}
+
+@keyframes m-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-22px);
+  }
+}
+
+@keyframes m-chevron-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-60px) scale(0.7);
+  }
+  65% {
+    opacity: 1;
+    transform: translateX(6px) scale(1.04);
+  }
+}
+
+@keyframes m-slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+
+@keyframes m-word-up {
+  from {
+    transform: translateY(110%) rotate(4deg);
+  }
+}
+
+@keyframes m-mask {
+  from, to { clip-path: inset(-1em -1em 0 -1em); }
+}
+
+@keyframes m-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@keyframes m-card-in {
+  from {
+    opacity: 0;
+    transform: perspective(1400px) translate3d(60px, 20px, 0) rotateY(-14deg);
+  }
+}
+
+@keyframes m-sheen {
+  0%, 70% { background-position: 150% 0; }
+  100% { background-position: -50% 0; }
+}
+
+/* ==========================================================================
+   2. Every page
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+
+  /* Page content glides in on arrival (the homepage has its own entrance) */
+  body:not([data-page="index"]) .site-main > * {
+    animation: m-page-in 0.75s var(--m-ease-out) backwards;
+  }
+
+  /* Header buttons drop in on every page */
+  .site-header-actions > * {
+    animation: m-drop 0.8s var(--m-ease-out) 0.15s backwards;
+  }
+
+  .site-logo {
+    animation: m-chevron-in 0.9s var(--m-ease-out) backwards;
+  }
+
+  /* Scroll reveals: content floats up as it enters the screen */
+  .motion-ready [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 34px, 0) scale(0.97);
+    transition:
+      opacity 0.7s var(--m-ease-out) var(--reveal-delay, 0ms),
+      transform 0.8s var(--m-ease-out) var(--reveal-delay, 0ms);
+  }
+
+  .motion-ready [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Cards rise very slightly under the cursor */
+  @media (hover: hover) {
+    .bf-trip,
+    .bk-card,
+    .pz-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .bf-trip:hover,
+    .bk-card:hover,
+    .pz-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px -16px rgba(5, 24, 33, 0.25);
+    }
+  }
+
+  .motion-press:active {
+    transform: scale(0.96) !important;
+    transition-duration: 0.12s;
+  }
+
+  /* Click ripple inside buttons */
+  .motion-ink {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .motion-ink > i {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--d);
+    height: var(--d);
+    margin: calc(var(--d) / -2) 0 0 calc(var(--d) / -2);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.45);
+    transform: scale(0);
+    animation: m-ink 0.65s var(--m-ease-out) forwards;
+  }
+
+  .motion-ink.is-dark > i {
+    background: rgba(0, 127, 112, 0.18);
+  }
+
+  .motion-has-ink {
+    isolation: isolate;
+  }
+
+  /* A trip you just booked springs and glows lime */
+  .motion-pop {
+    animation: m-pop 0.7s var(--m-ease-spring);
+  }
+
+  /* totals that just changed */
+  .motion-bump {
+    transform-origin: 100% 50%;
+    animation: m-bump 0.5s var(--m-ease-spring);
+  }
+
+  /* cart icon catching a pasalubong item */
+  .motion-cart-hit {
+    animation: m-cart-hit 0.5s var(--m-ease-spring);
+  }
+
+  /* booking confirmed: the check mark pops in and draws itself */
+  .bc-check {
+    animation: m-check-pop 0.7s var(--m-ease-spring) 0.15s backwards;
+  }
+
+  .bc-check path {
+    stroke-dasharray: 24;
+    animation: m-draw 0.5s var(--m-ease-out) 0.5s backwards;
+  }
+}
+
+.motion-flyer {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 12px 28px -10px rgba(5, 24, 33, 0.4);
+}
+
+.motion-confetti {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9000;
+  pointer-events: none;
+}
+
+@keyframes m-page-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0);
+  }
+}
+
+@keyframes m-ink {
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes m-pop {
+  0% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(194, 248, 0, 0.7); }
+  45% { transform: scale(1.015); }
+  100% { transform: scale(1); box-shadow: 0 0 0 16px rgba(194, 248, 0, 0); }
+}
+
+@keyframes m-bump {
+  40% { transform: scale(1.12); color: var(--m-teal); }
+}
+
+@keyframes m-cart-hit {
+  35% { transform: scale(1.25) rotate(-6deg); }
+  70% { transform: scale(0.95) rotate(3deg); }
+}
+
+@keyframes m-check-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4) rotate(-25deg);
+  }
+}
+
+@keyframes m-draw {
+  from {
+    stroke-dashoffset: 24;
+  }
+}
+
+/* ==========================================================================
+   3. Reduced motion and print
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .motion-ready [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero-scene {
+    translate: -50% -50%;
+    transform: scale(1.06);
+  }
+
+  .motion-flyer,
+  .motion-confetti {
+    display: none !important;
+  }
+}
+
+@media print {
+  .motion-flyer,
+  .motion-confetti,
+  .motion-ink {
+    display: none !important;
+  }
+}

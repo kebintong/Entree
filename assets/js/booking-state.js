@@ -128,7 +128,7 @@
       departureTime: returning ? company.returnDeparture : company.departure,
       arrivalTime: returning ? company.returnArrival : company.arrival,
       arrivalNextDay: returning && Boolean(company.overnightReturn), duration: company.duration,
-      availableSeats: 80, pricePerPerson: returning ? company.returnPrice ?? company.price : company.price,
+      availableSeats: company.capacity || 80, pricePerPerson: returning ? company.returnPrice ?? company.price : company.price,
     }));
     const legacyId = returning ? value.returnId : value.outboundId;
     const legacy = window.ENTREE_DATA.AVAILABLE_FERRIES.find(f => f.id === legacyId && f.date === date && f.availableSeats >= value.passengers);
@@ -227,7 +227,7 @@
       returnDate: inbound ? draft.returnDate : null,
       returnDepartureTime: inbound?.departureTime, returnArrivalTime: inbound?.arrivalTime,
       passengerDetails: draft.passengerDetails.map(p => ({ ...p, age: Number(p.age), seatNumber: "—" })),
-      fareBreakdown: totals(), totalPrice: totals().total, payment, hasPasalubong: false, pasalubongItems: 0,
+      fareBreakdown: totals(), totalPrice: totals().total, payment, bookedAt: new Date().toISOString(), hasPasalubong: false, pasalubongItems: 0,
       addOns: [
         { name: "Vehicles", quantity: draft.vehicles, price: 500 },
         { name: "Pets", quantity: draft.pets, price: 150 },

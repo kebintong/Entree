@@ -274,7 +274,7 @@
   }
   const selectedId = new URLSearchParams(location.search).get("id") || "1";
   const booking = () =>
-    data.MOCK_BOOKINGS.find((b) => b.id === selectedId) || data.MOCK_BOOKINGS[0];
+    data.MOCK_BOOKINGS.find((b) => b.id === selectedId) || data.MOCK_BOOKINGS[0] || null;
   function getPhilippineDate() {
     try {
       const parts = new Intl.DateTimeFormat("en-US", {
@@ -387,6 +387,7 @@
   // The source contains a mock session only. Never save passwords.
   // Logged-in header: [Buy Pasalubong] [Notifications bell] [Initial avatar ▾]
   const ICONS = {
+    panel: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13h8V3H3z"/><path d="M13 21h8V11h-8z"/><path d="M13 3v6h8V3z"/><path d="M3 21h8v-6H3z"/></svg>',
     bell: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>',
     chevron: '<svg class="account-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>',
     calendar: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>',
@@ -396,17 +397,18 @@
     logout: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>',
   };
   const DEMO_NOTIFICATIONS = [
-    { id: "n1", title: "Trip reminder", text: "Cebu → Tagbilaran sails Oct 30, 9:00 AM. Arrive 1 hour early.", href: "bookings.html" },
     { id: "n2", title: "Pasalubong deal", text: "Dried mangoes are 10% off when you add them to your trip.", href: "verify-booking.html" },
   ];
   const escHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+  // Whoever is logged in: a client, or a partner/admin visiting the customer site.
+  const currentUser = () => window.ENTREE_ACCOUNTS?.currentUser?.() || (store.get("session")?.email ? { role: "customer", ...store.get("session") } : null);
   function sessionInfo() {
-    const s = store.get("session") || {};
+    const s = currentUser() || {};
     const email = s.email || "";
     const local = email.split("@")[0] || "Guest";
     const name = (s.name || local.replace(/[._-]+/g, " ")).trim();
     const pretty = name.replace(/\b\w/g, (c) => c.toUpperCase());
-    return { name: pretty, email, initial: (pretty[0] || "?").toUpperCase() };
+    return { name: pretty, email, initial: (pretty[0] || "?").toUpperCase(), roleLabel: s.roleLabel || "", panel: s.panel || "", panelName: s.panelName || "" };
   }
   const unreadNotifications = () => {
     const read = store.get("notificationsRead") || [];
@@ -421,7 +423,7 @@
     $(".account-bell")?.setAttribute("aria-label", `Notifications${n ? `, ${n} unread` : ""}`);
   }
 
-  if (store.get("session")) {
+  if (currentUser()) {
     const login = $('header [data-action="go:login"]');
     if (login) {
       const info = sessionInfo();
@@ -432,6 +434,13 @@
         `<button type="button" class="account-trigger" data-action="account" aria-haspopup="true" aria-expanded="false" aria-label="Account menu for ${escHtml(info.name)}"><span class="account-avatar">${escHtml(info.initial)}</span>${ICONS.chevron}</button>`;
       login.replaceWith(cluster);
       updateBellBadge();
+    }
+    // The home page's "Have an account? Log in or Sign up" line.
+    const helper = $(".booking-widget-bottom > div");
+    if (helper) {
+      const info = sessionInfo();
+      helper.innerHTML = `<span class="home-have-account-text">Logged in as </span><strong>${escHtml(info.name)}</strong><span class="home-have-account-text"> · </span>` +
+        (info.panel ? `<a class="home-login-link" href="${escHtml(info.panel)}">Open ${escHtml(info.panelName)}</a>` : `<a class="home-login-link" href="bookings.html">My Bookings</a>`);
     }
   }
 
@@ -468,8 +477,9 @@
     openHeaderMenu(
       "account",
       trigger,
-      `<div class="user-menu-head"><p class="user-menu-name">${escHtml(info.name)}</p><p class="user-menu-email">${escHtml(info.email)}</p></div>` +
+      `<div class="user-menu-head"><p class="user-menu-name">${escHtml(info.name)}</p><p class="user-menu-email">${escHtml(info.email)}</p>${info.panel ? `<p class="user-menu-email">${escHtml(info.roleLabel)}</p>` : ""}</div>` +
         `<div class="user-menu-list">` +
+        (info.panel ? `<a href="${escHtml(info.panel)}" class="user-menu-panel">${ICONS.panel}<span>Open ${escHtml(info.panelName)}</span></a>` : "") +
         `<a href="bookings.html">${ICONS.calendar}<span>My Bookings</span></a>` +
         `<a href="verify-booking.html">${ICONS.bag}<span>Buy Pasalubong</span></a>` +
         `<a href="travel-instructions.html">${ICONS.user}<span>Travel Instructions</span></a>` +
@@ -568,7 +578,12 @@
     notice, dialog, enable, action, booking, selectedId, getPhilippineDate, formError, peso, PAY_METHODS,
     showCurrentBooking,
   };
-  pageScript = window.ENTREE_PAGES?.[page]?.(E) || {};
+  // Rescheduling and refunds need a booking; with none on this device, say so instead.
+  const noBooking = ["rebook", "refund"].includes(page) && !booking();
+  if (noBooking) {
+    $("main").innerHTML = `<div class="bf-page"><section class="bf-card bf-no-booking"><h2>No booking to ${page === "rebook" ? "reschedule" : "refund"}</h2><p>Bookings you make on this device show up in My Bookings, where you can reschedule or ask for a refund.</p><div class="bf-no-booking-actions"><a class="bf-primary" href="bookings.html">My Bookings</a><a href="index.html">Book a trip</a></div></section></div>`;
+  }
+  pageScript = noBooking ? {} : window.ENTREE_PAGES?.[page]?.(E) || {};
 
 
   // Snapshot initial values for change detection
@@ -628,7 +643,9 @@
     else if (name === "notifications") notificationsMenu();
     else if (name === "logout") {
       markSaved();
-      store.set("session", null);
+      // One log-out for the whole site, whether a client or a partner is logged in.
+      if (window.ENTREE_ACCOUNTS?.signOut) window.ENTREE_ACCOUNTS.signOut();
+      else store.set("session", null);
       store.remove("verification");
       navigateTo("index");
     } else if (name === "print") window.print();

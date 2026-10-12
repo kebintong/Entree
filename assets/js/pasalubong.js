@@ -27,9 +27,9 @@ window.ENTREE_PAGES["pasalubong"] = (E) => {
       (verification && data.MOCK_BOOKINGS.find((b) => b.reference.toUpperCase() === String(verification.reference).toUpperCase())) ||
       (draftTrip && { ...draftTrip, reference: "Your upcoming trip", route: { origin: draftTrip.origin, destination: draftTrip.destination } }) ||
       booking();
-    const tripDate = new Date(trip.departureDate + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+    const tripDate = trip?.departureDate ? new Date(trip.departureDate + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" }) : "your travel day";
     const tripBox = $("#pz-trip");
-    if (tripBox) {
+    if (tripBox && trip?.route) {
       tripBox.innerHTML =
         `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>` +
         `<span>Shopping for <strong>${escape(verification?.reference || trip.reference)}</strong> · ${escape(trip.route.origin)} → ${escape(trip.route.destination)} · ${escape(tripDate)}${verification?.name ? ` · Ordered by <strong>${escape(verification.name)}</strong>` : ""}</span>` +
@@ -214,7 +214,12 @@ window.ENTREE_PAGES["pasalubong"] = (E) => {
       const product = products.find((p) => p.id === Number(a));
       let focus = b.dataset.focus;
       if (act === "photo") return slidePhoto(Number(a), Number(c));
-      if (act === "variant") shop.selected[a] = Number(c);
+      if (act === "variant") {
+        shop.selected[a] = Number(c);
+        // Options with their own photo show it straight away.
+        const pick = product?.menu.find((m) => m.id === Number(c));
+        if (pick && Number.isInteger(pick.photoIndex)) shop.photo[a] = pick.photoIndex;
+      }
       else if (act === "add") {
         const v = product.menu.find((m) => m.id === shop.selected[a]);
         addToCart(product, v);
@@ -250,7 +255,7 @@ window.ENTREE_PAGES["pasalubong"] = (E) => {
           name: variant.name,
           productName: product.name,
           merchant: product.merchant,
-          image: product.images[0],
+          image: variant.image || product.images[0],
           price: variant.price,
           quantity: 1,
         });
@@ -286,7 +291,7 @@ window.ENTREE_PAGES["pasalubong"] = (E) => {
             <p class="pz-done-ref">Order ${escape(o.ref)}</p>
             <p class="pz-done-note">We'll bring everything to your seat on ${escape(tripDate)}, before the ferry leaves.</p>
             <div class="pz-done-actions">
-              <a class="pz-btn-primary" href="bookings.html${trip.id ? `?addons=${encodeURIComponent(trip.id)}` : ""}">View my add-ons</a>
+              <a class="pz-btn-primary" href="bookings.html${trip?.id ? `?addons=${encodeURIComponent(trip.id)}` : ""}">View my add-ons</a>
               <button type="button" class="pz-btn-ghost" data-cart="shop-more">Shop more</button>
             </div>
           </div>`;
@@ -371,7 +376,7 @@ window.ENTREE_PAGES["pasalubong"] = (E) => {
             total: total(),
             items: count(),
             method: shop.payment,
-            booking: verification?.reference || trip.reference,
+            booking: verification?.reference || trip?.reference || "",
             name: verification?.name || "",
             onBooking: verification ? verification.onBooking !== false : true,
             lines: cart.map((r) => ({ id: r.id, name: r.name, qty: r.quantity, price: r.price })),

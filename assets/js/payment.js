@@ -9,6 +9,16 @@ window.ENTREE_PAGES["payment"] = (E) => {
   if (info)
     info.textContent =
       "Preview mode — no payment is processed and no card details are collected.";
+  // Show the amount on the pay button (the total is filled in by booking-flow.js)
+  const total = $("[data-booking-total]");
+  const amount = $("[data-pay-amount]");
+  const syncAmount = () => {
+    if (total && amount) amount.textContent = "· " + total.textContent.trim();
+  };
+  syncAmount();
+  if (total && "MutationObserver" in window) {
+    new MutationObserver(syncAmount).observe(total, { childList: true, characterData: true, subtree: true });
+  }
   // Fresh session: no payment preselected on reload
   return {
     isDirty: () => selectedPayment !== null,
@@ -20,6 +30,8 @@ window.ENTREE_PAGES["payment"] = (E) => {
           b.setAttribute("aria-pressed", String(b === el));
         });
         enable($('[data-action="complete-payment"]'));
+        const hint = $("[data-pay-hint]");
+        if (hint) hint.textContent = `Paying with ${el.querySelector("strong")?.textContent || "your selected method"}.`;
       },
       "complete-payment"() {
         if (selectedPayment) {

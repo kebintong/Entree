@@ -75,7 +75,7 @@
           <p class="bf-leg-date">${escape(date(returning ? value.returnDate : value.departureDate))}${trip ? ` | ${escape(trip.departureTime)} – ${escape(trip.arrivalTime)}${trip.arrivalNextDay ? " (+1 day)" : ""}` : ""}</p>
           ${trip ? `<div class="bf-leg-company">${companyLogo(trip.ferry)}<div><strong>${escape(trip.ferry)}</strong><span>${escape(value.cabin)}</span></div></div><div class="bf-price-row"><span>Ticket price (${value.passengers} pax)</span><strong>${money(trip.pricePerPerson * value.passengers)}</strong></div>` : choosing && !booking.options(leg, value).length && value.passengers <= 80 ? `<p class="bf-note bf-note-warn">No sailings left on this date.</p><button type="button" class="bf-next-day-btn" data-next-day="${leg}">See ${escape(shortDate(booking.addDays(returning ? value.returnDate : value.departureDate, 1)))} trips</button>` : '<p class="bf-note">Choose a shipping line for this leg.</p>'}</section>`;
       }).join("")}
-      <p class="bf-party-counts">${value.passengers} passengers · ${value.vehicles} vehicles · ${value.pets} pets</p>
+      <p class="bf-party-counts">${value.passengers} passenger${value.passengers === 1 ? "" : "s"} · ${value.vehicles} vehicle${value.vehicles === 1 ? "" : "s"} · ${value.pets} pet${value.pets === 1 ? "" : "s"}</p>
       ${prices ? `<dl class="bf-costs"><div><dt>Items total</dt><dd>${money(totals.tickets)}</dd></div>
       ${!choosing && value.vehicles ? `<div><dt>Vehicle fees</dt><dd>${money(totals.vehicles)}</dd></div>` : ""}
       ${!choosing && value.pets ? `<div><dt>Pet fees</dt><dd>${money(totals.pets)}</dd></div>` : ""}

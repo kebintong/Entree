@@ -1,4 +1,7 @@
 /* Scripts for pages/signup.html (the sign-up page).
+   Normal visitors create a customer account here. Shipping lines and
+   merchants can only join through an admin's invite link
+   (signup.html?invite=…), which turns this page into partner set-up.
    Loaded before app.js; app.js runs this once the page is ready and passes in the
    shared helpers (see "Shared with the page scripts" in app.js). */
 window.ENTREE_PAGES = window.ENTREE_PAGES || {};
@@ -164,6 +167,41 @@ window.ENTREE_PAGES["signup"] = (E) => {
       if (!e.target.closest(".edf")) closeAll(null);
     });
   }
+  // ==========================================================================
+  // Partner invite (signup.html?invite=…)
+  // ==========================================================================
+  const A = window.ENTREE_ACCOUNTS;
+  const form = $(".signup-form");
+  const token = new URLSearchParams(location.search).get("invite");
+  const invite = token ? A.checkInvite(token) : null;
+  if (invite && form) {
+    if (!invite.ok) {
+      // A bad link must never quietly create a customer account instead.
+      $(".signup-create-account-title").textContent = "Invite link problem";
+      $(".signup-text").textContent = invite.error;
+      form.hidden = true;
+      $(".signup-box-2").insertAdjacentHTML("beforeend", '<p class="signup-invite-alt">Booking a trip for yourself? <a href="signup.html">Create a customer account</a> or <a href="index.html">book without one</a>.</p>');
+    } else {
+      const i = invite.invite;
+      const until = new Date(i.expiresAt).toLocaleDateString("en-US", { month: "long", day: "numeric" });
+      const admin = i.role === "admin";
+      $(".signup-create-account-title").textContent = admin ? "Join the Entree admin team" : "Set up your partner account";
+      $(".signup-text").textContent = admin ? "You've been invited to help run Entree as admin staff." : "Your Entree contact invited you to manage your business on Entree.";
+      $(".signup-box-2").insertAdjacentHTML("beforeend",
+        `<div class="signup-invite"><span class="signup-invite-role">${escape(i.roleLabel)}</span><strong>${escape(i.partnerName)}</strong><span>This link works once and expires on ${escape(until)}.</span></div>`);
+      // Partners don't need a birthdate or home address.
+      $('input[name="birthdate"]', form)?.closest("div")?.remove();
+      $$(".signup-card", form).find((card) => $('input[name="address"]', card))?.remove();
+      $(".signup-personal-information-heading", form).textContent = admin ? "Your details" : "Contact person";
+      const email = $('[name="email"]', form);
+      email.value = i.email;
+      email.readOnly = true;
+      email.setAttribute("aria-readonly", "true");
+      email.title = "Invites are tied to this email. Ask your Entree contact if it needs to change.";
+      $(".signup-create-account-button span", form).textContent = admin ? "Create admin account" : "Create partner account";
+    }
+  }
+
   setupDateFields();
   return {
     submit(form) {
@@ -174,12 +212,16 @@ window.ENTREE_PAGES["signup"] = (E) => {
         confirm.focus();
         return;
       }
+      const field = (name) => $(`[name="${name}"]`, form)?.value || "";
+      const details = { firstName: field("firstName"), lastName: field("lastName"), phone: field("phone"), password: p.value };
+      const result = invite?.ok ? A.acceptInvite(token, details) : A.signUp({ ...details, email: field("email") });
+      if (!result.ok) {
+        formError(form, result.error);
+        return;
+      }
       markSaved();
-      store.set("session", {
-        email: $('[name="email"]', form).value,
-        name: [$('[name="firstName"]', form)?.value, $('[name="lastName"]', form)?.value].filter(Boolean).join(" "),
-      });
-      navigateTo("index");
+      if (result.account.role === "customer") navigateTo("index");
+      else location.href = result.home;
     },
   };
 };

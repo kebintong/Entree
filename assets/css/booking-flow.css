@@ -224,3 +224,10 @@ body[data-page="payment"] .bf-summary-edit { font-size: 14px; }
   .bc-back, .bc-copy, .bc-actions { display: none !important; }
   .bf-layout { grid-template-columns: minmax(0, 1fr) !important; }
 }
+
+/* Reschedule / refund pages with no booking on this device */
+.bf-no-booking { max-width: 560px; margin: 48px auto; text-align: center; }
+.bf-no-booking h2 { margin: 0 0 8px; font: 600 22px Poppins, sans-serif; color: #051821; }
+.bf-no-booking p { margin: 0 0 20px; color: #64748b; line-height: 1.6; }
+.bf-no-booking-actions { display: grid; gap: 12px; justify-items: center; }
+.bf-no-booking-actions a:not(.bf-primary) { color: #051821; font-weight: 600; }
