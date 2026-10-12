@@ -1,395 +1,1119 @@
-/* Styles for pages/rebook.html (the reschedule page). Shared styles are in base.css and site.css. */
+/* Styles for pages/rebook.html (the reschedule page).
+   Drawn by assets/js/rebook.js in three steps with the booking-flow look
+   (booking-flow.css: .bf-page, .bf-card, .bf-primary…); these rules add the
+   reschedule-only pieces: stepper, choices, the landing page's date field and
+   calendar, review, "Your booking" sidebar and the phone bar. */
+
+.rb-page {
+  background: #fff;
+}
+
+.rb-sub {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.rb-sub strong {
+  color: #0f172a;
+  font-weight: 600;
+}
 
 /* ==========================================================================
-   Page layout and components
+   Stepper: 1 Trips & passengers — 2 New dates — 3 Review & pay
    ========================================================================== */
-.rebook-stack {
-  display: flex;
-  width: 100%;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  background-color: #f9fafb;
-  padding-top: 5rem;
-}
-
-.rebook-box {
-  margin-inline: auto;
-  width: 100%;
-  max-width: 1000px;
-  padding-inline: 1.5rem;
-  padding-block: 2rem;
-}
-
-.rebook-select-option-button {
-  margin-bottom: 1.5rem;
+.rb-stepper {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: #666;
-  transition-duration: 0.15s;
-  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@media (hover: hover) {
-  .rebook-select-option-button:hover {
-    color: #363636;
-  }
-}
-
-.rebook-icon {
-  height: 1.25rem;
-  width: 1.25rem;
-}
-
-.rebook-box-2 {
-  margin-bottom: 2rem;
-}
-
-.rebook-reschedule-trip-title {
-  margin-bottom: 0.5rem;
-  font-size: 32px;
-  color: #363636;
-  font-family: Poppins, sans-serif;
-  font-weight: 600;
-}
-
-.rebook-booking-reference-text {
-  font-size: 15px;
-  color: #666;
-  font-family: Poppins, sans-serif;
-  font-weight: 400;
-}
-
-.rebook-text {
-  font-weight: 600;
-  color: #363636;
-}
-
-.rebook-card {
-  margin-bottom: 1.5rem;
-  border-radius: 0.625rem;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #dbdcd9;
-  background-color: #fff;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
-}
-
-.rebook-current-booking-heading {
-  margin-bottom: 1rem;
-  font-size: 18px;
-  color: #363636;
-  font-family: Poppins, sans-serif;
-  font-weight: 700;
-}
-
-.rebook-grid {
-  display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-@media (min-width: 48rem) {
-  .rebook-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.rebook-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-}
-
-.rebook-icon-2 {
-  margin-top: 0.125rem;
-  height: 1.25rem;
-  width: 1.25rem;
-  color: #cf0;
-}
-
-.rebook-route-text {
-  font-size: 12px;
-  color: #999;
-  font-family: Poppins, sans-serif;
-  font-weight: 400;
-}
-
-.rebook-text-2 {
-  font-size: 15px;
-  color: #363636;
-  font-family: Poppins, sans-serif;
-  font-weight: 600;
-}
-
-.rebook-text-3 {
-  font-size: 13px;
-  color: #666;
-  font-family: Poppins, sans-serif;
-  font-weight: 400;
-}
-
-.rebook-card-2 {
-  border-radius: 0.625rem;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #dbdcd9;
-  background-color: #fff;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
-}
-
-.rebook-row-2 {
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.rebook-circle {
-  display: flex;
-  height: 2.5rem;
-  width: 2.5rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9999px;
-  background-color: #cf0;
-}
-
-.rebook-icon-3 {
-  height: 1.25rem;
-  width: 1.25rem;
-  color: #000;
-}
-
-.rebook-select-new-travel-heading {
-  font-size: 20px;
-  color: #363636;
-  font-family: Poppins, sans-serif;
-  font-weight: 700;
-}
-
-.rebook-card-3 {
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  border-radius: 0.625rem;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #bedbff;
-  background-color: #eff6ff;
-  padding: 1rem;
-}
-
-.rebook-icon-4 {
-  margin-top: 0.125rem;
-  height: 1.25rem;
-  width: 1.25rem;
-  flex-shrink: 0;
-  color: #155dfc;
-}
-
-.rebook-reschedule-policy-text {
-  margin-bottom: 0.25rem;
+  gap: 12px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
   font-size: 14px;
-  color: #193cb8;
-  font-family: Poppins, sans-serif;
-  font-weight: 500;
 }
 
-.rebook-text-4 {
+.rb-stepper-item,
+.rb-stepper-item > button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #64748b;
+}
+
+.rb-stepper-item > button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.rb-stepper-item > button:hover .rb-stepper-label {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.rb-stepper-dot {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 50%;
+  box-sizing: border-box;
   font-size: 13px;
-  color: #1447e6;
-  font-family: Poppins, sans-serif;
-  font-weight: 400;
+  font-weight: 600;
 }
 
-.rebook-box-3 {
-  margin-bottom: 1.5rem;
+.rb-stepper-item.is-done,
+.rb-stepper-item.is-done > button {
+  color: #0f172a;
 }
 
-.rebook-row-3 {
-  margin-bottom: 0.75rem;
+.rb-stepper-item.is-done .rb-stepper-dot {
+  border-color: #007f70;
+  background: #007f70;
+  color: #fff;
+}
+
+.rb-stepper-item.is-now {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.rb-stepper-item.is-now .rb-stepper-dot {
+  border-color: #ccff00;
+  background: #ccff00;
+  color: #051821;
+}
+
+.rb-stepper-line {
+  flex: 1;
+  max-width: 120px;
+  height: 2px;
+  border-radius: 2px;
+  background: #e2e8f0;
+}
+
+.rb-stepper-line.is-done {
+  background: #007f70;
+}
+
+/* Phones use the compact "Step 2 of 3" bar instead. */
+.rb-progress {
+  display: none;
+}
+
+/* ==========================================================================
+   Layout: the step on the left, "Your booking" on the right
+   ========================================================================== */
+.rb-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 24px;
+  align-items: start;
+}
+
+.rb-step {
+  padding: 28px;
+}
+
+.rb-step-title {
+  margin: 0 0 4px;
+  color: #0f172a;
+  font-size: 20px;
+  font-weight: 600;
+  outline: none;
+}
+
+.rb-step-sub {
+  margin: 0 0 22px;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.rb-group-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
 }
 
-.rebook-select-passengers-reschedule-label {
-  display: block;
+.rb-group-title {
+  margin: 0 0 10px;
+  color: #0f172a;
   font-size: 14px;
-  color: #363636;
-  font-family: Poppins, sans-serif;
-  font-weight: 500;
-}
-
-.rebook-deselect-all-button {
-  font-size: 13px;
-  color: #cf0;
-  transition-duration: 0.15s;
-  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: Poppins, sans-serif;
-  font-weight: 500;
-}
-
-@media (hover: hover) {
-  .rebook-deselect-all-button:hover {
-    color: #b8e600;
-  }
-}
-
-:where(.rebook-stack-2 > :not(:last-child)) {
-  margin-block-end: 0.5rem;
-  margin-block-start: 0;
-}
-
-.rebook-passenger-option {
-  display: flex;
-  cursor: pointer;
-  align-items: center;
-  gap: 0.75rem;
-  border-radius: 0.625rem;
-  border-style: solid;
-  border-width: 2px;
-  border-color: #cf0;
-  background-color: #ccff001a;
-  padding: 1rem;
-  transition-duration: 0.15s;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.rebook-passenger-checkbox {
-  height: 1.25rem;
-  width: 1.25rem;
-  cursor: pointer;
-  accent-color: #cf0;
-}
-
-.rebook-icon-5 {
-  height: 1.25rem;
-  width: 1.25rem;
-  color: #6a7282;
-}
-
-.rebook-box-4 {
-  flex: 1;
-}
-
-.rebook-juan-dela-text {
-  font-size: 14px;
-  color: #363636;
-  font-family: Poppins, sans-serif;
   font-weight: 600;
 }
 
-.rebook-text-5 {
-  font-size: 12px;
-  color: #666;
-  font-family: Poppins, sans-serif;
-  font-weight: 400;
+.rb-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: 500 13px Poppins, sans-serif;
 }
 
-.rebook-text-6 {
-  margin-top: 0.5rem;
-  font-size: 12px;
-  color: #666;
-  font-family: Poppins, sans-serif;
-  font-weight: 400;
+.rb-hint {
+  margin: 10px 0 0;
+  color: #64748b;
+  font-size: 12.5px;
 }
 
-.rebook-when-new-schedule-label {
-  margin-bottom: 0.75rem;
-  display: block;
-  font-size: 14px;
-  color: #363636;
-  font-family: Poppins, sans-serif;
-  font-weight: 500;
+.rb-muted {
+  color: #64748b;
 }
 
-.rebook-field-input {
-  width: 100%;
-  border-radius: 0.625rem;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #dbdcd9;
-  padding-inline: 1rem;
-  padding-block: 0.75rem;
-  font-size: 15px;
-  transition-duration: 0.15s;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: Poppins, sans-serif;
-  font-weight: 400;
-}
-
-.rebook-field-input:focus {
-  border-color: #cf0;
-  box-shadow: 0 0 0 2px rgba(205, 255, 0, 0.2);
-}
-
-.rebook-row-4 {
+/* Step actions: Back / Continue */
+.rb-actions {
   display: flex;
-  gap: 0.75rem;
-}
-
-.rebook-cancel-button {
-  flex: 1;
-  border-radius: 9999px;
-  border-style: solid;
-  border-width: 2px;
-  border-color: #d1d5dc;
-  padding-block: 0.75rem;
-  font-weight: 700;
-  color: #4a5565;
-  transition-duration: 0.15s;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@media (hover: hover) {
-  .rebook-cancel-button:hover {
-    background-color: #f9fafb;
-  }
-}
-
-.rebook-confirm-reschedule-button {
-  display: flex;
-  flex: 1;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  border-radius: 9999px;
-  background-color: #cf0;
-  padding-block: 0.75rem;
-  font-weight: 700;
-  color: #000;
-  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
-  transition-duration: 0.15s;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  justify-content: space-between;
+  gap: 16px;
 }
 
-@media (hover: hover) {
-  .rebook-confirm-reschedule-button:hover {
-    background-color: #b8e600;
-  }
+.rb-actions-card {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
 }
 
-.rebook-confirm-reschedule-button:disabled {
+.rb-back {
+  display: inline-flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 22px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #0f172a;
+  font: 500 14px Poppins, sans-serif;
+  text-decoration: none;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.rb-back:hover {
+  border-color: #94a3b8;
+}
+
+.rb-next {
+  width: auto;
+  min-width: 200px;
+  min-height: 48px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.rb-next:disabled {
+  background: #e5e7eb;
+  color: #94a3b8;
   cursor: not-allowed;
-  background-color: #e5e7eb;
-  color: #99a1af;
+}
+
+.rb-inline-btn {
+  display: inline-flex;
+  width: auto;
+  margin-top: 12px;
+  border-radius: 999px;
 }
 
 /* ==========================================================================
-   Elements added by the page script
+   Step 1: trip and passengers
    ========================================================================== */
-.rebook-empty-note {
-  padding-block: 1rem;
+.rb-choices {
+  display: grid;
+  gap: 10px;
+}
+
+.rb-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid #dbdcd9;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.rb-choice:hover {
+  border-color: #b8c2b0;
+}
+
+.rb-choice.is-on {
+  border-color: #ccff00;
+  background: #fbffe8;
+  box-shadow: inset 0 0 0 1px #ccff00;
+}
+
+.rb-choice.is-off {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.rb-choice input {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: #007f70;
+  cursor: inherit;
+}
+
+.rb-choice:focus-within {
+  outline: 2px solid #007f70;
+  outline-offset: 2px;
+}
+
+.rb-choice-body {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rb-choice-body strong {
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.rb-choice-body > span {
+  color: #64748b;
+  font-size: 12.5px;
+}
+
+.rb-choice-body .rb-choice-label {
+  color: #007f70;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rb-split {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f7ffd6;
+  color: #363636;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Step 2: the landing page's date field and calendar
+   ========================================================================== */
+.rb-dates {
+  display: grid;
+  gap: 16px;
+}
+
+.rb-dates.is-two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.rb-dates:not(.is-two) .rb-leg {
+  max-width: 380px;
+}
+
+.rb-datefield {
+  position: relative;
+}
+
+.rb-date-trigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 60px;
+  padding: 0 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  background: #f8fafc;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  color: #1e293b;
+  font-family: Poppins, sans-serif;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rb-date-trigger:hover {
+  border-color: #cbd5e1;
+  background: #fff;
+}
+
+.rb-date-trigger.is-open,
+.rb-date-trigger:focus-visible {
+  border-color: #007f70;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 127, 112, 0.12);
+  outline: none;
+}
+
+.rb-date-icon {
+  flex-shrink: 0;
+  color: #007f70;
+}
+
+.rb-date-text {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.rb-date-label {
+  overflow: hidden;
+  margin-bottom: 3px;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.6px;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.rb-date-value {
+  overflow: hidden;
+  color: #1e293b;
+  font-size: 14px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rb-date-value.is-empty {
+  color: #94a3b8;
+}
+
+.rb-date-chevron {
+  flex-shrink: 0;
+  color: #94a3b8;
+  transition: transform 0.2s ease;
+}
+
+.rb-date-trigger.is-open .rb-date-chevron {
+  transform: rotate(180deg);
+  color: #007f70;
+}
+
+.rb-cal {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 250;
+  width: 320px;
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  color: #334155;
+  font-family: Poppins, sans-serif;
+  box-shadow: 0 14px 28px -6px rgba(15, 23, 42, 0.18), 0 4px 10px -2px rgba(15, 23, 42, 0.06);
+}
+
+.rb-cal[hidden] {
+  display: none;
+}
+
+.rb-cal .calendar-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.rb-cal .calendar-weekdays,
+.rb-cal .calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+  text-align: center;
+}
+
+.rb-cal .calendar-weekdays {
+  margin-bottom: 6px;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 28px;
+}
+
+.rb-cal .calendar-day,
+.rb-cal .calendar-nav,
+.rb-cal .calendar-footer button {
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #334155;
+  font: 400 12px Poppins, sans-serif;
+  cursor: pointer;
+}
+
+.rb-cal .calendar-day {
+  position: relative;
+  height: 36px;
+  padding: 0;
+}
+
+.rb-cal .calendar-nav {
+  width: 32px;
+  height: 32px;
+  color: #007f70;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.rb-cal .calendar-day:hover,
+.rb-cal .calendar-nav:hover,
+.rb-cal .calendar-footer button:hover {
+  background: #f0fdf9;
+  color: #007f70;
+}
+
+.rb-cal .calendar-day:disabled {
+  background: transparent;
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.rb-cal .calendar-nav:disabled {
+  visibility: hidden;
+}
+
+.rb-cal .calendar-day.is-selected {
+  background: #e6f7f4;
+  color: #007f70;
+  font-weight: 500;
+  box-shadow: inset 0 0 0 1px #007f70;
+}
+
+.rb-cal .calendar-day[aria-current="date"] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Your current trip: a grey ring (it can't be picked again). */
+.rb-cal .calendar-day.is-current {
+  color: #64748b;
+  box-shadow: inset 0 0 0 1px #94a3b8;
+}
+
+/* A day that costs more: a small amber dot under the number. */
+.rb-cal .calendar-day.is-dearer::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: #f59e0b;
+}
+
+.rb-cal button:focus-visible {
+  outline: 2px solid #007f70;
+  outline-offset: 1px;
+}
+
+.rb-cal-key {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin: 8px 0 0;
+  color: #64748b;
+  font-size: 10.5px;
+}
+
+.rb-key-current,
+.rb-key-dearer {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.rb-key-current {
+  box-shadow: inset 0 0 0 1px #94a3b8;
+}
+
+.rb-key-dearer {
+  width: 6px;
+  height: 6px;
+  margin-left: 8px;
+  border-radius: 50%;
+  background: #f59e0b;
+}
+
+.rb-cal .calendar-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.rb-cal .calendar-footer button {
+  padding: 7px 10px;
+  color: #007f70;
+}
+
+/* The chosen sailing under its field */
+.rb-pick {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 12px 14px;
+  border: 2px solid #ccff00;
+  border-radius: 12px;
+  background: #fbffe8;
+}
+
+.rb-pick-logo {
+  flex-shrink: 0;
+  width: 64px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.rb-pick-body {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rb-pick-body strong {
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.rb-pick-body > span {
+  color: #64748b;
+  font-size: 12.5px;
+}
+
+.rb-dearer {
+  color: #b45309;
+  font-weight: 600;
+}
+
+.rb-times {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.rb-time {
+  padding: 4px 10px;
+  border: 1px solid #dbdcd9;
+  border-radius: 999px;
+  background: #fff;
+  font: 500 12px Poppins, sans-serif;
+  cursor: pointer;
+}
+
+.rb-time.is-on {
+  border-color: #007f70;
+  background: #e6f7f4;
+  color: #007f70;
+}
+
+/* ==========================================================================
+   Step 3: review and pay
+   ========================================================================== */
+.rb-review {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+}
+
+.rb-review-row {
+  padding: 16px 18px;
+}
+
+.rb-review-row + .rb-review-row {
+  border-top: 1px solid #e2e8f0;
+}
+
+.rb-review-leg {
+  margin: 0 0 6px;
+  color: #475569;
+  font-size: 13px;
+}
+
+.rb-review-leg span {
+  margin-right: 8px;
+  color: #007f70;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rb-review-change {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.rb-review-change s {
+  color: #94a3b8;
+}
+
+.rb-review-change strong {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.rb-review-arrow {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ccff00;
+  color: #051821;
+  font-size: 13px;
+}
+
+.rb-review-logo {
+  width: 64px;
+  height: 26px;
+  margin-left: auto;
+  object-fit: contain;
+}
+
+.rb-same {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.rb-review-row.is-same .rb-review-change strong {
+  font-weight: 500;
+}
+
+.rb-bill {
+  margin: 18px 0 0;
+}
+
+.rb-bill > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.rb-bill dt {
+  color: #475569;
+}
+
+.rb-bill dt span {
+  display: block;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.rb-bill dd {
+  margin: 0;
+  color: #0f172a;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.rb-bill .rb-bill-total {
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid #dbdcd9;
+  font-size: 18px;
+}
+
+.rb-bill .rb-bill-total dt,
+.rb-bill .rb-bill-total dd {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.rb-policy-note {
+  margin: 16px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.rb-step .bf-error {
+  margin: 16px 0 0;
+}
+
+/* ==========================================================================
+   "Your booking": now → new and the running total
+   ========================================================================== */
+.rb-side {
+  position: sticky;
+  top: 100px;
+}
+
+.rb-summary {
+  margin: 0;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: none;
+}
+
+.rb-summary > h2 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 0 4px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 15px;
+}
+
+.rb-summary > h2 span {
+  color: #64748b;
+  font-size: 11.5px;
+  font-weight: 400;
+}
+
+.rb-sum-leg {
+  padding: 12px 0 0;
+}
+
+.rb-sum-leg p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.rb-sum-leg .rb-sum-label {
+  color: #8b929a;
+  font-size: 12px;
+}
+
+.rb-sum-old {
+  color: #94a3b8;
+}
+
+.rb-sum-leg .rb-sum-new {
+  margin-top: 2px;
+  color: #0f172a;
+  font-weight: 500;
+}
+
+.rb-sum-leg .rb-sum-todo {
+  margin-top: 2px;
+  color: #b45309;
+}
+
+.rb-sum-leg .rb-sum-same {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.rb-facts {
+  margin: 16px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.rb-facts > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.rb-facts dt {
+  color: #64748b;
+}
+
+.rb-facts dd {
+  margin: 0;
+  color: #0f172a;
+}
+
+.rb-facts .rb-total {
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 15px;
+}
+
+.rb-facts .rb-total dt,
+.rb-facts .rb-total dd {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+/* Folds away on phones; always open on wider screens. */
+.rb-fold > summary {
+  display: none;
+}
+
+.rb-fold > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* ==========================================================================
+   After confirming: same layout, every step ticked
+   ========================================================================== */
+.rb-done-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.rb-done-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #ccff00;
+  color: #051821;
+}
+
+.rb-done .rb-bill dd .rb-same {
+  margin-left: 6px;
+  font-weight: 400;
+}
+
+.rb-actions-done {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.rb-actions-done .rb-next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+/* Phones: the bar at the bottom holds Back / Next */
+.rb-paybar {
+  display: none;
+}
+
+@media (max-width: 1100px) {
+  .rb-layout {
+    grid-template-columns: minmax(0, 1fr) 300px;
+  }
+}
+
+@media (max-width: 850px) {
+  .rb-page {
+    padding-bottom: 150px;
+  }
+
+  .rb-stepper {
+    display: none;
+  }
+
+  .rb-progress {
+    display: block;
+    margin: 0 0 18px;
+  }
+
+  .rb-progress p {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 10px;
+    margin: 0 0 8px;
+    font-size: 13px;
+  }
+
+  .rb-progress strong {
+    color: #0f172a;
+    font-weight: 600;
+  }
+
+  .rb-progress p span {
+    color: #64748b;
+    font-size: 12px;
+  }
+
+  .rb-progress div {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .rb-progress div span {
+    height: 4px;
+    border-radius: 4px;
+    background: #e2e8f0;
+  }
+
+  .rb-progress div .is-done {
+    background: #007f70;
+  }
+
+  .rb-progress div .is-now {
+    background: #ccff00;
+  }
+
+  .rb-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rb-step {
+    padding: 20px 16px;
+  }
+
+  .rb-actions-card {
+    display: none;
+  }
+
+  .rb-side {
+    position: static;
+  }
+
+  .rb-fold {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  .rb-fold > summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    color: #0f172a;
+    font-size: 14px;
+    font-weight: 500;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .rb-fold > summary span {
+    margin-left: auto;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  .rb-fold > summary::after {
+    content: "View";
+    color: #007f70;
+    font-size: 12.5px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .rb-fold[open] > summary::after {
+    content: "Hide";
+  }
+
+  .rb-fold .rb-summary {
+    border: 0;
+    border-top: 1px solid #e2e8f0;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .rb-fold .rb-summary > h2 {
+    display: none;
+  }
+
+  .rb-paybar {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 60;
+    display: block;
+    padding: 10px 16px calc(12px + env(safe-area-inset-bottom));
+    border-top: 1px solid #e2e8f0;
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow: 0 -10px 24px -16px rgba(15, 23, 42, 0.35);
+  }
+
+  .rb-paybar > p {
+    margin: 0 0 8px;
+    color: #64748b;
+    font-size: 12px;
+  }
+
+  .rb-paybar strong {
+    color: #0f172a;
+    font-weight: 600;
+  }
+
+  .rb-paybar .rb-actions {
+    gap: 10px;
+  }
+
+  .rb-paybar .rb-back {
+    flex-shrink: 0;
+    padding: 0 18px;
+  }
+
+  .rb-paybar .rb-next {
+    flex: 1;
+    min-width: 0;
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .rb-dates.is-two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rb-dates:not(.is-two) .rb-leg {
+    max-width: none;
+  }
+
+  /* On phones the calendar opens in place, pushing the page down, so it
+     never hides under the bar at the bottom. */
+  .rb-cal {
+    position: static;
+    width: 100%;
+    max-width: none;
+    margin-top: 8px;
+  }
+
+  .rb-review-logo {
+    display: none;
+  }
+
+  .rb-actions-done {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .rb-actions-done .rb-back {
+    justify-content: center;
+  }
 }

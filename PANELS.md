@@ -15,7 +15,7 @@ Booking never needs an account: guests can search, book and pay without one.
 
 Each panel opens only for its own role. An admin who opens a shipping-line or merchant panel is sent back to the admin panel (and the same for partners), so admins oversee partners from their own screens but never work inside a partner's panel.
 
-There is no separate staff log-in page and no partner link on the customer site. If someone opens a panel without being signed in, they're sent to `login.html` and then back to the panel. (`pages/staff-login.html` only redirects to `login.html` now and can be deleted.)
+There is no separate staff log-in page and no partner link on the customer site. If someone opens a panel without being signed in, they're sent to `login.html` and then back to the panel.
 
 ## Panels
 
@@ -116,7 +116,7 @@ Sign-up and invites still work, so new accounts can be created during a demo, bu
 - `assets/js/accounts.js` loads next on every page (`window.ENTREE_ACCOUNTS`). It keeps accounts, invites, suspensions and the activity log in `localStorage` key `entree.accounts.v1`. Customer sessions use `entree.session`; partner and admin sessions use `entree.staff.v1`. Both are in `localStorage`, so there's **one log-in for the whole site**: a merchant, shipping line or admin who opens the customer site is still logged in there (the account menu has **Open … panel**), the log-in page says who's already logged in, and logging out anywhere logs out everywhere.
 - Deactivating a partner is saved in both places: the account status in `entree.accounts.v1` (blocks log-in) and a "hidden" flag in `entree.catalog.v1` (hides their trips or products from customers).
 - Passwords are stored only as salted SHA-256 hashes. The demo passwords in plain text live only in the developer panel module.
-- Bookings and pasalubong orders come from the customer flow (`booking-state.js`), so a booking made on the site appears in the admin list, the shipping line's manifest and the merchant's orders. Approving a refund updates `entree.refunds.v1`, which the customer sees in **My Bookings**.
+- Bookings and pasalubong orders come from the customer flow (`booking-state.js`), so a booking made on the site appears in the admin list, the shipping line's manifest and the merchant's orders. Rescheduling (`pages/rebook.html`) saves the new sailing on the booking, so the panels show the new times too. Each leg is a ticket per passenger: the departure, the return or both can move, for some or all passengers (₱200 per ticket within 24 hours of that sailing, free before, plus any fare difference). Moving only some passengers splits them into a new booking with its own reference ("Split from …"). Approving a refund updates `entree.refunds.v1`, which the customer sees in **My Bookings**.
 
 ## Planned next
 

@@ -359,6 +359,17 @@
   color: #000;
 }
 
+.bookings-pill-rescheduled {
+  border-radius: 9999px;
+  border: 1px solid #e6f04d;
+  background-color: #f7ffd6;
+  padding-inline: 0.75rem;
+  padding-block: 0.25rem;
+  font-size: 11px;
+  font-weight: 700;
+  color: #4d5b00;
+}
+
 .bookings-pill-upcoming {
   border-radius: 9999px;
   border-style: solid;

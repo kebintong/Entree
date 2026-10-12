@@ -13,16 +13,16 @@
   <link rel="stylesheet" href="../assets/css/base.css?v=20260928" />
   <link rel="stylesheet" href="../assets/css/site.css?v=20261006" />
   <link rel="stylesheet" href="../assets/css/turtle.css?v=20260928" />
-  <link rel="stylesheet" href="../assets/css/signup.css?v=20261007" />
+  <link rel="stylesheet" href="../assets/css/signup.css?v=20261012a" />
   <script src="../assets/js/data.js?v=20261007b" defer></script>
   <script src="../assets/js/catalog-store.js?v=20261010c" defer></script>
   <script src="../assets/js/accounts.js?v=20261010" defer></script>
   <script src="../assets/js/dev-slot.js?v=20261006" defer></script>
-  <script src="../assets/js/booking-state.js?v=20261009" defer></script>
+  <script src="../assets/js/booking-state.js?v=20261012a" defer></script>
     <script src="../assets/js/signup.js?v=20261009" defer></script>
     <script src="../assets/js/app.js?v=20261010" defer></script>
     <script src="../assets/js/turtle.js?v=20260928" defer></script>
-    <script src="../assets/js/booking-flow.js?v=20260928" defer></script>
+    <script src="../assets/js/booking-flow.js?v=20261012c" defer></script>
     <link rel="stylesheet" href="../assets/css/booking-flow.css?v=20261007b" />
     <link rel="stylesheet" href="../assets/css/motion.css?v=20261006d" />
     <script src="../assets/js/motion.js?v=20261006d" defer></script>
@@ -71,11 +71,11 @@
       </div>
     </header>
     <main class="site-main">
-      <div class="signup-stack site-page">
+      <div class="signup-stack">
         <div class="signup-box">
           <div class="signup-box-2">
             <h1 class="signup-create-account-title">
-              Create Your Account
+              Create your account
             </h1>
             <p class="signup-text">
               Join Entree to book ferry trips, manage reservations, and pre-order pasalubong in one place.
@@ -84,7 +84,7 @@
           <form class="signup-form">
             <div class="signup-card">
               <h2 class="signup-personal-information-heading">
-                Personal Information
+                Personal information
               </h2>
               <div class="signup-grid">
                 <div>
@@ -118,6 +118,7 @@
                   </div>
                 </div>
                 <div>
+                  <label class="signup-first-name-label" id="signup-birthdate-label">Birthdate *</label>
                   <input type="date" name="birthdate" required="" value="" max="" data-date-field="Birthdate *"
                     data-min-year="1920" aria-label="Birthdate" />
                 </div>
@@ -171,7 +172,7 @@
             </div>
             <div class="signup-card">
               <h2 class="signup-personal-information-heading">
-                Account Security
+                Account security
               </h2>
               <div class="signup-grid-2">
                 <div>

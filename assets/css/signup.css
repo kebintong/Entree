@@ -1,7 +1,9 @@
-/* Styles for pages/signup.html (the sign-up page). Shared styles are in base.css and site.css. */
+/* Styles for pages/signup.html (the sign-up page). Shared styles are in base.css and site.css.
+   Same look as the booking flow (booking-flow.css): white page, rounded cards,
+   soft grey fields, a lime pill button. */
 
 /* ==========================================================================
-   Page layout and components
+   Page layout
    ========================================================================== */
 .signup-stack {
   display: flex;
@@ -11,76 +13,105 @@
   align-items: center;
   background-color: #fff;
   padding-top: 5rem;
+  font-family: Poppins, sans-serif;
 }
 
 .signup-box {
-  margin-inline: auto;
   width: 100%;
-  max-width: 800px;
-  padding-inline: 1.5rem;
-  padding-block: 2rem;
+  max-width: 760px;
+  margin-inline: auto;
+  padding: 2.5rem 24px 3rem;
 }
 
 .signup-box-2 {
-  margin-bottom: 2rem;
+  margin-bottom: 24px;
 }
 
 .signup-create-account-title {
-  margin-bottom: 0.5rem;
-  font-size: 32px;
-  color: #363636;
-  font-family: Poppins, sans-serif;
+  margin: 0 0 6px;
+  color: #0f172a;
+  font-size: clamp(26px, 4vw, 34px);
   font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .signup-text {
+  margin: 0;
+  color: #64748b;
   font-size: 14px;
-  color: #979797;
-  font-family: Poppins, sans-serif;
-  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Sections: numbered cards
+   ========================================================================== */
+.signup-form {
+  counter-reset: signup-step;
 }
 
 :where(.signup-form > :not(:last-child)) {
-  margin-block-end: 1.5rem;
+  margin-block-end: 20px;
   margin-block-start: 0;
 }
 
 .signup-card {
-  border-radius: 0.625rem;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #dbdcd9;
-  background-color: #fff;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+  counter-increment: signup-step;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 8px 24px -16px #0f172a33;
 }
 
 .signup-personal-information-heading {
-  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  color: #0f172a;
   font-size: 18px;
-  color: #363636;
-  font-family: Poppins, sans-serif;
   font-weight: 600;
 }
 
-.signup-grid {
+.signup-personal-information-heading::before {
+  content: counter(signup-step);
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #ccff00;
+  color: #051821;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.signup-grid,
+.signup-grid-2 {
   display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
 }
 
 @media (min-width: 48rem) {
   .signup-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .signup-box-4 {
+    grid-column: 1 / -1;
+  }
 }
 
+/* ==========================================================================
+   Fields
+   ========================================================================== */
 .signup-first-name-label {
-  margin-bottom: 0.5rem;
   display: block;
-  font-size: 12px;
-  color: #363636;
-  font-family: Poppins, sans-serif;
+  margin-bottom: 7px;
+  color: #475569;
+  font-size: 13px;
   font-weight: 500;
 }
 
@@ -91,156 +122,186 @@
 .signup-icon {
   position: absolute;
   top: 50%;
-  left: 0.75rem;
-  height: 1rem;
-  width: 1rem;
+  left: 14px;
+  width: 18px;
+  height: 18px;
   translate: 0 -50%;
-  transform: ;
-  color: #999;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.signup-field-input,
+.signup-field-input-2 {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #0f172a;
+  font: 400 15px Poppins, sans-serif;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .signup-field-input {
-  width: 100%;
-  border-radius: 0.625rem;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #dbdcd9;
-  padding-block: 0.75rem;
-  padding-right: 1rem;
-  padding-left: 2.5rem;
-  font-size: 15px;
-  color: #363636;
-  transition-duration: 0.15s;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: Poppins, sans-serif;
-  font-weight: 400;
+  padding-left: 42px;
 }
 
-.signup-field-input:focus {
-  border-color: #cf0;
-  box-shadow: 0 0 0 2px rgba(205, 255, 0, 0.2);
+.signup-field-input::placeholder,
+.signup-field-input-2::placeholder {
+  color: #94a3b8;
 }
 
-@media (min-width: 48rem) {
-  .signup-box-4 {
-    grid-column: span 2 / span 2;
-  }
+.signup-field-input:hover,
+.signup-field-input-2:hover {
+  border-color: #94a3b8;
 }
 
-.signup-field-input-2 {
-  width: 100%;
-  border-radius: 0.625rem;
-  border-style: solid;
-  border-width: 1px;
-  border-color: #dbdcd9;
-  padding-inline: 1rem;
-  padding-block: 0.75rem;
-  font-size: 15px;
-  color: #363636;
-  transition-duration: 0.15s;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: Poppins, sans-serif;
-  font-weight: 400;
-}
-
+.signup-field-input:focus,
 .signup-field-input-2:focus {
-  border-color: #cf0;
-  box-shadow: 0 0 0 2px rgba(205, 255, 0, 0.2);
+  border-color: #007f70;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 127, 112, 0.12);
+  outline: none;
 }
 
-.signup-grid-2 {
-  display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 1rem;
+.signup-form input[readonly] {
+  color: #64748b;
+  background: #f1f5f9;
+  cursor: not-allowed;
 }
 
+/* ==========================================================================
+   Terms, button, log-in link
+   ========================================================================== */
 :where(.signup-stack-2 > :not(:last-child)) {
-  margin-block-end: 1rem;
+  margin-block-end: 16px;
   margin-block-start: 0;
+}
+
+.signup-stack-2 {
+  padding-top: 4px;
 }
 
 .signup-row {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
+  gap: 10px;
 }
 
 .signup-terms-checkbox {
-  margin-top: 0.25rem;
-  height: 1rem;
-  width: 1rem;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
   cursor: pointer;
-  accent-color: #cf0;
+  accent-color: #007f70;
 }
 
 .signup-terms-label {
-  font-size: 12px;
-  color: #363636;
-  font-family: Poppins, sans-serif;
-  font-weight: 400;
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .signup-terms-conditions-text {
   color: #007f70;
-  text-decoration-line: underline;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
 }
 
 .signup-create-account-button {
   display: flex;
   width: 100%;
+  min-height: 52px;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  border-radius: 9999px;
-  background-color: #cf0;
-  padding-inline: 1.5rem;
-  padding-block: 0.875rem;
-  font-weight: 700;
-  color: #000;
-  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
-  transition-duration: 0.15s;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 8px;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: #ccff00;
+  color: #051821;
+  font: 600 15px Poppins, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 
 @media (hover: hover) {
   .signup-create-account-button:hover {
-    background-color: #b8e600;
+    background: #b8e600;
   }
+}
+
+.signup-create-account-button:focus-visible,
+.signup-terms-checkbox:focus-visible,
+.signup-terms-conditions-text:focus-visible,
+.signup-login-text:focus-visible {
+  outline: 2px solid #007f70;
+  outline-offset: 3px;
 }
 
 .signup-create-account-button:disabled {
   cursor: not-allowed;
-  background-color: #e5e7eb;
-  color: #99a1af;
+  background: #e5e7eb;
+  color: #94a3b8;
 }
 
 .signup-icon-2 {
-  height: 1.25rem;
-  width: 1.25rem;
+  width: 18px;
+  height: 18px;
   stroke-width: 2.5px;
 }
 
 .signup-already-have-text {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
   text-align: center;
-  font-size: 12px;
-  color: #979797;
-  font-family: Poppins, sans-serif;
-  font-weight: 400;
 }
 
 .signup-login-text {
-  color: #000;
-  font-family: Poppins, sans-serif;
+  color: #007f70;
   font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
 }
 
-@media (hover: hover) {
-  .signup-login-text:hover {
-    text-decoration-line: underline;
+@media (max-width: 540px) {
+  .signup-box {
+    padding: 1.5rem 16px 2.5rem;
   }
+
+  .signup-card {
+    padding: 20px 16px;
+  }
+}
+
+/* The birthdate picker sits under its own label like the other fields. */
+.signup-form .edf-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.signup-form .edf-trigger {
+  min-height: 48px;
+  border-width: 1px;
+  border-color: #cbd5e1;
+  border-radius: 10px;
+}
+
+.signup-form .edf-text {
+  padding: 0;
+}
+
+.signup-form .edf-value {
+  font-size: 15px;
 }
 
 /* ==========================================================================
@@ -480,7 +541,7 @@
   margin-top: 1.25rem;
   padding: 14px 16px;
   border: 1px solid #c2f800;
-  border-radius: 0.625rem;
+  border-radius: 12px;
   background: #f7ffd6;
   font-family: Poppins, sans-serif;
   color: #363636;
@@ -516,7 +577,3 @@
   font-weight: 600;
 }
 
-.signup-form input[readonly] {
-  color: #5c5c5c;
-  cursor: not-allowed;
-}

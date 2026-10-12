@@ -235,9 +235,112 @@
     };
     records.unshift(record);
     window.ENTREE_DATA.MOCK_BOOKINGS.unshift(record);
-    write(localStorage, RECORDS_KEY, records);
+    saveRecords();
     save({ completedId: id });
     return record;
   }
-  window.ENTREE_BOOKING = { get: () => draft, save, options, selected, firstBookableDate, addDays, movedFrom: () => movedFrom, totals, searchError, selectionError, detailsError, complete, records: () => records, dateValue, refundQuote, requestRefund, refundOf: id => refunds[id] || null };
+  // --------------------------------------------------------------------------
+  // Rescheduling a saved booking. Like Philippine ferry lines, every leg is a
+  // ticket per passenger: move the departure, the return or both, for some or
+  // all passengers. Each moved ticket costs a rebooking fee when it's within 24
+  // hours of that sailing (free before), plus any fare difference when the new
+  // sailing costs more (no refund when it costs less). Moving only some
+  // passengers splits them into a new booking with its own reference.
+  // --------------------------------------------------------------------------
+  const REBOOK_FEE = 200;
+  const LEGS = ["outbound", "return"];
+  const legTrip = (b, leg) => leg === "return"
+    ? (b.returnTrip || (b.returnDate && b.returnDepartureTime ? { ferry: b.returnFerry || b.ferry, departureTime: b.returnDepartureTime, arrivalTime: b.returnArrivalTime, pricePerPerson: 0 } : null))
+    : (b.outboundTrip || { ferry: b.ferry, departureTime: b.departureTime, arrivalTime: b.arrivalTime, pricePerPerson: 0 });
+  const legDate = (b, leg) => leg === "return" ? b.returnDate : b.departureDate;
+  const money2 = n => Math.round(n * 100) / 100;
+  function arrivalAt(day, trip) {
+    const at = timeOn(day, trip?.arrivalTime);
+    if (at && trip?.arrivalNextDay) at.setDate(at.getDate() + 1);
+    return at;
+  }
+  // changes = { trips: { outbound?: trip, return?: trip }, passengers: [index, …] }
+  function rescheduleQuote(id, changes, now = new Date()) {
+    const b = records.find(item => item.id === id);
+    if (!b) return { error: "We couldn't find that booking." };
+    if (b.refund || refunds[id]) return { error: "This booking was refunded and can no longer be rescheduled." };
+    const trips = changes?.trips || {};
+    const moving = LEGS.filter(leg => trips[leg]);
+    if (!moving.length) return { error: "Choose a new sailing first." };
+    const people = [...new Set(changes.passengers || [])].filter(i => Number.isInteger(i) && i >= 0 && i < b.passengerDetails.length);
+    if (!people.length) return { error: "Select at least one passenger." };
+    const lines = [];
+    for (const leg of moving) {
+      const old = legTrip(b, leg), next = trips[leg];
+      if (!old) return { error: "This booking has no return trip." };
+      const departs = timeOn(legDate(b, leg), old.departureTime);
+      if (departs && departs <= now) return { error: `Your ${leg === "return" ? "return" : "departure"} trip has already sailed.` };
+      if (!validDate(next.date) || !next.departureTime) return { error: "Choose a new sailing first." };
+      const newDeparts = timeOn(next.date, next.departureTime);
+      if (newDeparts && newDeparts <= now) return { error: "That sailing has already left. Choose a later one." };
+      const late = departs && (departs - now) / 36e5 < 24;
+      const fee = late ? REBOOK_FEE * people.length : 0;
+      const fareDiff = money2(Math.max(0, (Number(next.pricePerPerson) || 0) - (Number(old.pricePerPerson) || 0)) * people.length);
+      lines.push({ leg, from: { date: legDate(b, leg), ...old }, to: next, fee, fareDiff, late });
+    }
+    // The return still has to leave after the departure arrives.
+    const out = trips.outbound || legTrip(b, "outbound"), outDate = trips.outbound ? trips.outbound.date : b.departureDate;
+    const back = trips.return || (b.returnDate ? legTrip(b, "return") : null), backDate = trips.return ? trips.return.date : b.returnDate;
+    if (back && backDate) {
+      const arrives = arrivalAt(outDate, out), leaves = timeOn(backDate, back.departureTime);
+      if (arrives && leaves && leaves < arrives) return { error: moving.length === 1 && moving[0] === "outbound" ? "The new departure arrives after your return trip leaves. Reschedule the return trip too." : "Choose a return trip that leaves after your departure trip arrives." };
+    }
+    const fee = lines.reduce((n, l) => n + l.fee, 0), fareDiff = money2(lines.reduce((n, l) => n + l.fareDiff, 0));
+    return { lines, fee, fareDiff, total: money2(fee + fareDiff), tickets: moving.length * people.length, passengers: people, split: people.length < b.passengerDetails.length, feePerTicket: REBOOK_FEE };
+  }
+  // What gets saved: the booking without data attached on load.
+  const stored = b => { const { refund, pasalubongOrders, ...rest } = b; return rest; };
+  function saveRecords() { write(localStorage, RECORDS_KEY, records.map(stored)); }
+  function moveLeg(target, leg, trip) {
+    if (leg === "outbound") {
+      Object.assign(target, { departureDate: trip.date, outboundTrip: { ...trip }, ferry: trip.ferry, departureTime: trip.departureTime, arrivalTime: trip.arrivalTime, outboundId: trip.id || "" });
+    } else {
+      Object.assign(target, { returnDate: trip.date, returnTrip: { ...trip }, returnFerry: trip.ferry, returnDepartureTime: trip.departureTime, returnArrivalTime: trip.arrivalTime, returnId: trip.id || "" });
+    }
+  }
+  function ticketsTotal(b) {
+    const pax = b.passengerDetails.length;
+    return money2(((legTrip(b, "outbound")?.pricePerPerson || 0) + (b.returnDate ? legTrip(b, "return")?.pricePerPerson || 0 : 0)) * pax);
+  }
+  function reschedule(id, changes) {
+    const quote = rescheduleQuote(id, changes);
+    if (quote.error) return quote;
+    const b = records.find(item => item.id === id);
+    const at = new Date().toISOString();
+    const names = quote.passengers.map(i => b.passengerDetails[i]?.name || `Passenger ${i + 1}`);
+    const change = { at, legs: quote.lines.map(l => ({ leg: l.leg, from: { date: l.from.date, ferry: l.from.ferry, departureTime: l.from.departureTime }, to: { date: l.to.date, ferry: l.to.ferry, departureTime: l.to.departureTime } })), passengers: names, fee: quote.fee, fareDiff: quote.fareDiff };
+    let target = b;
+    if (quote.split) {
+      // The moved passengers become their own booking; vehicles, pets and
+      // pasalubong stay with the original one.
+      const share = ticketsTotal(b) / b.passengerDetails.length * quote.passengers.length;
+      const newId = `local-${crypto.randomUUID()}`;
+      const moved = quote.passengers.map(i => b.passengerDetails[i]);
+      target = {
+        ...JSON.parse(JSON.stringify(stored(b))), id: newId, reference: `ENT-${new Date().getFullYear()}-${newId.slice(-8).toUpperCase()}`,
+        splitFrom: b.reference, passengers: moved.length, passengerDetails: moved.map(p => ({ ...p })),
+        vehicles: 0, pets: 0, vehicleDetails: [], petDetails: [], addOns: [], hasPasalubong: false, pasalubongItems: 0, changes: [],
+        bookedAt: at, totalPrice: money2(share), fareBreakdown: { tickets: money2(share), vehicles: 0, pets: 0, fee: 0, total: money2(share) },
+      };
+      b.passengerDetails = b.passengerDetails.filter((_, i) => !quote.passengers.includes(i));
+      b.passengers = b.passengerDetails.length;
+      b.totalPrice = money2(b.totalPrice - share);
+      if (b.fareBreakdown) b.fareBreakdown = { ...b.fareBreakdown, tickets: money2((b.fareBreakdown.tickets || 0) - share), total: b.totalPrice };
+      b.changes = [...(b.changes || []), { at, splitTo: target.reference, passengers: names }];
+      records.unshift(target);
+      window.ENTREE_DATA.MOCK_BOOKINGS.unshift(target);
+    }
+    quote.lines.forEach(l => moveLeg(target, l.leg, l.to));
+    target.totalPrice = money2(target.totalPrice + quote.total);
+    target.fareBreakdown = { ...(target.fareBreakdown || {}), changeFees: money2((target.fareBreakdown?.changeFees || 0) + quote.fee), fareDifference: money2((target.fareBreakdown?.fareDifference || 0) + quote.fareDiff), total: target.totalPrice };
+    target.changes = [...(target.changes || []), change];
+    saveRecords();
+    return { record: target, original: b, split: quote.split, quote };
+  }
+  window.ENTREE_BOOKING = { get: () => draft, save, options, selected, firstBookableDate, addDays, movedFrom: () => movedFrom, totals, searchError, selectionError, detailsError, complete, records: () => records, dateValue, refundQuote, requestRefund, refundOf: id => refunds[id] || null, rescheduleQuote, reschedule, REBOOK_FEE };
 })();

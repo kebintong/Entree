@@ -328,10 +328,11 @@
       if (party) items.push(`<span class="bookings-meta-text">${party}</span>`);
       return items.join("");
     };
-    const subtitle = b => [b.ferry + (b.returnFerry && b.returnFerry !== b.ferry ? ` / ${b.returnFerry}` : ""), b.tripType, b.cabin].filter(Boolean).map(escape).join(" · ");
+    const subtitle = b => [b.ferry + (b.returnFerry && b.returnFerry !== b.ferry ? ` / ${b.returnFerry}` : ""), b.tripType, b.cabin, b.splitFrom ? `Split from ${b.splitFrom}` : ""].filter(Boolean).map(escape).join(" · ");
+    const rescheduled = b => (b.changes || []).some(c => c.legs) ? '<span class="bookings-pill-rescheduled">RESCHEDULED</span>' : "";
     const upcomingCard = b => `<div class="bk-card bookings-card" data-booking="${escape(b.id)}" data-action="booking">
       <div class="bk-card-head bookings-card-head"><div class="bk-card-title">
-        <div class="bk-card-ref bookings-card-ref"><span class="bk-ref bookings-ref">${escape(b.reference)}</span>${b.departureDate <= today ? `<span class="bookings-pill-today">TODAY</span>` : `<span class="bookings-pill-upcoming">UPCOMING</span>`}</div>
+        <div class="bk-card-ref bookings-card-ref"><span class="bk-ref bookings-ref">${escape(b.reference)}</span>${b.departureDate <= today ? `<span class="bookings-pill-today">TODAY</span>` : `<span class="bookings-pill-upcoming">UPCOMING</span>`}${rescheduled(b)}</div>
         <p class="bookings-card-subtitle">${subtitle(b)}</p>
       </div><button type="button" class="bk-share bookings-share-button" data-action="share" aria-label="Share trip">${share}<span>Share Trip</span></button></div>
       <div class="bk-card-grid bookings-card-grid">
@@ -419,10 +420,20 @@
     if (page === "payment") renderPayment();
     if (page === "confirmation") renderConfirmation();
     if (page === "bookings") renderTripLists();
-    if (["rebook", "refund", "travel-instructions"].includes(page)) {
+    // The reschedule page draws its own "Your booking" sidebar (rebook.js).
+    if (["refund", "travel-instructions"].includes(page)) {
       const id = new URLSearchParams(location.search).get("id");
       const record = booking.records().find(b => b.id === id);
-      if (record) $("main").insertAdjacentHTML("afterbegin", `<div class="bf-record-summary">${summary(record, false)}</div>`);
+      if (record) {
+        // A page can say where the summary goes (the reschedule page's sidebar);
+        // otherwise it sits at the top. It describes a booking already made, so
+        // it's titled "Your booking" rather than "2 of 2 trips selected".
+        const slot = $("#bf-record-slot");
+        if (slot) slot.innerHTML = summary(record, false);
+        else $("main").insertAdjacentHTML("afterbegin", `<div class="bf-record-summary">${summary(record, false)}</div>`);
+        const title = $((slot ? "#bf-record-slot" : ".bf-record-summary") + " .bf-summary > h2");
+        if (title) title.textContent = "Your booking";
+      }
     }
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
